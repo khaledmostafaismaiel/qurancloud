@@ -1,0 +1,34 @@
+.container_of_songs{
+    position: relative;
+    top: 5rem;
+    left: 20%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; //for main axis
+    align-items: center; //for cross axis
+
+    flex-wrap: wrap;
+    align-content: space-evenly; //for cross axis
+
+    //background-color: purple;
+
+    height: auto;
+    width: 60%;
+}
+
+.song{
+    font-size: 1.5rem;
+
+    height: 15rem;
+    width: 100%;
+    text-align: left;
+    margin: 2rem;
+
+    color: black;
+    background-color: var(--color-grey-light-3);
+    box-shadow: var(--shadow-dark);
+
+    overflow: hidden;
+
+    padding: 2rem;
+}

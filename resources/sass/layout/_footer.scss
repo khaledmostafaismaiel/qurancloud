@@ -1,0 +1,30 @@
+footer{
+
+    height: 8rem;
+    width: 84.5rem;
+    font-size: 1.3rem;
+
+    margin: 8rem  0 0 0 ;
+    padding: 2rem 0;
+    background: rgba(black,1);
+
+
+    position: relative;
+    bottom: 0rem;
+    left: 22rem;
+
+    color: white;
+
+    text-align: center;
+
+    &__copyright &--link{
+        color: navy;
+    }
+
+
+    &__copyright &--link:active{
+        color: red;
+    }
+}
+
+

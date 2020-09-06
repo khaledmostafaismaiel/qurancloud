@@ -1,0 +1,53 @@
+.flex-container-row-wrap{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly; //for main axis
+    align-items: center; //for cross axis
+
+    flex-wrap: wrap;
+    align-content: space-evenly; //for cross axis
+}
+
+.flex-item-row-wrap{
+
+}
+
+
+.flex-container-row-no_wrap{
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly; //for main axis
+    align-items: center; //for cross axis
+
+    flex-wrap: nowrap;
+    align-content: space-evenly; //for cross axis
+}
+.flex-item-row-no_wrap{
+    flex: 0 1;
+}
+
+
+.flex-container-column-wrap{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly; //for main axis
+    align-items: center; //for cross axis
+
+    flex-wrap: wrap;
+    align-content: space-evenly; //for cross axis
+}
+
+
+.flex-container-row-wrap-space_between{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly; //for main axis
+    align-items: center; //for cross axis
+
+    flex-wrap: wrap;
+    align-content: space-evenly; //for cross axis
+}
+
