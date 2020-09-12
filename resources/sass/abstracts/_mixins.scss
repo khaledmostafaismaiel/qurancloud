@@ -37,3 +37,27 @@ ORDER: Base + typography > general layout + grid > page layout > components
     left: 50%;
     transform: translate(-50%, -50%);
 }
+
+// Extra Small ( less than or equal 477)
+@media (min-width: 478px) {
+
+}
+// Small devices (landscape phones, 576px and up)
+@media (min-width: 576px) {
+
+}
+
+// Medium devices (tablets, 768px and up)
+@media (min-width: 768px) {
+
+}
+
+// Large devices (desktops, 992px and up)
+@media (min-width: 992px) {
+
+}
+
+// Extra large devices (large desktops, 1200px and up)
+@media (min-width: 1200px) {
+
+}

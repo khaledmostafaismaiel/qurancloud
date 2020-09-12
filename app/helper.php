@@ -74,3 +74,11 @@
         }
         return -1 ; //true
     }
+
+    function chatOwner($firstUser,$secondUser){
+        if($firstUser < $secondUser){
+            return $firstUser;
+        }else{
+            return $secondUser;
+        }
+    }

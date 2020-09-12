@@ -40,6 +40,12 @@
     align-content: space-evenly; //for cross axis
 }
 
+.flex-container-column-no_wrap{
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start; //for main axis
+}
 
 .flex-container-row-wrap-space_between{
     display: flex;
@@ -51,3 +57,14 @@
     align-content: space-evenly; //for cross axis
 }
 
+.flex-container-row-no_wrap-no_space{
+
+    display: flex;
+    flex-direction: row;
+
+    flex-wrap: nowrap;
+    align-content: space-evenly; //for cross axis
+}
+.flex-item-row-no_wrap{
+    flex: 0 1;
+}

@@ -18,6 +18,9 @@ class CreateTrackLovesTable extends Migration
             $table->unsignedInteger('track_id');
             $table->unsignedInteger('user_id');
             $table->timestamps();
+
+//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

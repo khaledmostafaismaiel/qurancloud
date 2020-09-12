@@ -18,9 +18,7 @@ class TracksController extends Controller
      */
     public function index()
     {
-//        $tracks = DB::table('tracks')->get() ;
         dd("index");
-
     }
 
     /**

@@ -5,4 +5,37 @@
 @import 'variables';
 
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+//@import '~bootstrap/scss/bootstrap';
+
+@import "abstracts/variables";
+@import "abstracts/flex_box";
+@import "abstracts/mixins";
+
+//@import "abstracts/variables";
+//
+@import "base/base";
+@import "base/animations";
+@import "base/typography";
+//
+//@import "components/bg-video";
+@import "components/button";
+@import "components/form";
+@import "components/popup.scss";
+@import "components/table.scss";
+//
+//@import "layout/advertise_side_navigation";
+@import "layout/chat_navigation";
+@import "layout/messages_navigation";
+//@import "layout/footer";
+@import "layout/grid";
+@import "layout/header";
+@import "layout/user_navigation";
+@import "layout/profile_navigation";
+//@import "layout/search_box";
+@import "layout/settings_navigation";
+//@import "layout/songs";
+//
+@import "test";
+
+
+@import "pages/test";

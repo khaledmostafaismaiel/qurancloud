@@ -20,6 +20,9 @@ class CreateTracksTable extends Migration
             $table->text('caption')->nullable();
             $table->string('temp_name');
             $table->timestamps();
+
+//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+
         });
     }
 

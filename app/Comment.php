@@ -12,7 +12,7 @@ class Comment extends Model
         'user_id',
         'comment',
         'created_at',
-        'updated_at',
+        'updated_at'
     ];
 
     public function commentLoves(){//return loves which belongs to that comment

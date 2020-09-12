@@ -14,7 +14,7 @@ class Track extends Model
         'caption',
         'temp_name',
         'created_at',
-        'updated_at',
+        'updated_at'
     ];
 
     public function trackLoves(){//return comments which belongs to that track

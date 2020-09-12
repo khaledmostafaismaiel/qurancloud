@@ -1,10 +1,11 @@
-<div id="track_container" class="track_container flex-container-column-wrap">
+<div id="track_container-{{$track->id}}" data-track_container_id="{{$track->id}}" class="track_container flex-container-column-wrap">
     <div class="track" id="track-{{$track->id}}">
-        <div class="track-menu">
-            <img class="track-menu-more" src="/images/more.png" alt="">
-            <div class="track-menu-wrapper">
+        <div class="dropdown">
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropDownMenuButton-{{$track->id}}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropDownMenuButton-{{$track->id}}">
                 @if(auth()->id() == $track->user_id)
-                    <span class="track-menu-wrapper-item">
+                    <span class="dropdown-item">
                         @if($track->id == $track_id_to_edit)
                             <form action="/tracks/{{$track->id}}" method="post">
                                 {{csrf_field()}}
@@ -15,22 +16,54 @@
                             <a href="/tracks/{{$track->id}}/edit">Edit</a>
                         @endif
                     </span>
-                    <span class="track-menu-wrapper-item">
+                    <div class="dropdown-divider"></div>
+                    <span class="dropdown-item">
                         <form action="/tracks/{{$track->id}}" method="post">
                             {{csrf_field()}}
                             {{method_field('delete')}}
                             <input type="submit" value="Delete">
                         </form>
                     </span>
-                @endif
-
-                @if(auth()->id() != $track->user_id)
-                    <span class="track-menu-wrapper-item" id="track-menu-wrapper-item-report-{{$track->id}}">
+                @else
+                    <span class="dropdown-item" id="track-menu-wrapper-item-report-{{$track->id}}">
                         <a href="#track-report-container-{{$track->id }}">Report</a>
                     </span>
                 @endif
             </div>
         </div>
+
+
+{{--        <div class="track-menu" id="{{$track->id}}">--}}
+{{--            <img class="track-menu-more" src="/images/more.png" alt="" id="{{$track->id}}">--}}
+{{--            <div class="track-menu-wrapper" id="track-menu-wrapper-{{$track->id}}">--}}
+{{--                @if(auth()->id() == $track->user_id)--}}
+{{--                    <span class="track-menu-wrapper-item">--}}
+{{--                        @if($track->id == $track_id_to_edit)--}}
+{{--                            <form action="/tracks/{{$track->id}}" method="post">--}}
+{{--                                {{csrf_field()}}--}}
+{{--                                {{method_field('patch')}}--}}
+{{--                                <input type="submit" value="EDIT">--}}
+{{--                            </form>--}}
+{{--                        @else--}}
+{{--                            <a href="/tracks/{{$track->id}}/edit">Edit</a>--}}
+{{--                        @endif--}}
+{{--                    </span>--}}
+{{--                    <span class="track-menu-wrapper-item">--}}
+{{--                        <form action="/tracks/{{$track->id}}" method="post">--}}
+{{--                            {{csrf_field()}}--}}
+{{--                            {{method_field('delete')}}--}}
+{{--                            <input type="submit" value="Delete">--}}
+{{--                        </form>--}}
+{{--                    </span>--}}
+{{--                @endif--}}
+
+{{--                @if(auth()->id() != $track->user_id)--}}
+{{--                    <span class="track-menu-wrapper-item" id="track-menu-wrapper-item-report-{{$track->id}}">--}}
+{{--                        <a href="#track-report-container-{{$track->id }}">Report</a>--}}
+{{--                    </span>--}}
+{{--                @endif--}}
+{{--            </div>--}}
+{{--        </div>--}}
                 <h3 class="track-name flex-item-row-wrap">
                     <a class="track-name-link" href="/tracks/{{$track->id}}">
                         {{$track->file_name}}
@@ -78,14 +111,14 @@
             </div>
             <div class="track-third_section flex-container-column-wrap">
                 @if(canILoveThisTrack($track) == -1)
-                    <img src="/images/unlove.png" alt="User photo" class="track-third_section-love_photo">
+                    <img src="/images/unlove.png" alt="User photo" class="track-third_section-love_photo" id="track-third_section-love_photo-{{$track->id}}">
                     <form method="POST" action="/trackLoves" class="">
                         {{csrf_field()}}
                         <input hidden type="text" name="track_id" value="{{$track->id}}" required>
                         <input type="submit"  class="track-third_section-love_btn"  name="submit" value="Love">
                     </form>
                 @else
-                    <img src="/images/love.png" alt="User photo" class="track-third_section-love_photo">
+                    <img src="/images/love.png" alt="User photo" class="track-third_section-unlove_photo" id="track-third_section-unlove_photo-{{$track->id}}">
                     <form method="POST" action="/trackLoves/{{canILoveThisTrack($track)}}" class="">
                         {{csrf_field()}}
                         {{method_field('delete')}}

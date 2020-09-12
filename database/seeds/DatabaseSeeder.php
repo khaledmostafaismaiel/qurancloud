@@ -69,6 +69,20 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        foreach (range(1,50) as $index){
+            \Illuminate\Support\Facades\DB::table('chats')->insert([
+                'id'=>$index,
+            ]);
+        }
+        foreach (range(1,50) as $index){
+            \Illuminate\Support\Facades\DB::table('messages')->insert([
+                'chat_id'=>$index,
+                'from_user_id'=>$faker->numberBetween(1,50) ,
+                'to_user_id'=>$faker->numberBetween(1,50) ,
+                'body'=>$faker->sentence(10,true) ,
+            ]);
+
+        }
 
         // $this->call(UserSeeder::class);
     }

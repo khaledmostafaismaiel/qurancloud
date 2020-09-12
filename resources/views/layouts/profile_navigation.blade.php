@@ -45,14 +45,13 @@
 
     @if(auth()->id() == $user->id)
         <li class="profile-nav__item">
-            <a href="/messages" class="profile-nav__link">
+            <a href="/chats" class="profile-nav__link">
                 <svg class="profile-nav__icon">
                     <use xlink:href="/images/sprite.svg#icon-chat"></use>
                 </svg>
                 <span>Chats</span>
             </a>
         </li>
-
         <li class="profile-nav__item">
             <a href="/users/{{auth()->id()}}/settings" class="profile-nav__link">
                 <svg class="profile-nav__icon">
@@ -63,14 +62,13 @@
         </li>
     @else
         <li class="profile-nav__item">
-            <a href="/messages" class="profile-nav__link">
+            <a href="/chats/create/for_first_time/{{$user->id}}" class="profile-nav__link">
                 <svg class="profile-nav__icon">
                     <use xlink:href="/images/sprite.svg#icon-chat"></use>
                 </svg>
                 <span>Chat</span>
             </a>
         </li>
-
         <li class="">
             <form method="POST" action="/friends" class="">
                 {{csrf_field()}}

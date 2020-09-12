@@ -24,6 +24,8 @@ class User extends Authenticatable
         'cover_photo',
         'profile_picture',
         'gender',
+        'created_at',
+        'updated_at'
     ];
 
     /**
@@ -70,4 +72,8 @@ class User extends Authenticatable
     {
         return $this->hashed_password;
     }
+    public function chats(){
+        $this->hasMany(Chat::class);
+    }
+
 }

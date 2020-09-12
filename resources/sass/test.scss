@@ -1,10 +1,7 @@
-
-
 .master_view {
-    max-width: 100rem;
+    max-width: 120rem;
     margin: 8rem auto;
     padding: 1rem 0 2rem 0;
-    background-color: black;
     box-shadow: var(--shadow-dark);
 
 
@@ -12,13 +9,11 @@
 
     border-radius: 2rem ;
 
-    background-image: linear-gradient(
-            to right bottom,
-            rgba(#7ed56f, 0.8),
-            rgba(#28b485, 0.8));
-    //background-image: linear-gradient(to right bottom,
-    //    var(--color-primary-light),
-    //    var(--color-primary-dark));
+    background-color: teal;
+    //background-image: linear-gradient(
+    //        to right bottom,
+    //        rgba(#7ed56f, 0.8),
+    //        rgba(#28b485, 0.8));
 
     @media only screen and (max-width: $bp-largest) {
         margin: 12rem 1rem; //6 for header + 3 for search bar + 3 for me for best preview
@@ -30,7 +25,45 @@
 
     &-pagination{
         text-align: center;
-        margin-left: 2rem;
+        &-button{
+            width: 100%;
+            font-size: 1.5rem;
+            padding: 1rem;
+            border-style: none;
+            background-color: teal;
+            cursor: pointer;
+
+        }
+    }
+
+    &-show_more{
+        text-align: center;
+        margin-top: 1rem;
+        &-input{
+            font-size: 1.5rem;
+            padding: 1rem;
+            border-style: none;
+            background-image: linear-gradient(to right bottom,
+                rgba(#7ed56f, 0.8),
+                rgba(#28b485, 0.8));
+            background-size: cover;
+            background-repeat: no-repeat;
+            cursor: pointer;
+
+            &-no_more{
+                font-size: 1.5rem;
+                padding: 1rem;
+                border-style: none;
+                background-image: linear-gradient(to right bottom,
+                    rgba(teal, 0.8),
+                    rgba(#28b485, 0.8));
+                background-size: cover;
+                background-repeat: no-repeat;
+
+            }
+        }
+
+
     }
 
 }
@@ -109,67 +142,6 @@
 }
 
 
-////////////////////////////////////////
-// USER NAVIGATION
-.user-nav {
-    align-self: stretch;
-
-    display: flex;
-    align-items: center;
-
-    & > * {
-        padding: 0 2rem;
-        cursor: pointer;
-        height: 100%;
-        display: flex;
-        align-items: center;
-    }
-
-    & > *:hover {
-        background-color: var(--color-grey-light-2);
-    }
-
-    &__icon-box {
-        position: relative;
-
-    }
-
-    &__icon {
-        height: 2.25rem;
-        width: 2.25rem;
-        //fill: var(--color-grey-dark-2);
-        fill: teal;
-    }
-
-    &__notification {
-        font-size: .8rem;
-        height: 1.75rem;
-        width: 1.75rem;
-        border-radius: 50%;
-        background-color: var(--color-primary);
-        color: #fff;
-        position: absolute;
-        top: 1.5rem;
-        right: 1.1rem;
-
-        display: flex;
-        justify-content: center;
-        align-items: center;
-
-    }
-
-    &__user-photo {
-        height: 4rem;
-        width: 4rem;
-        border-radius: 50%;
-        margin-right: 1rem;
-    }
-
-    &__user-name{
-        color: var(--color-grey-dark-3);
-        text-decoration: none;
-    }
-}
 
 
 
@@ -225,7 +197,7 @@
 
     &-menu{
         position: absolute;
-        right: 15%;
+        right: 10%;
 
         &-more{
             height: 3rem;
@@ -233,6 +205,8 @@
         }
 
         &-wrapper{
+            display: none;
+
             width: 7rem;
             height: auto;
             &-item{
@@ -332,6 +306,12 @@
             height: 10rem;
             border-radius: 50%;
         }
+        &-unlove_photo{
+
+            width: 10rem;
+            height: 10rem;
+            border-radius: 50%;
+        }
     }
 
 
@@ -388,6 +368,7 @@
 
         background-color: black;
         //background-color: #0a1520;
+
 
         border-radius: 0 0 2rem 2rem;
 
@@ -716,3 +697,172 @@
 
 }
 
+.message-section{
+    height: 80vh;
+    width: 100vw;
+    position: relative;
+    margin: 2rem;
+
+    &-square{
+        height: 90%;
+        width: 100%;
+        background-color: black;
+        overflow-y: scroll;
+        @media only screen and (max-width: $bp-small) {
+            border-radius: 2rem;
+        }
+        &-from_me{
+            font-size: 1.5rem;
+
+            float: right;
+            width: 50%;
+            color: white;
+            background-color: crimson;
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 2rem;
+
+            &-profile_pic{
+                float: right;
+            }
+        }
+        &-to_me{
+            font-size: 1.5rem;
+            width: 50%;
+            float: left;
+            color: black;
+            background-color: white;
+            padding: 1rem;
+            margin: 1rem;
+            border-radius: 2rem;
+            &-profile_pic{
+                float: left;
+            }
+
+        }
+    }
+
+    &-menu_bar{
+
+        width: 100%;
+        height: 10%;
+        position: relative;
+
+        border-radius: 2rem;
+
+        &-text{
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 100%;
+            border-style: none;
+            border-radius: 0 0 2rem 0;
+            @media only screen and (max-width: $bp-small) {
+                border-radius: 2rem;
+            }
+        }
+        &-send{
+            width: 5rem;
+            height: 100%;
+
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: teal;
+
+            border-radius: 0 0 2rem 0rem;
+            @media only screen and (max-width: $bp-small) {
+                border-radius: 0rem 2rem 2rem 0rem;
+            }
+        }
+    }
+}
+
+.notifi-box{
+
+    width: 30rem;
+    position: absolute;
+    top: 6rem;
+
+    box-shadow: 0 4px 8px 0 rgba(0 , 0 , 0 , .2), 0 6px 20px 0 rgba(0 , 0 , 0 , .19px) ;
+
+    display: none;
+
+    max-height: 80vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+
+    &-h2{
+        font-size: 1.4rem;
+        padding: 1rem;
+        border-bottom: 1px solid #eee;
+        color: black;
+        background-color: white;
+
+    }
+
+    &-span{
+        color: #f00;
+        margin-left: 1rem;
+    }
+
+    &-show_all{
+        text-align: center;
+        &-button{
+            width: 100%;
+            font-size: 1.5rem;
+            padding: 1rem;
+            border-style: none;
+            background-color: teal;
+            cursor: pointer;
+
+        }
+    }
+
+}
+
+
+.notifi-item{
+    display: flex;
+    border-bottom: 1px solid #eee;
+    padding: 1.5rem .5rem;
+    cursor: pointer;
+    width: 30rem;
+
+    background-color: #eee;
+    color: black;
+
+    &-img{
+
+        display: block;
+        width: 5rem;
+        margin-right: 1rem;
+        border-radius: 50%;
+    }
+
+    &-text{
+
+        &-h4{
+            color: inherit;
+            font-size: 1.3rem;
+            margin-top: 1rem ;
+        }
+
+        &-p{
+            color: inherit;
+            font-size: 1.2rem;
+        }
+
+    }
+}
+
+.notifi-item:hover{
+    background-color: black;
+    color: #eee;
+}
+
+@media only screen and (max-width: $bp-small) {
+    #notifications-box{
+        right: 3rem;
+    }
+}

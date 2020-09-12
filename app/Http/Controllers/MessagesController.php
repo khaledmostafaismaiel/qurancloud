@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\MessageSent;
 use App\Message;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class MessagesController extends Controller
 {
@@ -14,9 +17,7 @@ class MessagesController extends Controller
      */
     public function index()
     {
-        $tracks_or_track_or_not = "not";
 
-        return view('messages',compact('tracks_or_track_or_not'));
     }
 
     /**
@@ -26,7 +27,7 @@ class MessagesController extends Controller
      */
     public function create()
     {
-        //
+        dd("create");
     }
 
     /**
@@ -37,7 +38,36 @@ class MessagesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $validate  = $request->validate([
+            'chat_id'=> ['required'] ,
+            'to_user_id'=> ['required'] ,
+            'body'=> ['required'] ,
+        ]);
+
+
+//        if (! $request->chat_id){
+//            $chat = new \App\Http\Controllers\ChatsController();
+//            $chat_id = $chat->store(new Request());
+//
+//        }else{
+//            $chat_id = $request->chat_id ;
+//        }
+        $message = new Message();
+        if($message->create([
+            'chat_id'=>$request->chat_id,
+            'from_user_id'=>\auth()->id(),
+            'to_user_id'=>$request->to_user_id,
+            'body'=>$request->body,
+        ])) {
+
+            session()->flash('message', 'Done');
+//            broadcast(new MessageSent($message->load('user')))->toOthers();
+            return back();
+        }else{
+            session()->flash('message','Sorry');
+            return back();
+        }
     }
 
     /**
@@ -48,7 +78,6 @@ class MessagesController extends Controller
      */
     public function show(Message $messages)
     {
-        //
     }
 
     /**
@@ -59,7 +88,7 @@ class MessagesController extends Controller
      */
     public function edit(Message $messages)
     {
-        //
+        dd("edit");
     }
 
     /**
@@ -71,7 +100,7 @@ class MessagesController extends Controller
      */
     public function update(Request $request, Message $messages)
     {
-        //
+        dd("update");
     }
 
     /**
@@ -82,6 +111,8 @@ class MessagesController extends Controller
      */
     public function destroy(Message $messages)
     {
-        //
+        dd("destroy");
     }
+
+
 }

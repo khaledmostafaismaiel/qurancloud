@@ -346,10 +346,6 @@ class UsersController extends Controller
 //        $findUser = User::where('user_name',$socialUser->email);
         $findUser = \Auth::attempt(['user_name' => $socialUser->email , 'password' => "12345678"]) ;
         if($findUser){
-//            session(['authUser'=>\auth()->user()]);
-//            Mail::to(env('OWNER_EMAIL'))->queue(
-//                new UserSignedup(\auth()->user())
-//            );
             return redirect('/');
 
         }else{
