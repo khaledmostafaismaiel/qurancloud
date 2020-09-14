@@ -164,7 +164,7 @@ class FriendsController extends Controller
         }else{
             $tracks_or_track_or_not = 'not' ;
 
-            $followers = User::findorfail(\request('user_id'))->Followers()->simplePaginate(10) ;
+            $followers = User::findorfail(\request('user_id'))->Followers()->simplePaginate(1) ;
 
             foreach ($followers as $follower){
                 $lastId = $follower->id ;
@@ -237,7 +237,7 @@ class FriendsController extends Controller
         }else{
             $tracks_or_track_or_not = 'not' ;
 
-            $followings = User::findorfail(\request('user_id'))->followings()->simplePaginate(10) ;
+            $followings = User::findorfail(\request('user_id'))->followings()->simplePaginate(1) ;
 
             foreach ($followings as $following){
                 $lastId = $following->id ;

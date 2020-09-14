@@ -38,7 +38,7 @@ class DatabaseSeeder extends Seeder
         foreach (range(1,500) as $index){
             \Illuminate\Support\Facades\DB::table('tracks')->insert([
                 'user_id'=>$faker->numberBetween(1,50)  ,
-                'file_name'=>$faker->text ,
+                'file_name'=>$faker->sentence(5,true) ,
                 'temp_name'=>$faker->text ,
                 'caption'=>$faker->sentence(10,true) ,
             ]);

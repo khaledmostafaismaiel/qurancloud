@@ -52,14 +52,6 @@
                 <span>Chats</span>
             </a>
         </li>
-        <li class="profile-nav__item">
-            <a href="/users/{{auth()->id()}}/settings" class="profile-nav__link">
-                <svg class="profile-nav__icon">
-                    <use xlink:href="/images/sprite.svg#icon-key"></use>
-                </svg>
-                <span>settings</span>
-            </a>
-        </li>
     @else
         <li class="profile-nav__item">
             <a href="/chats/create/for_first_time/{{$user->id}}" class="profile-nav__link">

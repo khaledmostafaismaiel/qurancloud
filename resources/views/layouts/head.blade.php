@@ -9,7 +9,6 @@
     <link rel="stylesheet" href= "/css/app.css" >
     <title>QuranCloud {{get_script_name()}}</title>
     <link rel="shortcut icon" type="image/png" href="/images/favicon.png">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600" rel="stylesheet">
 
-    <meta name="csrf-token" content="{{csrf_token()}}">{{--for messages--}}
+    <meta name="csrf-token" content="{{ csrf_token() }}">{{--for messages--}}
 </head>

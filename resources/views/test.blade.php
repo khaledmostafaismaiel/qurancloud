@@ -70,93 +70,26 @@
     </div>
 </nav>
 <div class="container my_container">
-    <div class="row">
 
-        <form method="POST" action="/users" class="col-sm form-sign_up">
-            {{ csrf_field() }}
-            <fieldset class="">
-                <legend class="form-sign_up-legend">Please, Sign up first</legend>
+    <form action="/tracks" enctype="multipart/form-data" method="POST" class="">
+        {{csrf_field()}}
+        <table>
+            <tr class="form-group">
+                <td class="">&nbsp;</td>
+                <td class=""><input type="hidden" name="MAX_FILE_SIZE" value="<?php /*echo $max_file_size; */?>" /></td>
 
-                <div class="form-group">
-                    <label class="" for="first_name">First Name</label>
-                    <input class="form-control" id="first_name" name="first_name" type="text" value=""  placeholder="Enter Your First Name" required>
-                </div>
+            </tr>
+            <tr class="form-group">
+                <td class=""><input class="form-control-file" type="file" name="file_upload" required/></td>
+                <td class=""><textarea name="caption" id="" cols="100" rows="2" class="form-control" placeholder="Track caption"></textarea></td>
+            </tr>
+            <tr class="form-group">
+                <td>&nbsp;</td>
+                <td class=""><input type="submit"  class="btn btn-primary" name="submit" value="UPLOAD"></td>
+            </tr>
+        </table>
+    </form>
 
-                <div class="form-group">
-                    <label class="" for="second_name">Second Name</label>
-                    <input class="form-control" id = "second_name" name = "second_name" type="text"  value=""  placeholder="Enter Your Second Name" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="" for="user_name">User name</label>
-                    <input class="form-control" id="user_name" name="user_name" type="text" value=""   placeholder="Enter Your E_mail" required>
-                </div>
-
-                <div class="form-group">
-                    <label class=""  for="password">Password</label>
-                    <input class="form-control"  id="password" name="password"  type="password"   value=""  placeholder="Enter Your Password" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="" for="password_confirmation">Confirm Password</label>
-                    <input class="form-control" id="password_confirmation" name="password_confirmation" type="password"   value="" placeholder="Confirm Your Password" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="" for="gender">Gender</label>
-                    <select name="gender" id=""  size="1" class="form-control" >
-                        <option value="male">Male</option>
-                        <option value="female">Female</option>
-                    </select>
-                </div>
-
-                <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" id="not_robot" name="not_robot" value="1" type="checkbox" required>
-                    <label class="custom-control-label" for="not_robot">I'm not robot.</label>
-                </div>
-
-                <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input"  id="terms_of_conditions" name="terms_of_conditions" value= "1"  type="checkbox" required>
-                    <label class="custom-control-label" for="terms_of_conditions" >I agree with all <a href="/users/terms_of_conditions" class="alert-link alert-info">terms of conditions.</a></label>
-                </div>
-
-                <div class="form-group form-sign_up-submit" role="group">
-                    <a href="/sign_in/google" class="btn" id=""><img class="form-sign_up-submit-gmail" src="/images/gmail.png" alt=""></a>
-                    <input name="submit_sign_up" class="btn btn-primary" type="submit" value="sign up"/>
-                    <a href="/sign_in/facebook" class="btn" id="form-sign_up-submit-facebook"><img class="form-sign_up-submit-facebook" src="/images/facebook.png" alt=""></a>
-                </div>
-            </fieldset>
-        </form>
-
-        <form  method="POST"  action="/users/process_sign_in" class="col-sm form-sign_in align-self-center">
-            {{csrf_field()}}
-            <fieldset class="">
-                <legend class="form-sign_in-legend">Sign in</legend>
-
-                <div class="form-group">
-                    <label class="" for="user_name">User Name</label>
-                    <input class="form-control" type="text"  id="user_name" name="user_name" value="" placeholder="Your E_mail" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="" for="password">Password</label>
-                    <input class="form-control" type="password" id="password"  name="password" value="" placeholder="Your Password" required>
-                </div>
-
-                <div class="custom-control custom-checkbox">
-                    <input class="custom-control-input" id="remember_me" name="remember_me" type="checkbox">
-                    <label class="custom-control-label" for="remember_me">Remember Me</label>
-                </div>
-
-                <div class="form-group form-sign_in-submit" role="group">
-                    <a href="/sign_in/google" class="btn"><img class="form-sign_in-submit-gmail" src="/images/gmail.png" alt=""></a>
-                    <input name="submit_sign_in" class="btn btn-primary" type="submit"  value="SIGN IN"/>
-                    <a href="/sign_in/facebook" class="btn"><img class="form-sign_in-submit-facebook" src="/images/facebook.png" alt=""></a>
-                </div>
-            </fieldset>
-        </form>
-
-    </div>
 </div>
 
 

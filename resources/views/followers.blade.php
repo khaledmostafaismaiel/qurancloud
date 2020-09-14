@@ -15,9 +15,12 @@
         @endforeach
     </div>
     <div class="master_view-show_more" id="master_view-show_more-followers">
-        <button type="button" id="master_view-show_more-button-followers" class="master_view-show_more-input" data-last_id="{{$lastId}}" data-user_id="{{$user_id}}">
+        <button type="button" id="master_view-show_more-button-followers" class="btn btn-success btn-block" data-last_id="{{$lastId}}" data-user_id="{{$user_id}}">
             Show More
         </button>
     </div>
+{{--    <div class="progress">--}}
+{{--        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 25%"></div>--}}
+{{--    </div>--}}
 @endsection
 

@@ -112,22 +112,10 @@ html {
 }
 
 body {
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-  line-height: 1.6;
-  color: var(--color-grey-dark-2);
-  background-color: var(--color-grey-light-1);
+  background-color: var(--color-grey-dark-2);
   background-size: cover;
   background-repeat: no-repeat;
   min-height: 120vh;
-}
-
-legend {
-  color: gold;
-}
-
-.required {
-  border: red;
 }
 
 @-webkit-keyframes from_right_to_left {
@@ -334,349 +322,70 @@ legend {
   /*to prevent shake of the chars when its animated*/
 }
 
-.btn {
-  background-color: #fff;
-  color: #777;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: 1.5rem 4rem;
-  display: inline-block;
-  border-radius: 1rem;
-  transition: all .2s;
-  position: relative;
-  font-size: 1.6rem;
-  border: none;
-  cursor: pointer;
-}
-
-.btn-follow-form {
-  border: none;
-  background-color: transparent;
-  color: white;
-  font-size: 1.5rem;
-  padding: 2rem;
-}
-
-.btn-follow-form:hover {
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.btn-comment-form {
-  font-size: 1.5rem;
-  text-decoration: none;
-}
-
-.btn-comment-form-love {
-  font-size: 1.5rem;
-}
-
-.btn-comment-form-sign_out {
-  padding: 2rem  0rem;
-  margin: 0rem;
-  font-size: 1.5rem;
-  font-weight: bold;
-  border: none;
-  color: teal;
-  background-color: transparent;
-}
-
-.btn-list {
-  margin: 0rem 0rem  5rem 5rem;
-  position: absolute;
-  left: 7rem;
-  bottom: 4rem;
-}
-
-.btn-list-page_number {
-  font-size: 3rem;
-  margin: 2rem;
-  padding: 1rem 2rem 1rem 2.5rem;
-  text-align: center;
-}
-
-.btn-list-page_number-selected {
-  color: white;
-  background-color: red;
-  padding: .5rem;
-  font-weight: bold;
-  font-size: 3.5rem;
-}
-
-.btn-list-page_number-selected-min {
-  background-color: darkgreen;
-  padding: .5rem 1.5rem;
-}
-
-.btn-list-page_number-selected-max {
-  background-color: darkgreen;
-  padding: .5rem 1rem;
-}
-
-.btn-list-page_number-link {
-  color: black;
-  padding: .5rem;
-  background-color: darkgreen;
-}
-
-.btn-list-page_number-link-min {
-  background-color: darkgreen;
-  padding: .5rem 1.5rem;
-}
-
-.btn-list-page_number-link-max {
-  background-color: darkgreen;
-  padding: .5rem 1.5rem;
-}
-
-.btn-list-next {
-  position: absolute;
-  right: -10rem;
-}
-
-.btn-action {
-  position: relative;
-  text-align: center;
-}
-
-.btn-action-edit {
-  position: absolute;
-  top: -1.7rem;
-  left: 2rem;
-}
-
-.btn-action-edit-image {
-  height: 3rem;
-  width: 3rem;
-}
-
-.btn-action-edit:hover {
-  background-color: rgba(245, 222, 179, 0.4);
-}
-
-.btn-action-delete {
-  position: absolute;
-  top: -1.5rem;
-  left: 8rem;
-}
-
-.btn-action-delete-image {
-  height: 3rem;
-  width: 3rem;
-}
-
-.btn-action-delete:hover {
-  background-color: rgba(245, 222, 179, 0.4);
-}
-
-.btn:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.2);
-}
-
 .form-sign_up {
   padding: 2rem;
-  color: var(--color-grey-light-3);
-  border-radius: 5rem;
-  height: auto;
-  width: 100%;
-  font-size: 1.5rem;
+  margin: 2rem 2rem;
+  border-radius: 2rem;
+  background-color: black;
+  color: white;
 }
 
 .form-sign_up-legend {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: teal;
 }
 
-.form-sign_up-first_name-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_up-first_name-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_up-second_name-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_up-second_name-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_up-user_name-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_up-user_name-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_up-password-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_up-password-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_up-password_confirmation-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_up-password_confirmation-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_up-gender-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_up-gender-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_up-not_robot {
-  padding-top: 1rem;
-}
-
-.form-sign_up-terms_of_conditions {
-  padding-top: 1rem;
-}
-
-.form-sign_up-terms_of_conditions-link {
-  text-decoration: none;
-}
-
-.form-sign_up-submit-sign_up {
-  margin: 2rem 1rem 1rem 1rem;
+.form-sign_up-submit {
+  margin-top: 2rem;
+  text-align: center;
 }
 
 .form-sign_up-submit-gmail {
-  padding: 0;
-  margin: 0;
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
-}
-
-.form-sign_up-submit-gmail-pic {
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
 }
 
 .form-sign_up-submit-facebook {
-  padding: 0;
-  margin: 0;
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
-}
-
-.form-sign_up-submit-facebook-pic {
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
 }
 
 .form-sign_in {
   padding: 2rem;
-  color: var(--color-grey-light-3);
-  border-radius: 5rem;
-  height: auto;
-  width: auto;
-  font-size: 1.5rem;
+  margin: 2rem 2rem;
+  border-radius: 2rem;
+  background-color: black;
+  color: white;
 }
 
 .form-sign_in-legend {
-  font-size: 2rem;
+  font-size: 1.5rem;
   font-weight: bold;
+  color: teal;
 }
 
-.form-sign_in-user_name-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_in-user_name-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_in-password-label {
-  height: 2rem;
-  width: 100%;
-}
-
-.form-sign_in-password-input {
-  height: 2rem;
-  width: 100%;
-  padding-top: .2rem;
-}
-
-.form-sign_in-remember_me {
-  padding-top: 1rem;
-}
-
-.form-sign_in-submit-sign_in {
-  margin: 2rem 1rem 1rem 1rem;
+.form-sign_in-submit {
+  margin-top: 2rem;
+  text-align: center;
 }
 
 .form-sign_in-submit-gmail {
-  padding: 0;
-  margin: 0;
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
-}
-
-.form-sign_in-submit-gmail-pic {
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
 }
 
 .form-sign_in-submit-facebook {
-  padding: 0;
-  margin: 0;
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
-}
-
-.form-sign_in-submit-facebook-pic {
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
+  height: 4rem;
+  width: 4rem;
 }
 
 .form-add_track {
-  margin: 1rem 2rem 0rem 2rem;
+  margin-bottom: 2rem;
   padding: 2rem;
   color: var(--color-grey-light-3);
   background-color: black;
   border-radius: 2rem;
-  height: auto;
   width: auto;
   font-size: 1.5rem;
 }
@@ -684,146 +393,6 @@ legend {
 .form-add_track-file_upload {
   height: 2rem;
   width: 100%;
-}
-
-.form_add_expense {
-  color: black;
-  background-color: rgba(245, 222, 179, 0.4);
-  border-radius: 2rem;
-  width: 30%;
-  position: relative;
-  top: 7rem;
-  left: 42rem;
-  margin: 2rem;
-  padding: 2rem 4rem 8rem 4rem;
-  font-size: 2rem;
-}
-
-.form_add_expense-name {
-  position: relative;
-  top: -2rem;
-  left: 1rem;
-  padding: 1rem;
-}
-
-.form_add_expense-price {
-  position: relative;
-  left: 1.6rem;
-  top: -2rem;
-  padding: 1rem;
-}
-
-.form_add_expense-category {
-  padding: 1rem;
-  position: relative;
-  left: -3rem;
-  top: -2rem;
-}
-
-.form_add_expense-category-menu {
-  position: relative;
-  left: 1rem;
-  top: 0rem;
-  width: 18rem;
-  text-align: center;
-}
-
-.form_add_expense-comment {
-  padding: 1rem;
-  position: relative;
-  left: -2.5rem;
-  top: -2rem;
-}
-
-.form_add_expense-date {
-  padding: 1rem;
-  position: relative;
-  left: 1.9rem;
-  top: -2rem;
-}
-
-.form_add_expense-cancel {
-  position: absolute;
-  top: 36rem;
-  left: 2rem;
-}
-
-.form_add_expense-submit {
-  text-align: center;
-  padding: 1rem;
-  position: absolute;
-  top: 35rem;
-  left: 22rem;
-}
-
-.form_edit_expense {
-  color: black;
-  background-color: rgba(245, 222, 179, 0.4);
-  border-radius: 2rem;
-  width: 30%;
-  position: relative;
-  top: 7rem;
-  left: 42rem;
-  margin: 2rem;
-  padding: 2rem 4rem 8rem 4rem;
-  font-size: 2rem;
-}
-
-.form_edit_expense-name {
-  position: relative;
-  top: -2rem;
-  left: 1rem;
-  padding: 1rem;
-}
-
-.form_edit_expense-price {
-  position: relative;
-  left: 1.6rem;
-  top: -2rem;
-  padding: 1rem;
-}
-
-.form_edit_expense-category {
-  padding: 1rem;
-  position: relative;
-  left: -3rem;
-  top: -2rem;
-}
-
-.form_edit_expense-category-menu {
-  position: relative;
-  left: 1rem;
-  top: 0rem;
-  width: 18rem;
-  text-align: center;
-}
-
-.form_edit_expense-comment {
-  padding: 1rem;
-  position: relative;
-  left: -2.5rem;
-  top: -2rem;
-}
-
-.form_edit_expense-date {
-  padding: 1rem;
-  position: relative;
-  left: 1.9rem;
-  top: -2rem;
-}
-
-.form_edit_expense-cancel {
-  position: absolute;
-  top: 36rem;
-  left: 2rem;
-}
-
-.form_edit_expense-submit {
-  text-align: center;
-  padding: 1rem;
-  position: absolute;
-  top: 35rem;
-  left: 22rem;
 }
 
 .popup {
@@ -889,30 +458,6 @@ legend {
 
 .popup__close:hover {
   color: red;
-}
-
-.table-loves-container {
-  margin: 2rem;
-  padding: 2rem;
-  font-size: 1.5rem;
-  background-color: black;
-  border-radius: 2rem;
-}
-
-.table-loves-record {
-  width: 100%;
-  margin: 1rem;
-  padding: 1rem;
-  text-align: center;
-}
-
-.table-loves-record-user_name {
-  text-decoration: none;
-  color: white;
-}
-
-.table-loves-record-created_at {
-  color: white;
 }
 
 .chat-side-nav {
@@ -1065,58 +610,6 @@ legend {
   height: 1.75rem;
   margin-right: 2rem;
   fill: teal;
-}
-
-.row {
-  max-width: 114rem;
-  margin: 0 auto;
-}
-
-.row .col-1-of-2 {
-  width: calc((100% - 6rem) / 2);
-}
-
-.row .col-1-of-3 {
-  width: calc((100% - 2 * 6rem) / 3);
-}
-
-.row .col-2-of-3 {
-  width: calc(2 * ((100% - 2 * 6rem) / 3) + 6rem);
-}
-
-.row .col-1-of-4 {
-  width: calc((100% - 3 * 6rem) / 4);
-}
-
-.row .col-2-of-4 {
-  width: calc(2 * ((100% - 3 * 6rem) / 4) + 6rem);
-}
-
-.row .col-3-of-4 {
-  width: calc(3 * ((100% - 3 * 6rem) / 4) + 2 * 6rem);
-}
-
-.header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 6rem;
-  z-index: 1000;
-  font-size: 1.4rem;
-  background-color: black;
-  border-bottom: var(--line);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-@media only screen and (max-width: 31.25em) {
-  .header {
-    flex-wrap: wrap;
-    align-content: space-around;
-    height: 11rem;
-  }
 }
 
 .user-nav {
@@ -1382,11 +875,11 @@ legend {
 .master_view {
   max-width: 120rem;
   margin: 8rem auto;
-  padding: 1rem 0 2rem 0;
+  padding: 2rem;
   box-shadow: var(--shadow-dark);
   min-height: 7rem;
   border-radius: 2rem;
-  background-color: teal;
+  background-color: black;
 }
 
 @media only screen and (max-width: 75em) {
@@ -1411,6 +904,7 @@ legend {
 }
 
 .master_view-show_more {
+  cursor: pointer;
   text-align: center;
   margin-top: 1rem;
 }
@@ -1432,12 +926,6 @@ legend {
   background-image: linear-gradient(to right bottom, rgba(0, 128, 128, 0.8), rgba(40, 180, 133, 0.8));
   background-size: cover;
   background-repeat: no-repeat;
-}
-
-.logo {
-  height: 4rem;
-  width: 4rem;
-  margin-left: 3rem;
 }
 
 .search {
@@ -1511,22 +999,19 @@ legend {
 .track_container {
   border-radius: 2rem 2rem 0 0;
   margin-top: 1rem;
-  padding: 0 2rem;
 }
 
 .track {
-  margin: 0rem 2rem;
-  padding: 1rem 1rem 0 1rem;
+  padding: 2rem 2rem 0 2rem;
   border-radius: 2rem 2rem 0 0;
   font-size: 1.5rem;
   height: auto;
   width: 100%;
-  text-align: center;
+  text-align: right;
   background-color: black;
   color: var(--color-grey-dark-1);
   box-shadow: var(--shadow-dark);
   overflow: hidden;
-  border: var(--line);
 }
 
 .track-menu {
@@ -1545,24 +1030,18 @@ legend {
   height: auto;
 }
 
-.track-name {
-  text-align: center;
+.track-name-link-input {
+  cursor: pointer;
+  text-align: left;
   width: 100%;
-  height: auto;
-  border-radius: 2rem;
-}
-
-.track-name-link {
-  text-decoration: none;
-  font-weight: bold;
-  color: white;
+  font-size: 1.6rem;
 }
 
 .track-created_at {
   text-decoration: none;
   color: white;
   font-size: 1rem;
-  text-align: center;
+  text-align: left;
 }
 
 .track-caption {
@@ -1572,21 +1051,15 @@ legend {
 .track-caption-input {
   width: 100%;
   color: white;
-  background-color: black;
-  font-size: 1.5rem;
-  font-weight: bold;
-  padding: 1rem;
+  background-color: transparent;
+  font-size: 1.2rem;
+  padding: .5rem;
   text-align: left;
 }
 
-.track-first_section {
-  width: 100%;
-}
-
 .track-first_section-photo {
-  margin-right: 1rem;
-  height: 10rem;
-  width: 10rem;
+  height: 5rem;
+  width: 5rem;
   border-radius: 50%;
 }
 
@@ -1596,23 +1069,15 @@ legend {
   font-size: 1.5rem;
 }
 
-.track-second_section {
-  width: 100%;
-}
-
-.track-third_section {
-  width: 100%;
-}
-
 .track-third_section-love_photo {
-  width: 10rem;
-  height: 10rem;
+  width: 7rem;
+  height: 7rem;
   border-radius: 50%;
 }
 
 .track-third_section-unlove_photo {
-  width: 10rem;
-  height: 10rem;
+  width: 8rem;
+  height: 8rem;
   border-radius: 50%;
 }
 
@@ -1630,6 +1095,7 @@ legend {
 .track-duration {
   color: white;
   margin-bottom: 1rem;
+  width: 100%;
 }
 
 .track-duration-duration {
@@ -1638,6 +1104,7 @@ legend {
 }
 
 .track-volume {
+  width: 100%;
   color: white;
 }
 
@@ -1658,21 +1125,16 @@ legend {
 }
 
 .track-comments-container {
-  margin: 0 2rem;
+  margin-bottom: 2rem;
   padding: 0 2rem;
   background-color: black;
   border-radius: 0 0 2rem 2rem;
-  border: var(--line);
-}
-
-.track-comments-container-pagination {
-  text-align: center;
-  margin-left: 2rem;
 }
 
 .track-form-comment {
   margin: 1rem 0;
   color: white;
+  width: 100%;
 }
 
 .track-loves {
@@ -1689,6 +1151,7 @@ legend {
 .track-comment {
   margin: 1rem 0;
   color: white;
+  width: 100%;
 }
 
 .track-comment-love_pic {
@@ -1715,11 +1178,9 @@ legend {
 }
 
 .track-comment-text_area {
-  padding: 1.3rem 0 0 2rem;
+  padding: .5rem;
   text-align: left;
-  border-radius: 2rem;
   width: 100%;
-  height: 4rem;
 }
 
 .track-comment-photo {
@@ -1727,13 +1188,6 @@ legend {
   width: 5rem;
   border-radius: 50%;
   margin-right: 1rem;
-}
-
-.container-sign {
-  margin: 2rem 4rem;
-  padding: 2rem;
-  border-radius: 2rem;
-  background-color: black;
 }
 
 .show_track_container {
@@ -2040,11 +1494,13 @@ legend {
   width: 30rem;
   position: absolute;
   top: 6rem;
+  right: 6rem;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
   display: none;
   max-height: 80vh;
   overflow-y: scroll;
   overflow-x: hidden;
+  background-color: black;
 }
 
 .notifi-box-h2 {
@@ -2113,8 +1569,8 @@ legend {
 }
 
 .navbar-brand-logo {
-  height: 2rem;
-  width: 2rem;
+  height: 4rem;
+  width: 4rem;
 }
 
 .my_navbar {
@@ -2122,6 +1578,8 @@ legend {
   top: 0;
   z-index: 2;
   width: 100%;
+  font-size: 1.5rem;
+  background-color: black;
 }
 
 .my_container {
@@ -2131,61 +1589,52 @@ legend {
   border-radius: 2rem;
 }
 
-.form-sign_up {
-  padding: 2rem;
-  border-radius: 2rem;
+.index_track {
   background-color: black;
-  color: white;
-  margin-right: .5rem;
-}
-
-.form-sign_up-legend {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: teal;
-}
-
-.form-sign_up-submit {
-  margin-top: 2rem;
-  text-align: center;
-}
-
-.form-sign_up-submit-gmail {
-  height: 2rem;
-  width: 2rem;
-}
-
-.form-sign_up-submit-facebook {
-  height: 2rem;
-  width: 2rem;
-}
-
-.form-sign_in {
-  padding: 2rem;
   border-radius: 2rem;
-  background-color: black;
+}
+
+.index_track-track_owner-pic {
+  width: 7rem;
+  height: 7rem;
+  border-radius: 50%;
+}
+
+.index_track-track_owner-name {
   color: white;
-  margin-right: .5rem;
+  font-size: 1.4rem;
 }
 
-.form-sign_in-legend {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: teal;
+.index_track-track_owner-name:hover {
+  color: white;
 }
 
-.form-sign_in-submit {
-  margin-top: 2rem;
-  text-align: center;
+.index_track-created_at {
+  color: gray;
+  text-decoration: none;
 }
 
-.form-sign_in-submit-gmail {
-  height: 2rem;
-  width: 2rem;
+.index_track-created_at:hover {
+  color: gray;
 }
 
-.form-sign_in-submit-facebook {
-  height: 2rem;
-  width: 2rem;
+.index_track-track_name {
+  text-decoration: none;
+}
+
+.index_track-track_name:hover {
+  color: white;
+}
+
+.index_track-love_photo {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
+}
+
+.index_track-unlove_photo {
+  width: 4rem;
+  height: 4rem;
+  border-radius: 50%;
 }
 

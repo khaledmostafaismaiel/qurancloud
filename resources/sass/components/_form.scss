@@ -1,328 +1,75 @@
 .form{
 
+
     &-sign_up{
-        //flex-item-row-wrap
-
         padding: 2rem;
+        margin: 2rem 2rem;
 
-        color: var(--color-grey-light-3);
-
-        border-radius: 5rem;
-
-        height: auto;
-        width: 100%;
-
-        font-size: 1.5rem;
-
-        //position: relative;
-        //top: 5rem;
-        //left: 0rem;
-
-
+        border-radius: 2rem;
+        background-color: black;
+        color: white;
         &-legend{
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
+            color: teal;
         }
-
-        &-first_name{
-
-            //position: absolute;
-            //left: 9.6rem;
-            //top: 5rem;
-            &-label{
-                height: 2rem;
-                width: 100%;
-            }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-            }
-        }
-
-        &-second_name{
-
-            //position: absolute;
-            //left: 6.6rem;
-            //top: 9rem;
-            &-label{
-                height: 2rem;
-                width: 100%;
-            }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-            }
-        }
-
-        &-user_name{
-
-            //position: absolute;
-            //left: 9.5rem;
-            //top: 13rem;
-            &-label{
-                height: 2rem;
-                width: 100%;
-            }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-            }
-
-        }
-
-        &-password{
-            //
-            //position: absolute;
-            //left: 10.5rem;
-            //top: 17rem;
-            &-label{
-                height: 2rem;
-                width: 100%;
-            }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-            }
-        }
-
-        &-password_confirmation{
-            //
-            //position: absolute;
-            //left: 3rem;
-            //top: 21rem;
-            &-label{
-                height: 2rem;
-                width: 100%;
-            }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-            }
-        }
-
-        &-gender{
-            //
-            //position: absolute;
-            //left: 3rem;
-            //top: 21rem;
-            &-label{
-                height: 2rem;
-                width: 100%;
-            }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-            }
-        }
-
-
-        &-not_robot{
-            //position: absolute;
-            //left: 18rem;
-            //top: 25rem;
-            padding-top: 1rem;
-
-
-        }
-
-        &-terms_of_conditions{
-
-            //position: absolute;
-            //left: 8rem;
-            //top: 29rem;
-            padding-top: 1rem;
-
-            &-link{
-                text-decoration: none;
-            }
-        }
-
 
         &-submit{
-            //position: relative;
-            //left: 15rem;
-            //top: 33rem;
-            &-sign_up{
-
-                //position: absolute;
-                //left: 0rem;
-                //top: 0rem;
-
-                margin: 2rem 1rem 1rem 1rem;
-            }
+            margin-top: 2rem;
+            text-align: center;
 
             &-gmail{
-                padding: 0;
-                margin: 0;
-                height: 5rem;
-                width: 5rem;
-                border-radius: 50%;
-
-                &-pic{
-                    height: 5rem;
-                    width: 5rem;
-                    border-radius: 50%;
-                }
-                //position: absolute;
-                //left: -13rem;
-                //top: 6rem;
+                height: 4rem;
+                width: 4rem;
             }
-
             &-facebook{
-                padding: 0;
-                margin: 0;
-                height: 5rem;
-                width: 5rem;
-                border-radius: 50%;
-
-                &-pic{
-                    height: 5rem;
-                    width: 5rem;
-                    border-radius: 50%;
-                }
-                //position: absolute;
-                //left: 12rem;
-                //top: 6rem;
-
+                height: 4rem;
+                width: 4rem;
             }
         }
+
     }
 
-
     &-sign_in{
-        //flex-item-row-wrap
         padding: 2rem;
+        margin: 2rem 2rem;
 
-        color: var(--color-grey-light-3);
-        border-radius: 5rem;
+        border-radius: 2rem;
+        background-color: black;
+        color: white;
 
-        height: auto;
-        width: auto;
-
-        //position: relative;
-        //top: 14.5rem;
-        //right: 0rem;
-
-
-        font-size: 1.5rem;
 
         &-legend{
-            font-size: 2rem;
+            font-size: 1.5rem;
             font-weight: bold;
-        }
-
-        &-user_name{
-
-            //position: absolute;
-            //left: 6rem;
-            //top: 6rem;
-
-            &-label{
-                height: 2rem;
-                width: 100%;
-            }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-
-            }
+            color: teal;
 
         }
 
-        &-password{
-            //
-            //position: absolute;
-            //left: 7.3rem;
-            //top: 10rem;
-            &-label{
-                height: 2rem;
-                width: 100%;
+        &-submit{
+            margin-top: 2rem;
+            text-align: center;
+
+            &-gmail{
+                height: 4rem;
+                width: 4rem;
             }
-            &-input{
-                height: 2rem;
-                width: 100%;
-                padding-top: .2rem;
-            }
-        }
-
-        &-remember_me{
-
-            //position: absolute;
-            //left: 13rem;
-            //top: 14rem;
-            padding-top: 1rem;
-
-        }
-
-        &-submit {
-            //position: absolute;
-            //left: 13rem;
-            //top: 19rem;
-
-            &-sign_in {
-                //position: absolute;
-                //top: 0rem;
-                //left: 2rem;
-                margin: 2rem 1rem 1rem 1rem;
-
-            }
-
-            &-gmail {
-                padding: 0;
-                margin: 0;
-                height: 5rem;
-                width: 5rem;
-                border-radius: 50%;
-
-                &-pic{
-                    height: 5rem;
-                    width: 5rem;
-                    border-radius: 50%;
-                }
-
-                //position: absolute;
-                //left: -10rem;
-                //top: 6rem;
-            }
-
-            &-facebook {
-                padding: 0;
-                margin: 0;
-                height: 5rem;
-                width: 5rem;
-                border-radius: 50%;
-
-                &-pic{
-                    height: 5rem;
-                    width: 5rem;
-                    border-radius: 50%;
-                }
-
-                //position: absolute;
-                //left: 12rem;
-                //top: 6rem;
-
+            &-facebook{
+                height: 4rem;
+                width: 4rem;
             }
         }
     }
 
     &-add_track{
 
-        margin: 1rem 2rem 0rem 2rem;
+        margin-bottom: 2rem;
         padding: 2rem;
 
         color: var(--color-grey-light-3);
         background-color: rgba(black,1);
         border-radius: 2rem;
 
-        height: auto;
         width: auto;
 
         font-size: 1.5rem;
@@ -334,184 +81,6 @@
 
     }
 
-
-    &_add_expense{
-
-
-        color: black;
-        background-color: rgba(245, 222, 179,.4);
-        border-radius: 2rem;
-
-        width: 30%;
-
-        position: relative;
-        top: 7rem;
-        left: 42rem;
-
-        margin: 2rem;
-        padding: 2rem 4rem 8rem 4rem;
-
-
-        font-size: 2rem;
-
-        &-name{
-            position: relative;
-            top: -2rem;
-            left: 1rem;
-
-            padding: 1rem;
-        }
-
-        &-price{
-            position: relative;
-            left: 1.6rem;
-            top: -2rem;
-
-            padding: 1rem;
-        }
-
-        &-category{
-            padding: 1rem;
-
-            position: relative;
-            left: -3rem;
-            top: -2rem;
-
-        }
-
-        &-category-menu{
-            position: relative;
-            left: 1rem;
-            top: 0rem;
-
-
-            width: 18rem;
-            text-align: center;
-        }
-
-        &-comment{
-            padding: 1rem;
-
-            position: relative;
-            left: -2.5rem;
-            top: -2rem;
-
-        }
-
-        &-date{
-            padding: 1rem;
-
-            position: relative;
-            left: 1.9rem;
-            top: -2rem;
-
-        }
-
-        &-cancel{
-            position: absolute;
-            top: 36rem;
-            left: 2rem;
-
-        }
-
-        &-submit{
-            text-align: center;
-            padding: 1rem;
-
-            position: absolute;
-            top: 35rem;
-            left: 22rem;
-        }
-    }
-
-    &_edit_expense{
-
-
-        color: black;
-        background-color: rgba(245, 222, 179,.4);
-        border-radius: 2rem;
-
-        width: 30%;
-
-        position: relative;
-        top: 7rem;
-        left: 42rem;
-
-        margin: 2rem;
-        padding: 2rem 4rem 8rem 4rem;
-
-
-        font-size: 2rem;
-
-        &-name{
-            position: relative;
-            top: -2rem;
-            left: 1rem;
-
-            padding: 1rem;
-        }
-
-        &-price{
-            position: relative;
-            left: 1.6rem;
-            top: -2rem;
-
-            padding: 1rem;
-        }
-
-        &-category{
-            padding: 1rem;
-
-            position: relative;
-            left: -3rem;
-            top: -2rem;
-
-        }
-
-        &-category-menu{
-            position: relative;
-            left: 1rem;
-            top: 0rem;
-
-
-            width: 18rem;
-            text-align: center;
-        }
-
-        &-comment{
-            padding: 1rem;
-
-            position: relative;
-            left: -2.5rem;
-            top: -2rem;
-
-        }
-
-        &-date{
-            padding: 1rem;
-
-            position: relative;
-            left: 1.9rem;
-            top: -2rem;
-
-        }
-
-        &-cancel{
-            position: absolute;
-            top: 36rem;
-            left: 2rem;
-
-        }
-
-        &-submit{
-            text-align: center;
-            padding: 1rem;
-
-            position: absolute;
-            top: 35rem;
-            left: 22rem;
-        }
-    }
 
 
 

@@ -17,11 +17,11 @@
             </tr>
             <tr>
                 <td>&nbsp;</td>
-                <td><textarea name="comment"  cols="100" rows="3" required class="track-comment-text_area" placeholder="Write something constractive"></textarea></td>
+                <td><textarea name="comment" cols="500" rows="1" required class="track-comment-text_area" placeholder="Write something constractive"></textarea></td>
             </tr>
             <tr>
                 <td>&nbsp;</td>
-                <td><input type="submit"  class="btn btn-comment-form" name="submit" value="ok"></td>
+                <td><input type="submit"  class="btn btn-primary" name="submit" value="Commnet"></td>
             </tr>
         </table>
     </div>

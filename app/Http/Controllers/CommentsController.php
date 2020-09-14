@@ -87,12 +87,16 @@ class CommentsController extends Controller
         if($comment->user_id == auth()->id()){
             $comment_to_edit = $comment;
             $track = Track::findorfail($comment->track_id);
-            $comments = $track->Comments ;
+            $comments = $track->Comments()->simplepaginate(50) ;
+            $tracks_or_track_or_not = 'track';
+            $track_id_to_edit = null;
 
             return view('show_track')->with([
                 'comment_to_edit'=>$comment_to_edit ,
                 'track'=>$track ,
-                'comments'=>$comments
+                'comments'=>$comments,
+                'tracks_or_track_or_not'=>$tracks_or_track_or_not,
+                'track_id_to_edit'=>$track_id_to_edit
             ]);
         }
         else{

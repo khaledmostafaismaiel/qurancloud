@@ -348,7 +348,7 @@ Route::get('/', function () {
         }
         echo $output;
     }else{
-        $tracks = Track::latest()->simplePaginate(10)/*->sortByDesc('created_at')*/;
+        $tracks = Track::latest()->simplePaginate(7)/*->sortByDesc('created_at')*/;
         $comment_to_edit = null ;
         $track_id_to_edit = null ;
         $tracks_or_track_or_not = 'tracks' ;

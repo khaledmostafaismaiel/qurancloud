@@ -11534,32 +11534,34 @@ window.Echo.channel('chat').listen('MessageSent', function (event) {
   $('#chat').append("\n            <div class=\"message-section-square-to_me\">\n                <spam class=\"message-section-square-to_me-profile_pic\">\n                    <img src=\"/storage/uploads/profile_pictures/".concat(event.message.user.profile_picture, "\" alt=\"User photo\" class=\"chat-side-nav__item__user-photo\">\n                </spam>\n                ").concat(event.message.body, "\n            </div>\n        "));
 });
 $("document").ready(function () {
-  $.ajaxSetup({
-    headers: {
-      'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-    }
-  });
-  $('.track-comments-container').css("display", "none");
+  // $.ajaxSetup({
+  //     headers:{
+  //         'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+  //     }
+  // });
+  // $('.track-comments-container').css("display" , "none") ;
   $('#user-nav__friend_requests_box').on('click', toggleFriendRequests);
   $('#user-nav__messages_box').on('click', toggleMessages);
   $('#user-nav__notifications_box').on('click', toggleNotifications);
-  $(document).on('click', '#master_view-show_more-button', function () {
-    var last_id = $(this).data('last_id'); // $('#master_view-show_more-button').html('<b>Loadding...</b>');
-
+  $(document).on('click', '#master_view-show_more-button-tracks-index', function () {
+    console.log("hi");
+    var last_id = $(this).data('last_id');
+    $('#master_view-show_more-button-tracks-index').html('<b>Loadding...</b>');
     loadMoreIndexTracks(last_id);
   });
   $(document).on('click', '#master_view-show_more-button-followers', function () {
+    console.log("hi");
     var user_id = $(this).data('user_id');
+    $('#master_view-show_more-button-followers').html('<b>Loadding...</b>');
     var last_id = $(this).data('last_id');
     loadMoreFollowers(user_id, last_id);
   });
   $(document).on('click', '#master_view-show_more-button-followings', function () {
+    console.log("hi");
     var user_id = $(this).data('user_id');
+    $('#master_view-show_more-button-followings').html('<b>Loadding...</b>');
     var last_id = $(this).data('last_id');
     loadMoreFollowings(user_id, last_id);
-  });
-  $('.track-menu-more').on('click', function (event) {
-    $('#track-menu-wrapper-' + event.target.id).toggle('normal');
   });
   $('.track-third_section-love_photo').click(loveTrack);
   $('.track-third_section-unlove_photo').click(unLoveTrack); // $('.track').click(function (event) {
@@ -11568,8 +11570,8 @@ $("document").ready(function () {
   //         $('#track-comments-container-'+ event.target.getAttribute('data-track_id')).slideToggle('normal');
   //     }
   // });
-
-  $('#icon-sign_out').on('click', signoutFun); // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
+  // $('#icon-sign_out').on('click',signoutFun);
+  // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
   //
   // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
   //
@@ -11583,21 +11585,27 @@ $("document").ready(function () {
 });
 
 function toggleFriendRequests() {
-  $('#friend_requests-box').toggle();
-  $('#messages-box').css('display', 'none');
-  $('#notifications-box').css('display', 'none');
+  if (screen.width > 992) {
+    $('#friend_requests-box').toggle();
+    $('#messages-box').css('display', 'none');
+    $('#notifications-box').css('display', 'none');
+  } else {}
 }
 
 function toggleMessages() {
-  $('#messages-box').toggle();
-  $('#notifications-box').css('display', 'none');
-  $('#friend_requests-box').css('display', 'none');
+  if (screen.width > 992) {
+    $('#messages-box').toggle();
+    $('#notifications-box').css('display', 'none');
+    $('#friend_requests-box').css('display', 'none');
+  } else {}
 }
 
 function toggleNotifications() {
-  $('#notifications-box').toggle();
-  $('#friend_requests-box').css('display', 'none');
-  $('#messages-box').css('display', 'none');
+  if (screen.width > 992) {
+    $('#notifications-box').toggle();
+    $('#friend_requests-box').css('display', 'none');
+    $('#messages-box').css('display', 'none');
+  } else {}
 }
 
 function loveTrack(event) {
@@ -11654,7 +11662,7 @@ function loadMoreIndexTracks() {
       last_id: last_id
     },
     success: function success(tracks) {
-      $('#master_view-show_more-button').remove();
+      $('#master_view-show_more-button-tracks').remove();
       $('#master_view').append(tracks);
     }
   });
@@ -11690,15 +11698,14 @@ function loadMoreFollowings(user_id) {
   });
 }
 
-function get_chat_id_by_user_id(user) {
-  $.ajax({
-    url: "/chats/get_chat_by_user/" + user.id,
-    method: 'GET',
-    success: function success(chat) {
-      console.log(chat.id);
-      return chat.id;
-    }
-  });
+function get_chat_id_by_user_id(user) {// $.ajax({
+  //     url:"/chats/get_chat_by_user/"+ user.id,
+  //     method:'GET',
+  //     success:function (chat) {
+  //         console.log(chat.id);
+  //         return chat.id;
+  //     }
+  // });
 }
 
 function full_name(user) {
