@@ -110,13 +110,17 @@ class UsersController extends Controller
         $user = User::findorfail($id) ;
 
         $tracks = new Track() ;
-        $tracks = $user->tracks()->simplePaginate(5) ;
+        $tracks = $user->tracks()->simplePaginate(1) ;
 
         $comment_to_edit = null;//because profile includes track_comment and there are more than one .blade include track_comment
         $track_id_to_edit = null ;
-        $tracks_or_track_or_not = 'tracks';
 
-        return view('profile' , compact('user','tracks','comment_to_edit','track_id_to_edit','tracks_or_track_or_not'));
+        $lastId = null;
+        foreach ($tracks as $track){
+            $lastId = $track->id;
+        }
+
+        return view('profile' , compact('user','tracks','comment_to_edit','track_id_to_edit','lastId'));
 
     }
 

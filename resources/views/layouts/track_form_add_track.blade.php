@@ -1,20 +1,8 @@
-<form action="/tracks" enctype="multipart/form-data" method="POST" class="w-100 form-add_track ">
-    {{csrf_field()}}
-    <fieldset class="flex-container-column-wrap ">
-        <table>
-                <tr class="form-group">
-                    <td class="">&nbsp;</td>
-                    <td class=""><input type="hidden" name="MAX_FILE_SIZE" value="<?php /*echo $max_file_size; */?>" /></td>
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#add_track">
+    UPLOAD
+</button>
 
-                </tr>
-                <tr class="form-group">
-                    <td class=""><input class="form-control-file mr-2" type="file" name="file_upload" required/></td>
-                    <td class=""><textarea name="caption" id="" cols="500"  class="form-control ml-2" placeholder="Track caption"></textarea></td>
-                </tr>
-                <tr class="form-group">
-                    <td>&nbsp;</td>
-                    <td class=""><input type="submit"  class="btn btn-primary ml-2" name="submit" value="Post"></td>
-                </tr>
-        </table>
-    </fieldset>
-</form>
+<!--I Used Add Track Modal at the bottom of user_nav.blade.php because there are issues if i put it here
+    because in the documentation of modal the say " Nested modals aren’t supported as we believe them to be poor user experiences."
+    -->

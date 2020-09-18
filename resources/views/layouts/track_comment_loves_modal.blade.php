@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#comment-loves-{{$comment->id}}">
-    <span>{{$comment->commentLoves()->count()}}</span><span>Love</span>
+    <span id="track_comment_loves-{{$comment->id}}">{{$comment->commentLoves()->count()}}</span><span> Love</span>
 </button>
 <!-- Modal -->
 <div class="modal fade" id="comment-loves-{{$comment->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="comment-loves-Label-{{$comment->id}}" aria-hidden="true">

@@ -16,11 +16,7 @@
             </span>
             <div class="dropdown-divider"></div>
             <span class="dropdown-item">
-                <form action="/tracks/{{$track->id}}" method="post">
-                    {{csrf_field()}}
-                    {{method_field('delete')}}
-                    <input type="submit" value="Delete" class="btn btn-danger w-100">
-                </form>
+                @include('layouts.delete_track_modal')
             </span>
         @else
             @include('layouts.track_report_modal')

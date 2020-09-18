@@ -1,6 +1,6 @@
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#track-loves-{{$track->id}}">
-    <span>{{$track->trackLoves()->count()}}</span><span> Love</span>
+    <span class="" id="track_loves-{{$track->id}}">{{$track->trackLoves()->count()}}</span><span> Love</span>
 </button>
 <!-- Modal -->
 <div class="modal fade" id="track-loves-{{$track->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="track-loves-Label-{{$track->id}}" aria-hidden="true">

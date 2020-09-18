@@ -8,11 +8,7 @@
             </span>
             <div class="dropdown-divider"></div>
             <span class="dropdown-item">
-                <form method="post" action="/comments/{{$comment->id}}">
-                    {{csrf_field()}}
-                    {{method_field('delete')}}
-                    <input type="submit" value="Delete" class="btn btn-danger w-100">
-                </form>
+                @include('layouts.delete_track_comment_modal')
             </span>
         @else
             <span class="dropdown-item" id="track-menu-wrapper-item-report-{{$comment->id}}">

@@ -18,7 +18,47 @@ class TracksController extends Controller
      */
     public function index()
     {
-        dd("index");
+        $lastId = null;
+        if (\Request()->ajax()){
+            $tracks = DB::table('tracks')
+                ->where('user_id','=',\request('user_id'))
+                ->where('id','<',\request('last_id'))
+                ->limit(2)
+                ->get();
+            $output='';
+            if(! $tracks->isEmpty()){
+                foreach ($tracks as $track) {
+                    $output .= '
+
+
+
+                ';
+
+                    $lastId = $track->id;
+                }
+                $output.='
+                    <div class="master_view-show_more" id="master_view-show_more">
+                        <button type="button" id="master_view-show_more-button-tracks-profile" class="btn btn-success "  data-last_id="'.$lastId.'" data-user_id="'.\request('user_id').'">
+                            Show More
+                        </button>
+                    </div>
+                    ';
+            }else{
+                $output.= '
+                    <div class="master_view-show_more">
+                        <button type="button"  class="btn btn-danger" >
+                            No More
+                        </button>
+                    </div>
+                ';
+            }
+            echo $output;
+
+
+
+        }else{
+
+        }
     }
 
     /**
@@ -81,12 +121,15 @@ class TracksController extends Controller
      */
     public function show(Track $track)
     {
-        $comments = $track->Comments()->simplePaginate(5);
+        $comments = $track->Comments()->simplePaginate(1);
 
         $comment_to_edit = null ;
         $track_id_to_edit = null ;
-        $tracks_or_track_or_not = 'track' ;
-        return view('show_track',compact('track','comments' ,'comment_to_edit','track_id_to_edit','tracks_or_track_or_not'));
+        $lastId = null;
+        foreach ($comments as $comment){
+            $lastId = $comment->id ;
+        }
+        return view('show_track',compact('track','comments' ,'comment_to_edit','track_id_to_edit','lastId'));
     }
 
     /**
@@ -129,7 +172,7 @@ class TracksController extends Controller
             // then remove the file
             // Note that even though the database entry is gone, this object
             // is still around (which lets us use $this->image_path()).
-//            if(unlink(storage_path('app/uploads/tracks/'.$track->temp_name))){
+//            if(unlink(storage_path('app/uploads/tracks/').$track->temp_name)){
 //                session()->flash('message','Done');
 //            }else{
 //                session()->flash('message',"Sorry");
@@ -140,7 +183,13 @@ class TracksController extends Controller
 
         }
 
-        return back();
+
+        if (back()->getTargetUrl() == "http://localhost:8000/tracks/".$track->id ){
+            return redirect('/');
+
+        }else{
+            return back();
+        }
     }
 
     public function search(Request $request,$user_id)

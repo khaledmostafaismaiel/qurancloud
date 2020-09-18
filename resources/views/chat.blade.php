@@ -7,8 +7,8 @@
 
     <div class="flex-container-row-no_wrap-no_space">
     @if($chats)
-        <nav class="chat-sidebar"{{--TO SEE ONLINE USERS UNCOMMENT id="online-users"--}}>
-            <ul class="chat-side-nav">
+        <nav class="chat-sidebar">
+            <ul class="chat-side-nav" {{--TO SEE ONLINE USERS UNCOMMENT id="online-users"--}}  id="online-users">
                 @foreach($chats as $chat)
                     <li class="chat-side-nav__item /*chat-side-nav__item--active*/">
                         <a href="/chats/{{$chat->id}}" class="chat-side-nav__link">

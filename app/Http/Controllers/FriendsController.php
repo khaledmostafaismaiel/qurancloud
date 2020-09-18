@@ -18,6 +18,7 @@ class FriendsController extends Controller
      */
     public function index()
     {
+        return view('friends');
 
     }
 
@@ -107,12 +108,12 @@ class FriendsController extends Controller
         $lastId = "";
         if (\request()->ajax()){
 
-            if(\request()->last_id > 0){
+            if(\request()->last_id >= 0){
 
                 $followers = DB::table('friends')
                     ->where('id','>',\request()->last_id)
                     ->where('following_user_id','=',$user_id)
-                    ->limit(10)
+                    ->limit(2)
                     ->get();
             }else{
 
@@ -127,36 +128,39 @@ class FriendsController extends Controller
                 foreach ($followers as $follower) {
 
                     $output .= '
-                    <div class="table-loves-record">
-                            <span class="flex-container-column-wrap">
-                                <a href="/users/'.$follower->follower_user_id.'">
-                                    <img src="/storage/uploads/profile_pictures/'.User::findorfail($follower->follower_user_id)->profile_picture.'" alt="User photo" class="track-comment-photo">
-                                </a>
-                                <a href="/users/'.$follower->follower_user_id.'" class="flex-item-row-wrap table-loves-record-user_name">
-                                    '.User::findorfail($follower->follower_user_id)->full_name().'
-                                </a>
-                            </span>
-                        </div>
+                                <tr class="col">
+                                    <td class="col-auto"><img src="/storage/uploads/profile_pictures/'.\App\User::findorfail($follower->follower_user_id)->profile_picture.'" alt="User photo" class="track-comment-photo"></td>
+                                    <td class="col-auto">'.\App\User::findorfail($follower->follower_user_id)->full_name().'</td>
+                                    <td class="col-auto"><a class="btn btn-success" href="/users/'.$follower->follower_user_id.'">View</a></td>
+                                </tr>
                     ';
 
                     $lastId = $follower->id;
                 }
 
                 $output.='
-                    <div class="master_view-show_more" id="master_view-show_more-followers">
-                        <button type="button" id="master_view-show_more-button-follower" class="master_view-show_more-input" data-last_id="'.$lastId.'" data-user_id="'.$user_id.'">
-                            Show More ..
-                        </button>
-                    </div>
+                        <tr>
+                            <td>
+                                <div class="master_view-show_more" id="master_view-show_more-followers">
+                                    <button type="button" id="master_view-show_more-button-followers" class="btn btn-success" data-last_id="'.$lastId.'" data-user_id="'.$user_id.'">
+                                        Show More
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     ';
             }else{
 
                 $output.= '
-                    <div class="master_view-show_more">
-                        <button type="button" class="master_view-show_more-input-no_more">
-                            No More
-                        </button>
-                    </div>
+                        <tr>
+                            <td>
+                                <div class="master_view-show_more" id="master_view-show_more-followers">
+                                    <button type="button" class="btn btn-danger">
+                                        No More
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     ';
             }
             echo $output;
@@ -180,7 +184,7 @@ class FriendsController extends Controller
         $lastId = "";
         if (\request()->ajax()){
 
-            if(\request()->last_id > 0){
+            if(\request()->last_id >= 0){
 
                 $followings = DB::table('friends')
                     ->where('id','>',\request()->last_id)
@@ -201,41 +205,43 @@ class FriendsController extends Controller
             if(! $followings->isEmpty()){
                 foreach ($followings as $following) {
                     $output .= '
-                        <div class="table-loves-record">
-                            <span class="flex-container-column-wrap">
-                                <a href="/users/'.$following->following_user_id.'">
-                                    <img src="/storage/uploads/profile_pictures/'.User::findorfail($following->following_user_id)->profile_picture.'" alt="User photo" class="track-comment-photo">
-                                </a>
-                                <a href="/users/{{$following->following_user_id}}" class="flex-item-row-wrap table-loves-record-user_name">
-                                    '.User::findorfail($following->following_user_id)->full_name().'
-                                </a>
-                            </span>
-                        </div>
-                    ';
+                                <tr class="col">
+                                    <td class="col-auto"><img src="/storage/uploads/profile_pictures/'.\App\User::findorfail($following->following_user_id)->profile_picture.'" alt="User photo" class="user-nav__user-photo mb-4"></td>
+                                    <td class="col-auto">'.\App\User::findorfail($following->following_user_id)->full_name().'</td>
+                                    <td class="col-auto"><a class="btn btn-success" href="/users/'.$following->following_user_id.'">View</a></td>
+                                </tr>
+                                ';
 
                     $lastId = $following->id;
                 }
 
                 $output.='
-                    <div class="master_view-show_more" id="master_view-show_more-followings">
-                        <button type="button" id="master_view-show_more-button-followings" class="master_view-show_more-input" data-last_id="'.$lastId.'" data-user_id="'.$user_id.'">
-                            Show More
-                        </button>
-                    </div>
+                        <tr class="">
+                            <td>
+                                <div class="master_view-show_more"  id="master_view-show_more-followings">
+                                    <button type="button" id="master_view-show_more-button-followings" class="btn btn-success" data-last_id="'.$lastId.'" data-user_id="'.$user_id.'">
+                                        Show More
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
                     ';
             }else{
-
                 $output.= '
-                    <div class="master_view-show_more">
-                        <button type="button" class="master_view-show_more-input-no_more">
-                            No More
-                        </button>
-                    </div>
+                        <tr>
+                            <td>
+                                <div class="master_view-show_more" id="master_view-show_more-followings">
+                                    <button type="button" class="btn btn-danger">
+                                        No More
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+
                     ';
             }
             echo $output;
         }else{
-            $tracks_or_track_or_not = 'not' ;
 
             $followings = User::findorfail(\request('user_id'))->followings()->simplePaginate(1) ;
 
@@ -243,7 +249,7 @@ class FriendsController extends Controller
                 $lastId = $following->id ;
             }
 
-            return view('followings',compact('followings','tracks_or_track_or_not','user_id','lastId'));
+            return view('followings',compact('followings','user_id','lastId'));
 
         }
     }

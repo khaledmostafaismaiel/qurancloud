@@ -7,6 +7,7 @@ use App\Track;
 use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\DB;
 
 class CommentsController extends Controller
 {
@@ -17,7 +18,48 @@ class CommentsController extends Controller
      */
     public function index()
     {
-        //
+        $lastId = null;
+        if (\Request()->ajax()){
+            $comments = DB::table('comments')
+                ->orderByDesc('created_at')
+                ->where('track_id','=',\request('track_id'))
+                ->where('id','<',\request('last_id'))
+                ->limit(2)
+                ->get();
+            $output='';
+            if(! $comments->isEmpty()){
+                foreach ($comments as $comment) {
+                    $output .= '
+
+
+
+                ';
+
+                    $lastId = $comment->id;
+                }
+                $output.='
+                    <div class="master_view-show_more">
+                        <button type="button" id="master_view-show_more-button-comments" class="btn btn-success" data-last_id="'.$lastId.'"  data-track_id="'.\request('track_id').'">
+                            Show More
+                        </button>
+                    </div>
+                    ';
+            }else{
+                $output.= '
+                <div class="master_view-show_more">
+                    <button type="button"  class="btn btn-danger">
+                        No More
+                    </button>
+                </div>
+                ';
+            }
+            echo $output;
+
+
+
+        }else{
+
+        }
     }
 
     /**
@@ -38,25 +80,28 @@ class CommentsController extends Controller
      */
     public function store(Request $request)
     {
-        $valid = $request->validate(
-            [
-                'track_id'=> ['required'] ,
-                'comment'=> ['required'] ,
-            ]
-        );
+        if ($request->ajax()){
+            $valid = $request->validate(
+                [
+                    'track_id'=> ['required'] ,
+                    'comment'=> ['required'] ,
+                ]
+            );
+            if(Comment::create([
+                'user_id'=> auth()->id(),
+                'track_id'=>  strtolower(trim($request->track_id)) ,
+                'comment'=>  trim($request->comment) ,
+            ])){
 
-        if(Comment::create([
-            'user_id'=> auth()->id(),
-            'track_id'=>  strtolower(trim($request->track_id)) ,
-            'comment'=>  trim($request->comment) ,
-        ])){
+                session()->flash('message','Done');
 
-            session()->flash('message','Done');
-            return back();
+            }else{
+                session()->flash('message','Sorry');
+            }
 
+            return "Done";
         }else{
-            session()->flash('message','Sorry');
-            return back();
+
         }
     }
 
@@ -88,14 +133,12 @@ class CommentsController extends Controller
             $comment_to_edit = $comment;
             $track = Track::findorfail($comment->track_id);
             $comments = $track->Comments()->simplepaginate(50) ;
-            $tracks_or_track_or_not = 'track';
             $track_id_to_edit = null;
 
             return view('show_track')->with([
                 'comment_to_edit'=>$comment_to_edit ,
                 'track'=>$track ,
                 'comments'=>$comments,
-                'tracks_or_track_or_not'=>$tracks_or_track_or_not,
                 'track_id_to_edit'=>$track_id_to_edit
             ]);
         }
@@ -119,9 +162,7 @@ class CommentsController extends Controller
         if($comment->update()){
             session()->flash('message','Done');
 
-            return back()->with([
-                'comment_to_edit'=>null ,
-            ]);
+            return redirect('/tracks/'. $comment->track_id);
 
         }else{
             session()->flash('message','Sorry');

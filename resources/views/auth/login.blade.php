@@ -30,23 +30,31 @@
                     <input class="form-control" id="user_name" name="user_name" type="text" value=""   placeholder="Enter Your E_mail" required>
                 </div>
 
-                <div class="form-group">
-                    <label class=""  for="password">Password</label>
-                    <input class="form-control"  id="password" name="password"  type="password"   value=""  placeholder="Enter Your Password" required>
+                <div class="form-row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label class=""  for="password">Password</label>
+                            <input class="form-control"  id="password" name="password"  type="password"   value=""  placeholder="Enter Your Password" required>
+                            <div class="valid-feedback">
+                                Looks good!
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label class="" for="password_confirmation">Confirm Password</label>
+                            <input class="form-control" id="password_confirmation" name="password_confirmation" type="password"   value="" placeholder="Confirm Your Password" required>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="" for="password_confirmation">Confirm Password</label>
-                    <input class="form-control" id="password_confirmation" name="password_confirmation" type="password"   value="" placeholder="Confirm Your Password" required>
+                    <label class="" for="gender">Gender</label>
+                    <select name="gender" id=""  size="1" class="form-control" >
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
                 </div>
-
-{{--                <div class="form-group">--}}
-{{--                    <label class="" for="gender">Gender</label>--}}
-{{--                    <select name="gender" id=""  size="1" class="form-control" >--}}
-{{--                        <option value="male">Male</option>--}}
-{{--                        <option value="female">Female</option>--}}
-{{--                    </select>--}}
-{{--                </div>--}}
 
                 <div class="custom-control custom-checkbox">
                     <input class="custom-control-input" id="not_robot" name="not_robot" value="1" type="checkbox" required>
