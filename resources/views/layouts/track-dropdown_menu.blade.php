@@ -4,15 +4,7 @@
     <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropDownMenuButton-{{$track->id}}">
         @if(auth()->id() == $track->user_id)
             <span class="dropdown-item">
-                @if($track->id == $track_id_to_edit)
-                    <form action="/tracks/{{$track->id}}" method="post">
-                        {{csrf_field()}}
-                        {{method_field('patch')}}
-                        <input type="submit" value="EDIT" class="btn btn-info w-100">
-                    </form>
-                @else
-                    <a href="/tracks/{{$track->id}}/edit" class="btn btn-info w-100">Edit</a>
-                @endif
+                <a href="/tracks/{{$track->id}}/edit" class="btn btn-info w-100">Edit</a>
             </span>
             <div class="dropdown-divider"></div>
             <span class="dropdown-item">

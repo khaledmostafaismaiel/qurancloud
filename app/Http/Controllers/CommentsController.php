@@ -20,8 +20,8 @@ class CommentsController extends Controller
     {
         $lastId = null;
         if (\Request()->ajax()){
-            $comments = DB::table('comments')
-                ->orderByDesc('created_at')
+            $comments = Comment::
+                orderByDesc('created_at')
                 ->where('track_id','=',\request('track_id'))
                 ->where('id','<',\request('last_id'))
                 ->limit(2)
@@ -29,11 +29,7 @@ class CommentsController extends Controller
             $output='';
             if(! $comments->isEmpty()){
                 foreach ($comments as $comment) {
-                    $output .= '
-
-
-
-                ';
+                    $output .= view('layouts.track_comment',compact('comment'))->render();
 
                     $lastId = $comment->id;
                 }
@@ -133,13 +129,13 @@ class CommentsController extends Controller
             $comment_to_edit = $comment;
             $track = Track::findorfail($comment->track_id);
             $comments = $track->Comments()->simplepaginate(50) ;
-            $track_id_to_edit = null;
+
 
             return view('show_track')->with([
                 'comment_to_edit'=>$comment_to_edit ,
                 'track'=>$track ,
                 'comments'=>$comments,
-                'track_id_to_edit'=>$track_id_to_edit
+                'lastId'=>\request()->lastId
             ]);
         }
         else{
@@ -178,13 +174,13 @@ class CommentsController extends Controller
      */
     public function destroy(Comment $comment)
     {
-        if($comment->delete()){
-            session()->flash('message','Done');
-            return back();
-
+        if(\request()->ajax()){
+            if($comment->delete()){
+                echo "Done";
+            }else{
+                echo "Sorry";
+            }
         }else{
-            session()->flash('message','Sorry');
-            return back();
 
         }
     }

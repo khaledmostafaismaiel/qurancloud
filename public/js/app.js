@@ -11547,6 +11547,37 @@ window.Echo.channel('chat').listen('MessageSent', function (event) {
 });
 $("document").ready(function () {
   // $('.track-comments-container').css("display" , "none") ;
+  $('.delete-track-submit').on('click', function (event) {
+    event.preventDefault();
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $('#delete_track-' + $(this).data('id')).remove();
+    $('#track-' + $(this).data('id')).remove();
+    $.ajax({
+      url: "/tracks/" + $(this).data('id'),
+      method: "DELETE",
+      success: function success(response) {}
+    });
+  });
+  $('.delete-track_comment-submit').on('click', function (event) {
+    event.preventDefault();
+    $.ajaxSetup({
+      headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+      }
+    });
+    $('#delete_track_comment-' + $(this).data('id')).remove();
+    $('#track_comment-' + $(this).data('id')).remove();
+    $.ajax({
+      url: "/comments/" + $(this).data('id'),
+      method: "DELETE",
+      dataType: 'json',
+      success: function success(response) {}
+    });
+  });
   $('#user-nav__friend_requests_box').on('click', toggleFriendRequests);
   $('#user-nav__messages_box').on('click', toggleMessages);
   $('#user-nav__notifications_box').on('click', toggleNotifications);
@@ -11643,19 +11674,67 @@ $("document").ready(function () {
     if (audioPlayer) {
       $('#track_options-body').empty();
       var track_id = audioPlayerId;
+      getTrackInfo(track_id);
     } else {
       $('#track_options-body').empty();
+      $('#track_options-body').append("choose track to play from HOME and try this again.");
     }
-
-    $('#track_options-body').append("\n<div class=\"col mb-4\">\n    <div class=\"card h-100 text-center border-info track\">\n        <table class=\"mt-3\">\n            <tr>\n                <td class=\"\">\n                    <a href=\"/users/{{$track->user_id}}\">\n                        <img src=\"/storage/uploads/profile_pictures/{{App\\User::findorfail($track->user_id)->profile_picture}}\" class=\"card-img-top mb-1 track-track_owner-pic\" alt=\"...\">\n                    </a>\n                    <a class=\"track-track_owner-name\" href=\"/users/{{App\\User::findorfail($track->user_id)->id}}\">\n                        {{App\\User::findorfail($track->user_id)->full_name()}}\n                    </a>\n                </td>\n            </tr>\n            <tr class=\"\">\n                <td class=\"track-created_at\">\n                    {{date(\"Y-m-d h:i:sa\",strtotime($track->created_at))}}\n                </td>\n            </tr>\n        </table>\n        <div class=\"card-body\">\n            <a href=\"/tracks/{{$track->id}}\" class=\"track-track_name\">\n                <h4 class=\"card-title text-white\">{{$track->file_name}}</h4>\n            </a>\n\n            <div class=\"\">\n                <div class=\"track-upper_buttons flex-container-row-wrap\">\n<!--                    <img src=\"/images/media_repeat_btn.png\" alt=\"repeat\" class=\"flex-item-row-wrap track-upper_buttons-icon repeat\" id=\"repeat\">-->\n<!--                    <img src=\"/images/media_shuffle_btn.png\" alt=\"shuffle\" class=\"flex-item-row-wrap track-upper_buttons-icon shuffle\" id=\"shuffle\">-->\n                    <img src=\"/images/media_addtoplaylist_btn.png\" alt=\"addtoplaylist\" class=\"flex-item-row-wrap track-upper_buttons-icon add_to_play_list\" id=\"add_to_play_list\">\n                    <img src=\"/images/media_mute_btn.png\" alt=\"mute\" class=\"flex-item-row-wrap track-upper_buttons-icon mute\" id=\"mute\">\n                </div>\n                <div class=\"track-volume flex-container-row-no_wrap\">\n                    <span class=\"volume_start\" id=\"volume_start\"></span>\n                    <input class=\"track-volume-volume volume\"  type=\"range\" value=\"\" name=\"volume\" id=\"volume\">\n                    <span class=\"volume_end\" id=\"volume_end\"></span>\n                </div>\n                <div class=\"track-down_buttons flex-container-row-wrap\">\n                    <img src=\"/images/media_last_btn.png\" alt=\"last track\" class=\"flex-item-row-wrap track-down_buttons-icon last_track\" id=\"last_track\">\n                    <img src=\"/images/media_backward_btn.png\" alt=\"back 5 sec\" class=\"flex-item-row-wrap track-down_buttons-icon back_5_sec\" id=\"back_5_sec\">\n                    <img src=\"/images/media_play_btn.png\" alt=\"play\" data-src=\"/storage/uploads/tracks/{{$track->temp_name}}\" data-track_id=\"{{$track->id}}\" class=\"flex-item-row-wrap track-down_buttons-icon play\" id=\"play\">\n                    <img src=\"/images/media_forward_btn.png\" alt=\"next 5 sec\"  class=\"flex-item-row-wrap track-down_buttons-icon next_5_sec\" id=\"next_5_sec\">\n                    <img src=\"/images/media_next_btn.png\" alt=\"next track\" class=\"flex-item-row-wrap track-down_buttons-icon next_track\" id=\"next_track\">\n                </div>\n                <div class=\"track-duration flex-container-row-no_wrap\">\n                    <span class=\"duration_start\" id=\"duration_start\"></span>\n                    <input class=\"track-duration-duration duration\" value=\"0\" type=\"range\"  id=\"duration\">\n                    <span class=\"duration_end\" id=\"duration_end\"></span>\n                </div>\n            </div>\n\n            <p class=\"card-text text-white\">{{$track->caption}}</p>\n        </div>\n        <div class=\"card-footer bg-transparent border-info d-flex justify-content-around align-items-center\">\n            @if(canILoveThisTrack($track) == -1)\n                <img src=\"/images/unlove.png\" alt=\"User photo\" class=\"track-love_photo\" id=\"track-love_photo-{{$track->id}}\" data-id=\"{{$track->id}}\">\n                <form method=\"POST\" action=\"/trackLoves\" class=\"\">\n                    {{csrf_field()}}\n                    <input hidden type=\"text\" name=\"track_id\" value=\"{{$track->id}}\" required>\n                    <input type=\"submit\"  class=\"btn btn-danger\"  name=\"submit\" value=\"Love\">\n                </form>\n            @else\n                <img src=\"/images/love.png\" alt=\"User photo\" class=\"track-unlove_photo\" id=\"track-unlove_photo-{{$track->id}}\" data-id=\"{{$track->id}}\">\n                <form method=\"POST\" action=\"/trackLoves/{{canILoveThisTrack($track)}}\" class=\"\">\n                    {{csrf_field()}}\n                    {{method_field('delete')}}\n                    <input type=\"submit\"  class=\"btn-warning\"  name=\"submit\" value=\"unLove\">\n                </form>\n            @endif\n            @include('layouts.track_loves_modal')\n        </div>\n    </div>\n</div>\n\n\n\n\n        "); //for play
-
-    playMethod();
   }); // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
   //
   // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
   //
   // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
 });
+
+function getTrackInfo() {
+  var track_id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  $.ajax({
+    url: "/tracks/get_track_info/" + track_id,
+    method: "GET",
+    data: {
+      track_id: track_id
+    },
+    dataType: 'json',
+    success: function success(data) {
+      if (!data.track_caption) {
+        data.track_caption = "";
+      }
+
+      $('#track_options-body').append("\n<div class=\"col mb-4\">\n    <div class=\"card h-100 text-center border-info track\">\n        <table class=\"mt-3\">\n            <tr>\n                <td class=\"\">\n                    <a href=\"/users/".concat(data.user_id, "\">\n                        <img src=\"/storage/uploads/profile_pictures/").concat(data.user_profile_picture, "\" class=\"card-img-top mb-1 track-track_owner-pic\" alt=\"...\">\n                    </a>\n                    <a class=\"track-track_owner-name\" href=\"/users/").concat(data.user_id, "\">\n                        ").concat(data.user_full_name, "\n                    </a>\n                </td>\n            </tr>\n            <tr class=\"\">\n                <td class=\"track-created_at\">\n                    ").concat(data.track_created_at, "\n                </td>\n            </tr>\n        </table>\n        <div class=\"card-body\">\n            <a href=\"/tracks/").concat(data.track_id, "\" class=\"track-track_name\">\n                <h4 class=\"card-title text-white\">").concat(data.track_file_name, "</h4>\n            </a>\n\n            <div class=\"\">\n                <div class=\"track-upper_buttons flex-container-row-no_wrap\">\n                    <img src=\"/images/media_repeat_btn.png\" alt=\"repeat\" class=\"flex-item-row-wrap track-upper_buttons-icon repeat\" id=\"repeat\">\n                    <img src=\"/images/media_shuffle_btn.png\" alt=\"shuffle\" class=\"flex-item-row-wrap track-upper_buttons-icon shuffle\" id=\"shuffle\">\n                    <img src=\"/images/media_addtoplaylist_btn.png\" alt=\"addtoplaylist\" class=\"flex-item-row-wrap track-upper_buttons-icon add_to_play_list\" id=\"add_to_play_list\">\n                    <img src=\"/images/media_mute_btn.png\" alt=\"mute\" class=\"flex-item-row-wrap track-upper_buttons-icon mute\" id=\"mute\">\n                </div>\n                <div class=\"track-volume flex-container-row-no_wrap\">\n                    <span class=\"volume_start\" id=\"volume_start\"></span>\n                    <input class=\"track-volume-volume volume\"  type=\"range\" value=\"10\" name=\"volume\" id=\"volume\">\n                    <span class=\"volume_end\" id=\"volume_end\"></span>\n                </div>\n                <div class=\"track-down_buttons flex-container-row-no_wrap\">\n                    <img src=\"/images/media_last_btn.png\" alt=\"last track\" class=\"flex-item-row-wrap track-down_buttons-icon last_track\" id=\"last_track\">\n                    <img src=\"/images/media_backward_btn.png\" alt=\"back 5 sec\" class=\"flex-item-row-wrap track-down_buttons-icon back_5_sec\" id=\"back_5_sec\">\n                    <img src=\"/images/media_pause_btn.png\" alt=\"play\" data-src=\"/storage/uploads/tracks/").concat(data.track_temp_name, "\" data-track_id=\"").concat(data.track_id, "\" class=\"flex-item-row-wrap track-down_buttons-icon play\" id=\"play\">\n                    <img src=\"/images/media_forward_btn.png\" alt=\"next 5 sec\"  class=\"flex-item-row-wrap track-down_buttons-icon next_5_sec\" id=\"next_5_sec\">\n                    <img src=\"/images/media_next_btn.png\" alt=\"next track\" class=\"flex-item-row-wrap track-down_buttons-icon next_track\" id=\"next_track\">\n                </div>\n                <div class=\"track-duration flex-container-row-no_wrap\">\n                    <span class=\"duration_start\" id=\"duration_start\"></span>\n                    <input class=\"track-duration-duration duration\" value=\"0\" type=\"range\"  id=\"duration\">\n                    <span class=\"duration_end\" id=\"duration_end\"></span>\n                </div>\n            </div>\n\n            <p class=\"card-text text-white\">").concat(data.track_caption, "</p>\n        </div>\n        <div class=\"card-footer bg-transparent border-info d-flex justify-content-around align-items-center\">\n\n        </div>\n    </div>\n</div>\n        ")); //for repeat
+
+      $('#repeat').on('click', repeatMethod); //for shuffle
+
+      $('#shuffle').on('click', shuffleMethod); //for add to play list
+
+      $('#add_to_play_list').on('click', addToPlayListMethod); //for mute
+
+      $('#mute').on('click', muteMethod); //for volume
+
+      audioPlayer.volume = $('#volume').val() / 100;
+      document.getElementById('volume_start').innerHTML = parseInt(audioPlayer.volume * 100);
+      document.getElementById('volume_end').innerHTML = "100";
+      $('#volume').on('change', voluemMethod); //for last track
+
+      $('#last_track').on('click', lastTrackMethod); // //for back 5 sec
+
+      $('#back_5_sec').on('click', back5SecMethod); //for next 5 sec
+
+      $('#next_5_sec').on('click', next5SecMethod); //for next track
+
+      $('#next_track').on('click', nextTrackMethod); //for duration
+
+      $('#duration').on('change', durationMethod); //for play
+
+      playMethod();
+      audioPlayer.addEventListener('timeupdate', function () {
+        var position = audioPlayer.currentTime / audioPlayer.duration * 100;
+        document.getElementById('duration_start').innerHTML = parseInt(audioPlayer.currentTime);
+        document.getElementById('duration_end').innerHTML = parseInt(audioPlayer.duration);
+        document.getElementById('duration').setAttribute('value', parseInt(position));
+      });
+    }
+  });
+}
 
 function toggleFriendRequests(event) {
   if (screen.width > 992) {
@@ -11928,10 +12007,6 @@ function get_chat_id_by_user_id(user) {// $.ajax({
   // });
 }
 
-function get_track_data() {
-  var track_id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
-}
-
 function full_name(user) {
   return user.first_name + " " + user.second_name;
 }
@@ -11992,6 +12067,12 @@ function muteMethod() {
   }
 }
 
+function voluemMethod(event) {
+  audioPlayer.volume = $(this).val() / 100;
+  document.getElementById('volume_start').innerHTML = parseInt(audioPlayer.volume * 100);
+  document.getElementById('volume_end').innerHTML = "100";
+}
+
 function lastTrackMethod(event) {
   console.log("lastTrackMethod");
 }
@@ -12018,35 +12099,7 @@ function playMethod() {
         document.body.appendChild(audioPlayer);
         audioPlayer.play();
         event.target.src = '/images/media_pause_btn.png';
-        trackIsPlaying = 1;
-        audioPlayer.addEventListener('timeupdate', function () {
-          var position = audioPlayer.currentTime / audioPlayer.duration * 100;
-          document.getElementById('duration_start').innerHTML = parseInt(audioPlayer.currentTime);
-          document.getElementById('duration').setAttribute('value', parseInt(position));
-          document.getElementById('duration_end').innerHTML = parseInt(audioPlayer.duration);
-        }); //for repeat
-
-        $('#repeat').on('click', repeatMethod); //for shuffle
-
-        $('#shuffle').on('click', shuffleMethod); //for add to play list
-
-        $('#add_to_play_list').on('click', addToPlayListMethod); //for volume
-
-        document.getElementById('volume_start').innerHTML = "0";
-        document.getElementById('volume_end').innerHTML = parseInt(audioPlayer.volume * 100);
-        $('#volume').on('change', voluemMethod); //for last track
-
-        $('#last_track').on('click', lastTrackMethod); //for next track
-
-        $('#next_track').on('click', nextTrackMethod); //for mute
-
-        $('#mute').on('click', muteMethod); //for next 5 sec
-
-        $('#next_5_sec').on('click', next5SecMethod); // //for back 5 sec
-
-        $('#back_5_sec').on('click', back5SecMethod); //for duration
-
-        $('#duration').on('change', durationMethod); //for end
+        trackIsPlaying = 1; //for end
 
         audioPlayer.addEventListener("ended", function () {
           audioPlayer.parentNode.removeChild(audioPlayer); // event.target.id = '';
@@ -12103,13 +12156,9 @@ function nextTrackMethod(event) {
   console.log("nextTrackMethod");
 }
 
-function voluemMethod(event) {
-  audioPlayer.volume = $(this).val() / 100;
-}
-
 function durationMethod(event) {
-  // audioPlayer.currentTime = parseInt(($(this).val() * 100) / audioPlayer.duration);
-  console.log($(this).val() / 100 / audioPlayer.duration);
+  audioPlayer.currentTime = parseInt(audioPlayer.duration * $(this).val() / 100);
+  console.log(parseInt(audioPlayer.duration * $(this).val() / 100));
 }
 
 /***/ }),

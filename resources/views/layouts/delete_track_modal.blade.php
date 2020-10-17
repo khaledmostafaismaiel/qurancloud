@@ -1,5 +1,5 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-danger  w-100" data-toggle="modal" data-target="#delete_track-{{$track->id}}">
+<button type="button" class="btn btn-danger w-100" data-toggle="modal" data-target="#delete_track-{{$track->id}}">
     Delete
 </button>
 

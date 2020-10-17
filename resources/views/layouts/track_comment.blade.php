@@ -1,4 +1,4 @@
-<div class="card h-100 border-bottom-0 border-info track-comment">
+<div class="card h-100 border-bottom-0 border-info track-comment" id="track_comment-{{$comment->id}}">
     <div class="card-body">
         <table>
             <tr>
@@ -113,7 +113,7 @@
                     {{csrf_field()}}
                     {{method_field('delete')}}
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" name="delete" class="btn btn-danger">Delete</button>
+                    <button type="submit" name="delete" class="btn btn-danger delete-track_comment-submit" data-id="{{$comment->id}}" data-dismiss="modal">Delete</button>
                 </form>
             </div>
         </div>

@@ -113,14 +113,13 @@ class UsersController extends Controller
         $tracks = $user->tracks()->simplePaginate(1) ;
 
         $comment_to_edit = null;//because profile includes track_comment and there are more than one .blade include track_comment
-        $track_id_to_edit = null ;
 
         $lastId = null;
         foreach ($tracks as $track){
             $lastId = $track->id;
         }
 
-        return view('profile' , compact('user','tracks','comment_to_edit','track_id_to_edit','lastId'));
+        return view('profile' , compact('user','tracks','comment_to_edit','lastId'));
 
     }
 

@@ -121,15 +121,14 @@ class TracksController extends Controller
      */
     public function show(Track $track)
     {
-        $comments = $track->Comments()->simplePaginate(1);
+        $comments = $track->Comments()->simplePaginate(3);
 
         $comment_to_edit = null ;
-        $track_id_to_edit = null ;
         $lastId = null;
         foreach ($comments as $comment){
             $lastId = $comment->id ;
         }
-        return view('show_track',compact('track','comments' ,'comment_to_edit','track_id_to_edit','lastId'));
+        return view('show_track',compact('track','comments' ,'comment_to_edit','lastId'));
     }
 
     /**
@@ -140,10 +139,11 @@ class TracksController extends Controller
      */
     public function edit(Track $track)
     {
-        $track_id_to_edit = $track->id ;
-        $tracks_or_track_or_not = 'track' ;
 
-        return back(compact('tracks_or_track_or_not'));
+        $track_to_edit = $track ;
+        $lastId = \request()->lastId;
+        $comments = $track->Comments;
+        return view('show_track',compact('track','track_to_edit','lastId','comments'));
     }
 
     /**
@@ -155,8 +155,17 @@ class TracksController extends Controller
      */
     public function update(Request $request, Track $track)
     {
-        dd("update");
+        $validate = $request->validate([
+           'caption'=>'required'
+        ]);
 
+        $track->caption = $request->caption;
+        if ($track->save()){
+
+            return redirect('/tracks/'. $track->id);
+        }else{
+
+        }
     }
 
     /**
@@ -167,28 +176,33 @@ class TracksController extends Controller
      */
     public function destroy(Track $track)
     {
-        // First remove the database entry
-        if($track->delete()) {
-            // then remove the file
-            // Note that even though the database entry is gone, this object
-            // is still around (which lets us use $this->image_path()).
+        if(\request()->ajax()){
+            // First remove the database entry
+            if($track->delete()) {
+                // then remove the file
+                // Note that even though the database entry is gone, this object
+                // is still around (which lets us use $this->image_path()).
 //            if(unlink(storage_path('app/uploads/tracks/').$track->temp_name)){
 //                session()->flash('message','Done');
 //            }else{
 //                session()->flash('message',"Sorry");
 //            }
-        } else {
-            // database delete failed
-            session()->flash('message',"Sorry");
+            } else {
+                // database delete failed
+                session()->flash('message',"Sorry");
 
-        }
+            }
 
 
-        if (back()->getTargetUrl() == "http://localhost:8000/tracks/".$track->id ){
-            return redirect('/');
+            if (back()->getTargetUrl() == "http://localhost:8000/tracks/".$track->id ){
 
+                return redirect('/');
+
+            }else{
+                return back();
+            }
         }else{
-            return back();
+
         }
     }
 
@@ -207,5 +221,30 @@ class TracksController extends Controller
             'reason'=>'required',
         ]);
         return back();
+    }
+
+    public function getTrackInfo(){
+        if (\request()->ajax()){
+            $track = \App\Track::findorfail(\request('track_id'));
+
+            $user = \App\User::findorfail($track->user_id);
+
+            $data = array(
+                'track_id'  => $track->id,
+                'track_user_id'  => $track->user_id,
+                'track_caption'  => $track->caption,
+                'track_file_name'  => $track->file_name,
+                'track_temp_name'  => $track->temp_name,
+                'track_created_at'  => $track->created_at,
+                'user_id'  => $user->id,
+                'user_full_name'  => $user->full_name(),
+                'user_profile_picture'  => $user->profile_picture,
+            );
+
+            echo json_encode($data);
+        }else{
+
+        }
+
     }
 }

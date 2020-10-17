@@ -1,4 +1,4 @@
-@component('mail::chat')
+@component('mail::message')
     # New user had signed up now!
     * first name: {{ $user->first_name }}
     * second name: {{ $user->second_name }}

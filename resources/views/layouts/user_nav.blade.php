@@ -167,7 +167,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="track_options-Label">TRACK OPTIONS</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="track_options-modal-close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -175,8 +175,7 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" data-dismiss="modal">OK</button>
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="track_options-modal-ok">OK</button>
             </div>
         </div>
     </div>
