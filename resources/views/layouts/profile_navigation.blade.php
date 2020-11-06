@@ -1,4 +1,4 @@
-<ul class="row d-flex justify-content-around p-3 profile-nav">
+<ul class="row d-flex justify-content-around p-3 profile-nav bg-dark">
 
     <li class="">
         <a href="/users/{{$user->id}}/about" class="">
@@ -30,7 +30,6 @@
                         <table>
                             <thead>
                             <tr>
-
                             </tr>
                             </thead>
                             <tbody id="follower-modal-body">
@@ -56,7 +55,6 @@
             </span>
         </button>
 
-
         <!-- Followings Modal -->
         <div class="modal fade" id="following-modal" tabindex="-1" role="dialog" aria-labelledby="following-modal-Title" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -71,9 +69,6 @@
                         <table>
                             <thead>
                                 <tr>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody id="following-modal-body">
@@ -101,13 +96,15 @@
                 <button class="btn btn-outline-info">Chat</button>
             </a>
         </li>
-        <li class="">
-            <form method="POST" action="/friends" class="">
-                {{csrf_field()}}
-                <input type="text" hidden name="following_user_id" value="{{$user->id}}">
-                <input type="submit"  class="btn btn-outline-info " name="submit" value="FOLLOW">
-            </form>
-        </li>
+        @if(canIFollowThisUser($user) == -1)
+            <li class="">
+                @include('layouts.actions.follow')
+            </li>
+        @else
+            <li class="">
+                @include('layouts.actions.unfollow')
+            </li>
+        @endif
     @endif
 
 </ul>

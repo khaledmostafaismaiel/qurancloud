@@ -20,20 +20,16 @@ class TracksController extends Controller
     {
         $lastId = null;
         if (\Request()->ajax()){
-            $tracks = DB::table('tracks')
-                ->where('user_id','=',\request('user_id'))
+            $tracks = Track::
+                where('user_id','=',\request('user_id'))
                 ->where('id','<',\request('last_id'))
-                ->limit(2)
+                ->orderByDesc('id')
+                ->limit(4)
                 ->get();
             $output='';
             if(! $tracks->isEmpty()){
                 foreach ($tracks as $track) {
-                    $output .= '
-
-
-
-                ';
-
+                    $output .= view('layouts.track',compact('track'))->render();
                     $lastId = $track->id;
                 }
                 $output.='
@@ -121,8 +117,7 @@ class TracksController extends Controller
      */
     public function show(Track $track)
     {
-        $comments = $track->Comments()->simplePaginate(3);
-
+        $comments = $track->Comments()->simplePaginate(1);
         $comment_to_edit = null ;
         $lastId = null;
         foreach ($comments as $comment){

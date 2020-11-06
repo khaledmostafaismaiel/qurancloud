@@ -16,10 +16,9 @@ class CreateTrackLovesTable extends Migration
         Schema::create('track_loves', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('track_id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
-
-//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
         });
     }

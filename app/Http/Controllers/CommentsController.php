@@ -83,19 +83,21 @@ class CommentsController extends Controller
                     'comment'=> ['required'] ,
                 ]
             );
-            if(Comment::create([
-                'user_id'=> auth()->id(),
-                'track_id'=>  strtolower(trim($request->track_id)) ,
-                'comment'=>  trim($request->comment) ,
-            ])){
 
+            $comment = new Comment() ;
+            $comment->user_id = auth()->id() ;
+            $comment->track_id = strtolower(trim($request->track_id)) ;
+            $comment->comment = $request->comment ;
+
+            if($comment->save()){
+                $output = view('layouts.track_comment',compact('comment'))->render();
                 session()->flash('message','Done');
 
+                echo $output ;
             }else{
                 session()->flash('message','Sorry');
             }
 
-            return "Done";
         }else{
 
         }

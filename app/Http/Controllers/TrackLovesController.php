@@ -98,7 +98,6 @@ class TrackLovesController extends Controller
      */
     public function destroy(trackLoves $trackLove)
     {
-        dd("you are in track loves destroy");
         if($trackLove->delete()){
             session()->flash('message','Done');
             return back();

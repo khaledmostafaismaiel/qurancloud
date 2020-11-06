@@ -1,4 +1,4 @@
-<div class="card h-100 border-bottom-0 border-info track-comment" id="track_comment-{{$comment->id}}">
+<div class="card h-100 border-bottom-0 border-info track-comment bg-dark" id="track_comment-{{$comment->id}}">
     <div class="card-body">
         <table>
             <tr>
@@ -38,8 +38,7 @@
                         </form>
                     </td>
                 @else
-                    <td><textarea name="comment"  cols="500" rows="1" readonly class=" w-100 h-auto p-2">{{$comment->comment}}</textarea></td>
-
+                    <td><textarea name="comment"  cols="500" rows="1" readonly class="w-100 h-auto p-2">{{$comment->comment}}</textarea></td>
                 @endif
                 <td>
 

@@ -95,12 +95,18 @@ class FriendsController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Friends  $friends
+     * @param  \App\Friends  $friend
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Friends $friends)
+    public function destroy(Friends $friend)
     {
-        //
+        if ($friend->delete()){
+            session()->flash('message','Done');
+            return back();
+        }else{
+            session()->flash('message','Sorry');
+            return back();
+        }
     }
 
     public function followers($user_id)
@@ -126,15 +132,7 @@ class FriendsController extends Controller
             $output='';
             if(! $followers->isEmpty()){
                 foreach ($followers as $follower) {
-
-                    $output .= '
-                                <tr class="col">
-                                    <td class="col-auto"><img src="/storage/uploads/profile_pictures/'.\App\User::findorfail($follower->follower_user_id)->profile_picture.'" alt="User photo" class="track-comment-photo"></td>
-                                    <td class="col-auto">'.\App\User::findorfail($follower->follower_user_id)->full_name().'</td>
-                                    <td class="col-auto"><a class="btn btn-success" href="/users/'.$follower->follower_user_id.'">View</a></td>
-                                </tr>
-                    ';
-
+                    $output .= view('layouts.popup.followers',compact('follower'))->render() ;
                     $lastId = $follower->id;
                 }
 
@@ -166,15 +164,6 @@ class FriendsController extends Controller
             echo $output;
 
         }else{
-            $tracks_or_track_or_not = 'not' ;
-
-            $followers = User::findorfail(\request('user_id'))->Followers()->simplePaginate(1) ;
-
-            foreach ($followers as $follower){
-                $lastId = $follower->id ;
-            }
-
-            return view('followers',compact('followers','tracks_or_track_or_not','user_id' ,'lastId'));
 
         }
     }
@@ -204,13 +193,7 @@ class FriendsController extends Controller
             $output='';
             if(! $followings->isEmpty()){
                 foreach ($followings as $following) {
-                    $output .= '
-                                <tr class="col">
-                                    <td class="col-auto"><img src="/storage/uploads/profile_pictures/'.\App\User::findorfail($following->following_user_id)->profile_picture.'" alt="User photo" class="user-nav__user-photo mb-4"></td>
-                                    <td class="col-auto">'.\App\User::findorfail($following->following_user_id)->full_name().'</td>
-                                    <td class="col-auto"><a class="btn btn-success" href="/users/'.$following->following_user_id.'">View</a></td>
-                                </tr>
-                                ';
+                    $output .= view('layouts.popup.followings',compact('following'))->render();
 
                     $lastId = $following->id;
                 }
@@ -243,13 +226,6 @@ class FriendsController extends Controller
             echo $output;
         }else{
 
-            $followings = User::findorfail(\request('user_id'))->followings()->simplePaginate(1) ;
-
-            foreach ($followings as $following){
-                $lastId = $following->id ;
-            }
-
-            return view('followings',compact('followings','user_id','lastId'));
 
         }
     }

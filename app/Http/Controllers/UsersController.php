@@ -106,20 +106,16 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-//        dd(auth()->user());
         $user = User::findorfail($id) ;
 
-        $tracks = new Track() ;
-        $tracks = $user->tracks()->simplePaginate(1) ;
-
-        $comment_to_edit = null;//because profile includes track_comment and there are more than one .blade include track_comment
+        $tracks = $user->tracks()->simplePaginate(4) ;
 
         $lastId = null;
         foreach ($tracks as $track){
             $lastId = $track->id;
         }
 
-        return view('profile' , compact('user','tracks','comment_to_edit','lastId'));
+        return view('profile' , compact('user','tracks','lastId'));
 
     }
 

@@ -1,7 +1,7 @@
 @extends('layouts.master_layout')
 @section('content')
     @include('layouts.profile_navigation')
-    <div class="row row-cols-md-3  row-cols-1" >
+    <div class="row row-cols-lg-4 row-cols-md-3  row-cols-sm-2 row-cols-1 " id="tracks_container" >
         @foreach($tracks as $track)
             @include('layouts.track')
         @endforeach

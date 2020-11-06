@@ -8,10 +8,11 @@
             </span>
             <div class="dropdown-divider"></div>
             <span class="dropdown-item">
-                @include('layouts.delete_track_modal')
+                @include('layouts.actions.delete_track_modal')
             </span>
         @else
-            @include('layouts.track_report_modal')
+            @include('layouts.actions.track_report_modal')
         @endif
     </div>
 </div>
+

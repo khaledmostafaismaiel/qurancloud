@@ -75,6 +75,16 @@
         return -1 ; //true
     }
 
+    function canIFollowThisUser($user)
+    {
+        foreach ($user->Followers as $follower) {
+            if ($follower->follower_user_id === auth()->id()) {
+                return $follower->id;
+            }
+        }
+        return -1 ; //true
+    }
+
     function chatOwner($firstUser,$secondUser){
         if($firstUser < $secondUser){
             return $firstUser;

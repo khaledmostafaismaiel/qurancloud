@@ -42,17 +42,12 @@ class LiveSearchController extends Controller
             {
                 foreach($users as $user)
                 {
-
-                    $usersOutput .= '
-                                    <tr>
-                                        <td><img src="/storage/uploads/profile_pictures/'.User::findorfail($user->id)->profile_picture.'" alt="" class="user-nav__user-photo"></td>
-                                        <td>'.User::findorfail($user->id)->full_name().'</td>
-                                        <td><a class="btn btn-success" href="/users/'.$user->id.'">View</a></td>
-                                    </tr>
-                                ';
-
+                    if ($user->id != auth()->id()){
+                        $usersOutput .= view('layouts.livesearch.user',compact('user'))->render() ;
+                    }else{
+                        $total_users_num -= 1;
+                    }
                 }
-
             }
             else
             {
@@ -90,14 +85,7 @@ class LiveSearchController extends Controller
             {
                 foreach($tracks as $track)
                 {
-
-                    $tracksOutput .= '
-                                <tr>
-                                 <td>'.$track->file_name.'</td>
-                                  <td><a class="btn btn-success" href="/tracks/'.$track->id.'">View</a></td>
-                                </tr>
-                                ';
-
+                    $tracksOutput .=  view('layouts.livesearch.track',compact('track'))->render() ;
                 }
 
             }

@@ -534,8 +534,8 @@
     }
     &-track_owner{
         &-pic{
-            width: 7rem;
-            height: 7rem;
+            width: 6rem;
+            height: 6rem;
             border-radius: 50%;
         }
         &-name{
@@ -548,6 +548,7 @@
     }
     &-created_at{
         color: #f1faee;
+        font-size: 1rem;
     }
 
     &-track_name{
@@ -628,11 +629,6 @@
     &-comment {
 
         //display: none;
-
-        background-color: black;
-
-
-
         &-photo{
             height: 5rem;
             width: 5rem;
@@ -653,7 +649,5 @@
         }
 
     }
-
-
 
 }

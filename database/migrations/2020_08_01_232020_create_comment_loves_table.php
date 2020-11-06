@@ -16,10 +16,9 @@ class CreateCommentLovesTable extends Migration
         Schema::create('comment_loves', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('comment_id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->timestamps();
-
-//            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
         });
     }

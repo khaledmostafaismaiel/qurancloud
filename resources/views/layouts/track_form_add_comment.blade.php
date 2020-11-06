@@ -1,4 +1,4 @@
-<div class="card h-100 border-bottom-0 border-info track-comment">
+<div class="card h-100 border-bottom-0 border-info track-comment bg-dark">
     <div class="card-body">
         <form method="POST" action="/comments" class="add_comment" id="add_comment-{{$track->id}}" data-id="{{$track->id}}">
             {{csrf_field()}}

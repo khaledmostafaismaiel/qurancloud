@@ -676,7 +676,6 @@ body {
   font-size: 1.4rem;
   list-style: none;
   border-radius: 1rem;
-  background-color: black;
   margin: 0 .3rem 1rem .3rem;
 }
 
@@ -1274,8 +1273,8 @@ body {
 }
 
 .track-track_owner-pic {
-  width: 7rem;
-  height: 7rem;
+  width: 6rem;
+  height: 6rem;
   border-radius: 50%;
 }
 
@@ -1290,6 +1289,7 @@ body {
 
 .track-created_at {
   color: #f1faee;
+  font-size: 1rem;
 }
 
 .track-track_name {
@@ -1359,10 +1359,6 @@ body {
   margin: 1rem 0;
   color: white;
   width: 100%;
-}
-
-.track-comment {
-  background-color: black;
 }
 
 .track-comment-photo {

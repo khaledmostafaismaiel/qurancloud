@@ -2,11 +2,13 @@
 @section('content')
     <div class="show_track_container">
         @include('layouts/track')
-        <div id="track-comments-container" class="track-comments-container col">
+        <div id="track-comments-container-{{$track->id}}" class="track-comments-container col">
             @include('layouts.track_form_add_comment')
-            @foreach($comments as $comment)
-                @include('layouts.track_comment')
-            @endforeach
+            <div id="track_comments">
+                @foreach($comments as $comment)
+                    @include('layouts.track_comment')
+                @endforeach
+            </div>
         </div>
     </div>
     <div class="master_view-show_more">

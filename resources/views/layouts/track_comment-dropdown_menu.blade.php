@@ -8,11 +8,11 @@
             </span>
             <div class="dropdown-divider"></div>
             <span class="dropdown-item">
-                @include('layouts.delete_track_comment_modal')
+                @include('layouts.actions.delete_track_comment_modal')
             </span>
         @else
             <span class="dropdown-item" id="track-menu-wrapper-item-report-{{$comment->id}}">
-                @include('layouts.track_comment_report_modal')
+                @include('layouts.actions.track_comment_report_modal')
             </span>
         @endif
 

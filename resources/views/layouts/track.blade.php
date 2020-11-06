@@ -1,5 +1,5 @@
 <div class="col mb-4" id="track-{{$track->id}}">
-    <div class="card h-100 text-center border-info track">
+    <div class="card h-100 text-center border-info track bg-dark">
         <table class="mt-3">
             <tr>
                 <td class="">
@@ -153,7 +153,7 @@
 </div>
 
 <!-- Track Loves Modal -->
-<div class="modal fade" id="track-loves-{{$track->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="track-loves-Label-{{$track->id}}" aria-hidden="true">
+<div class="modal fade  offset-xl-5 offset-lg-4 offset-md-4 offset-sm-3" id="track-loves-{{$track->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="track-loves-Label-{{$track->id}}" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">

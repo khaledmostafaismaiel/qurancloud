@@ -195,46 +195,8 @@ window.Echo.channel('chat')
 
 $("document").ready(function () {
 
-
-    // $('.track-comments-container').css("display" , "none") ;
-
-    $('.delete-track-submit').on('click',function (event) {
-        event.preventDefault();
-        $.ajaxSetup({
-            headers:{
-                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $('#delete_track-'+ $(this).data('id')).remove();
-        $('#track-'+ $(this).data('id')).remove();
-        $.ajax({
-            url:"/tracks/"+ $(this).data('id') ,
-            method:"DELETE",
-            success:function (response) {
-
-            }
-        });
-    });
-    $('.delete-track_comment-submit').on('click',function (event) {
-        event.preventDefault();
-        $.ajaxSetup({
-            headers:{
-                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-            }
-        });
-
-        $('#delete_track_comment-'+ $(this).data('id')).remove();
-        $('#track_comment-'+ $(this).data('id')).remove();
-        $.ajax({
-            url:"/comments/"+ $(this).data('id') ,
-            method:"DELETE",
-            dataType:'json',
-            success:function (response) {
-
-            }
-        });
-    });
+    $('.delete-track-submit').on('click',delete_track_submit);
+    $('.delete-track_comment-submit').on('click',delete_track_comment_submit);
 
     $('#user-nav__friend_requests_box').on('click',toggleFriendRequests);
     $('#user-nav__messages_box').on('click',toggleMessages);
@@ -271,15 +233,11 @@ $("document").ready(function () {
 
 
     $(document).on('click','#follower-modal-button',function () {
-        console.log("hi");
-
         var user_id = $(this).data('user_id');
         var last_id = 0 ;
         loadMoreFollowers(user_id,last_id);
     });
     $(document).on('click','#master_view-show_more-button-followers',function(){
-        console.log("hi");
-
         var user_id = $(this).data('user_id');
         $('#master_view-show_more-button-followers').html('<b>Loadding...</b>');
         var last_id = $(this).data('last_id');
@@ -287,15 +245,11 @@ $("document").ready(function () {
     });
 
     $(document).on('click','#following-modal-button',function () {
-        console.log("hi");
-
         var user_id = $(this).data('user_id');
         var last_id = 0 ;
         loadMoreFollowings(user_id,last_id);
     });
     $(document).on('click','#master_view-show_more-button-followings',function(){
-        console.log("hi");
-
         var user_id = $(this).data('user_id');
         $('#master_view-show_more-button-followings').html('<b>Loadding...</b>');
         var last_id = $(this).data('last_id');
@@ -320,37 +274,8 @@ $("document").ready(function () {
     // });
 
 
-    $('.add_comment').on('submit',addComment);//from comment by ajax without reloading
-    $('.add_comment').keypress(function(event){
-        if(event.which == 13){
-            event.preventDefault();
-            $.ajaxSetup({
-                headers:{
-                    'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            var trackId = $(this).data('id');
-
-            var comment = $('#comment-'+ trackId).val();
-            $.ajax({
-                url:"/comments",
-                method:"POST",
-                data:{
-                    track_id : trackId,
-                    comment : comment,
-                },
-                success:function (result) {
-                    console.log(result);
-                    $('#comment-'+ trackId).val("");
-                    //we need to append our new comment or to make chancel and listen to it
-
-                }
-
-            }) ;
-
-        }
-    });
+    $('.add_comment').on('submit',addCommentFromSubmit);//from comment by ajax without reloading
+    $('.add_comment').keypress(addCommentFromEnter);
 
 
     $('#track_options-user_nav-btn').on('click',function (event) {
@@ -497,7 +422,46 @@ function getTrackInfo(track_id="") {
     });
 }
 
+function delete_track_submit(event) {
+    event.preventDefault();
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
 
+    $('#delete_track-'+ $(this).data('id')).remove();
+    $('#track-'+ $(this).data('id')).remove();
+    $('#track-comments-container-'+ $(this).data('id')).remove();
+    $('#master_view-show_more-button-comments').remove();
+
+    $.ajax({
+        url:"/tracks/"+ $(this).data('id') ,
+        method:"DELETE",
+        success:function (response) {
+
+        }
+    });
+}
+function delete_track_comment_submit(event) {
+    event.preventDefault();
+    $.ajaxSetup({
+        headers:{
+            'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#delete_track_comment-'+ $(this).data('id')).remove();
+    $('#track_comment-'+ $(this).data('id')).remove();
+    $.ajax({
+        url:"/comments/"+ $(this).data('id') ,
+        method:"DELETE",
+        dataType:'json',
+        success:function (response) {
+
+        }
+    });
+}
 
 function toggleFriendRequests(event) {
     if ( screen.width > 992 ){
@@ -618,38 +582,6 @@ function unLoveComment(event){
 
 }
 
-function successfun(result) {
-    $('#endoftext').append(result);
-
-}
-
-function errorfun() {
-    console.log("There are an error");
-}
-
-function getData() {
-    $.get('',{
-        url:"/",
-        success:successfun,
-        error:errorfun,
-        complete:function (xhr,status) {
-            console.log("the request is complete!");
-        }
-    });
-}
-
-function signoutFun() {
-    var _token = $('input[name="_token"]').val();
-
-    $.ajax({
-        url:"/users/process_sign_out",
-        method:'POST',
-        data:{
-            _token:_token
-        },
-    });
-}
-
 function loadMoreIndexTracks(last_id=""){
     $.ajax({
         url:"/",
@@ -659,7 +591,9 @@ function loadMoreIndexTracks(last_id=""){
         },
         success:function (tracks) {
             $('#master_view-show_more').remove();
-            $('#master_view').append(tracks);
+            $('#tracks_container').append(tracks);
+            $('.delete-track-submit').on('click',delete_track_submit);
+
         }
     });
 }
@@ -673,7 +607,9 @@ function loadMoreProfileTracks(last_id="",user_id=""){
         },
         success:function (tracks) {
             $('#master_view-show_more').remove();
-            $('#master_view').append(tracks);
+            $('#tracks_container').append(tracks);
+            $('.delete-track-submit').on('click',delete_track_submit);
+
         }
     });
 }
@@ -687,7 +623,8 @@ function loadMoreComments(last_id="",track_id=""){
         },
         success:function (comments) {
             $('#master_view-show_more-button-comments').remove();
-            $('#track-comments-container').append(comments);
+            $('.track-comments-container').append(comments);
+            $('.delete-track_comment-submit').on('click',delete_track_comment_submit);
         }
     });
 }
@@ -703,7 +640,6 @@ function loadMoreFollowers(user_id,last_id="") {
                 $('#follower-modal-body').remove();
                 $('#modal-body-div-follower').append(`
                     <tbody id="follower-modal-body">
-
                     </tbody>
                 `);
                 $('#follower-modal-body').append(followers);
@@ -757,7 +693,7 @@ function loadMoreFollowings(user_id,last_id="") {
     }
 }
 
-function addComment(event){
+function addCommentFromSubmit(event){
 
     event.preventDefault();
     $.ajaxSetup({
@@ -767,7 +703,6 @@ function addComment(event){
     });
 
     var trackId = $(this).data('id');
-
     var comment = $('#comment-'+ trackId).val();
     $.ajax({
         url:"/comments",
@@ -776,17 +711,45 @@ function addComment(event){
             track_id : trackId,
             comment : comment,
         },
-        success:function (result) {
-            console.log(result);
+        success:function (comment) {
             $('#comment-'+ trackId).val("");
-            //we need to append our new comment or to make chancel and listen to it
-
+            $('#track_comments').prepend(comment);
+            $('.delete-track_comment-submit').on('click',delete_track_comment_submit);
         }
 
     }) ;
 }
 
+function addCommentFromEnter(event){
 
+    if(event.which == 13){
+        event.preventDefault();
+        $.ajaxSetup({
+            headers:{
+                'X-CSRF-TOKEN':$('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        var trackId = $(this).data('id');
+
+        var comment = $('#comment-'+ trackId).val();
+        $.ajax({
+            url:"/comments",
+            method:"POST",
+            data:{
+                track_id : trackId,
+                comment : comment,
+            },
+            success:function (comment) {
+                $('#comment-'+ trackId).val("");
+                $('#track_comments').prepend(comment);
+                $('.delete-track_comment-submit').on('click',delete_track_comment_submit);
+            }
+
+        }) ;
+
+    }
+}
 
 
 
