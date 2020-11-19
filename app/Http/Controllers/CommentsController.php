@@ -33,24 +33,15 @@ class CommentsController extends Controller
 
                     $lastId = $comment->id;
                 }
-                $output.='
-                    <div class="master_view-show_more">
-                        <button type="button" id="master_view-show_more-button-comments" class="btn btn-success" data-last_id="'.$lastId.'"  data-track_id="'.\request('track_id').'">
-                            Show More
-                        </button>
-                    </div>
-                    ';
+                $track_id = \request('track_id');
+                $output .= view('layouts.showmore-btns.show_more_track_comments',compact('lastId','track_id'))->render();
+
             }else{
-                $output.= '
-                <div class="master_view-show_more">
-                    <button type="button"  class="btn btn-danger">
-                        No More
-                    </button>
-                </div>
-                ';
+                $output .= view('layouts.showmore-btns.no_more_track_comments')->render();
+
             }
             echo $output;
-
+//            return response()->json(['html'=>$output]);
 
 
         }else{

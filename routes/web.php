@@ -113,21 +113,11 @@ Route::get('/', function () {
                 $output .= view('layouts.track',compact('track'))->render();
                 $lastId = $track->id;
             }
-            $output.='
-                    <div class="master_view-show_more" id="master_view-show_more">
-                        <button type="button" id="master_view-show_more-button-tracks-index" class="btn btn-success "  data-last_id="'.$lastId.'">
-                            Show More
-                        </button>
-                    </div>
-                    ';
+            $output .= view('layouts.showmore-btns.show_more_index_tracks',compact('lastId'))->render();
+
         }else{
-            $output.= '
-                    <div class="master_view-show_more">
-                        <button type="button"  class="btn btn-danger">
-                            No More
-                        </button>
-                    </div>
-                ';
+            $output .= view('layouts.showmore-btns.no_more_tracks')->render();
+
         }
         echo $output;
     }else{

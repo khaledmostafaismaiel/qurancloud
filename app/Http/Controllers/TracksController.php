@@ -32,21 +32,12 @@ class TracksController extends Controller
                     $output .= view('layouts.track',compact('track'))->render();
                     $lastId = $track->id;
                 }
-                $output.='
-                    <div class="master_view-show_more" id="master_view-show_more">
-                        <button type="button" id="master_view-show_more-button-tracks-profile" class="btn btn-success "  data-last_id="'.$lastId.'" data-user_id="'.\request('user_id').'">
-                            Show More
-                        </button>
-                    </div>
-                    ';
+                $user_id = \request('user_id');
+                $output .= view('layouts.showmore-btns.show_more_profile_tracks',compact('lastId','user_id'))->render();
+
             }else{
-                $output.= '
-                    <div class="master_view-show_more">
-                        <button type="button"  class="btn btn-danger" >
-                            No More
-                        </button>
-                    </div>
-                ';
+                $output .= view('layouts.showmore-btns.no_more_tracks')->render();
+
             }
             echo $output;
 

@@ -131,35 +131,17 @@ class FriendsController extends Controller
             }
             $output='';
             if(! $followers->isEmpty()){
+
                 foreach ($followers as $follower) {
                     $output .= view('layouts.popup.followers',compact('follower'))->render() ;
                     $lastId = $follower->id;
                 }
 
-                $output.='
-                        <tr>
-                            <td>
-                                <div class="master_view-show_more" id="master_view-show_more-followers">
-                                    <button type="button" id="master_view-show_more-button-followers" class="btn btn-success" data-last_id="'.$lastId.'" data-user_id="'.$user_id.'">
-                                        Show More
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ';
-            }else{
+                $output .= view('layouts.showmore-btns.show_more_followers',compact('lastId','user_id'))->render();
 
-                $output.= '
-                        <tr>
-                            <td>
-                                <div class="master_view-show_more" id="master_view-show_more-followers">
-                                    <button type="button" class="btn btn-danger">
-                                        No More
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ';
+            }else{
+                $output .= view('layouts.showmore-btns.no_more_followers')->render();
+
             }
             echo $output;
 
@@ -198,30 +180,11 @@ class FriendsController extends Controller
                     $lastId = $following->id;
                 }
 
-                $output.='
-                        <tr class="">
-                            <td>
-                                <div class="master_view-show_more"  id="master_view-show_more-followings">
-                                    <button type="button" id="master_view-show_more-button-followings" class="btn btn-success" data-last_id="'.$lastId.'" data-user_id="'.$user_id.'">
-                                        Show More
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    ';
-            }else{
-                $output.= '
-                        <tr>
-                            <td>
-                                <div class="master_view-show_more" id="master_view-show_more-followings">
-                                    <button type="button" class="btn btn-danger">
-                                        No More
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
+                $output .= view('layouts.showmore-btns.show_more_followings',compact('lastId','user_id'))->render();
 
-                    ';
+            }else{
+                $output .= view('layouts.showmore-btns.no_more_followings')->render();
+
             }
             echo $output;
         }else{
