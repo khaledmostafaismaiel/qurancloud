@@ -13,11 +13,12 @@ class messages extends Seeder
     public function run()
     {
         $faker = Faker::create() ;
+        $users_ids = App\User::all()->pluck('id');
         foreach (range(1,50) as $index){
             \Illuminate\Support\Facades\DB::table('messages')->insert([
                 'chat_id'=>$index,
-                'from_user_id'=>$faker->numberBetween(1,50) ,
-                'to_user_id'=>$faker->numberBetween(1,50) ,
+                'from_user_id'=>$faker->randomElement($users_ids),
+                'to_user_id'=>$faker->randomElement($users_ids),
                 'body'=>$faker->sentence(10,true) ,
                 'created_at'=>$faker->date(now()),
 

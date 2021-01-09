@@ -11561,45 +11561,96 @@ $("document").ready(function () {
   $(document).on('blur', '#search', function () {
     $('#search-records').toggle();
   });
-  $(document).on('click', '#master_view-show_more-button-tracks-index', function () {
-    var last_id = $(this).data('last_id');
-    $('#master_view-show_more-button-tracks-index').html('<b>Loadding...</b>');
-    loadMoreIndexTracks(last_id);
-  });
-  $(document).on('click', '#master_view-show_more-button-tracks-profile', function () {
-    var last_id = $(this).data('last_id');
-    var user_id = $(this).data('user_id');
-    $('#master_view-show_more-button-tracks-profile').html('<b>Loadding...</b>');
-    loadMoreProfileTracks(last_id, user_id);
-  });
-  $(document).on('click', '#master_view-show_more-button-comments', function () {
-    var last_id = $(this).data('last_id');
-    var track_id = $(this).data('track_id');
-    $('#master_view-show_more-button-comments').html('<b>Loadding...</b>');
-    loadMoreComments(last_id, track_id);
-  });
-  $(document).on('click', '#follower-modal-button', function () {
-    var user_id = $(this).data('user_id');
-    var last_id = 0;
-    loadMoreFollowers(user_id, last_id);
-  });
-  $(document).on('click', '#master_view-show_more-button-followers', function () {
-    var user_id = $(this).data('user_id');
-    $('#master_view-show_more-button-followers').html('<b>Loadding...</b>');
-    var last_id = $(this).data('last_id');
-    loadMoreFollowers(user_id, last_id);
-  });
-  $(document).on('click', '#following-modal-button', function () {
-    var user_id = $(this).data('user_id');
-    var last_id = 0;
-    loadMoreFollowings(user_id, last_id);
-  });
-  $(document).on('click', '#master_view-show_more-button-followings', function () {
-    var user_id = $(this).data('user_id');
-    $('#master_view-show_more-button-followings').html('<b>Loadding...</b>');
-    var last_id = $(this).data('last_id');
-    loadMoreFollowings(user_id, last_id);
-  });
+
+  if ($('div.index_script').length) {
+    var pageNumber = 1;
+    $(window).ready(function () {
+      loadMoreIndexTracks(pageNumber);
+    });
+    $(window).scroll(function () {
+      if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+        pageNumber++;
+        loadMoreIndexTracks(pageNumber);
+      }
+    });
+  }
+
+  if ($('div.profile_script').length) {
+    var pageNumber = 1;
+    $(window).ready(function () {
+      var userId = $('.profile_script').data('user_id');
+      loadMoreProfileTracks(pageNumber, userId);
+    });
+    $(window).scroll(function () {
+      if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+        pageNumber++;
+        var userId = $('.profile_script').data('user_id');
+        loadMoreProfileTracks(pageNumber, userId);
+      }
+    });
+  }
+
+  if ($('div.profile_script').length) {
+    $(document).on('click', '#follower-modal-button', function () {
+      var user_id = $(this).data('user_id');
+      var pageNumber = 1;
+      $('.modal-body-followers-table').remove();
+      $('.modal-body').append("\n                    <table class=\"modal-body-followers-table\">\n\n                    </table>\n                ");
+      loadMoreFollowers(pageNumber, user_id);
+    });
+    $('.modal-body').scroll(function () {
+      if ($('.modal-body').scrollTop() + $('.modal-body').height() >= $('.modal-body').height()) {
+        pageNumber++;
+        var userId = $('#follower-modal-button').data('user_id');
+        loadMoreFollowers(pageNumber, userId);
+      }
+    });
+    $(document).on('click', '#following-modal-button', function () {
+      var user_id = $(this).data('user_id');
+      var pageNumber = 1;
+      $('.modal-body-following-table').remove();
+      $('.modal-body').append("\n                    <table class=\"modal-body-following-table\">\n\n                    </table>\n                ");
+      loadMoreFollowings(pageNumber, user_id);
+    });
+    $('.modal-body').scroll(function () {
+      if ($('.modal-body').scrollTop() + $('.modal-body').height() >= $('.modal-body').height()) {
+        pageNumber++;
+        var userId = $('#following-modal-button').data('user_id');
+        loadMoreFollowings(pageNumber, userId);
+      }
+    });
+  }
+
+  if ($('div.show_track_script').length) {
+    var pageNumber = 1;
+    $(window).ready(function () {
+      var trackId = $('.show_track_script').data('track_id');
+      loadMoreComments(pageNumber, trackId);
+    });
+    $(window).scroll(function () {
+      if ($(window).scrollTop() + $(window).height() >= $(document).height()) {
+        pageNumber++;
+        var trackId = $('.show_track_script').data('track_id');
+        loadMoreComments(pageNumber, trackId);
+      }
+    });
+
+    if ($('div.track_loves_script').length) {
+      var tackLovespageNumber = 1;
+      $(window).ready(function () {
+        var trackId = $('.track_loves_script').data('track_id');
+        loadMoreTrackLoves(tackLovespageNumber, trackId);
+      });
+      $('.modal-body').scroll(function () {
+        if ($('.modal-body').scrollTop() + $('.modal-body').height() >= $('.modal-body').height()) {
+          tackLovespageNumber++;
+          var trackId = $('.track_loves_script').data('track_id');
+          loadMoreTrackLoves(tackLovespageNumber, trackId);
+        }
+      });
+    }
+  }
+
   $('.track-love_photo').click(loveTrack);
   $('.track-unlove_photo').click(unLoveTrack);
   $('.track-comment-love_photo').click(loveComment);
@@ -11622,28 +11673,32 @@ $("document").ready(function () {
       $('#track_options-body').empty();
       $('#track_options-body').append("choose track to play from HOME and try this again.");
     }
-  }); // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
-  //
-  // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
-  //
-  // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
+  });
+  $('#playlist-user_nav-btn').on('click', function (event) {
+    $.ajax({
+      url: "/playlistTracks",
+      method: 'GET',
+      success: function success(playlist) {
+        $('#playlist-body').empty();
+        $('#playlist-body').append(playlist);
+      },
+      error: function error(playlist) {
+        console.log(playlist);
+      }
+    });
+  });
 });
 
 function getTrackInfo() {
   var track_id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
   $.ajax({
-    url: "/tracks/get_track_info/" + track_id,
+    url: "/tracks/" + track_id,
     method: "GET",
     data: {
       track_id: track_id
     },
-    dataType: 'json',
-    success: function success(data) {
-      if (!data.track_caption) {
-        data.track_caption = "";
-      }
-
-      $('#track_options-body').append("\n<div class=\"col mb-4\">\n    <div class=\"card h-100 text-center border-info track\">\n        <table class=\"mt-3\">\n            <tr>\n                <td class=\"\">\n                    <a href=\"/users/".concat(data.user_id, "\">\n                        <img src=\"/storage/uploads/profile_pictures/").concat(data.user_profile_picture, "\" class=\"card-img-top mb-1 track-track_owner-pic\" alt=\"...\">\n                    </a>\n                    <a class=\"track-track_owner-name\" href=\"/users/").concat(data.user_id, "\">\n                        ").concat(data.user_full_name, "\n                    </a>\n                </td>\n            </tr>\n            <tr class=\"\">\n                <td class=\"track-created_at\">\n                    ").concat(data.track_created_at, "\n                </td>\n            </tr>\n        </table>\n        <div class=\"card-body\">\n            <a href=\"/tracks/").concat(data.track_id, "\" class=\"track-track_name\">\n                <h4 class=\"card-title text-white\">").concat(data.track_file_name, "</h4>\n            </a>\n\n            <div class=\"\">\n                <div class=\"track-upper_buttons flex-container-row-no_wrap\">\n                    <img src=\"/images/media_repeat_btn.png\" alt=\"repeat\" class=\"flex-item-row-wrap track-upper_buttons-icon repeat\" id=\"repeat\">\n                    <img src=\"/images/media_shuffle_btn.png\" alt=\"shuffle\" class=\"flex-item-row-wrap track-upper_buttons-icon shuffle\" id=\"shuffle\">\n                    <img src=\"/images/media_addtoplaylist_btn.png\" alt=\"addtoplaylist\" class=\"flex-item-row-wrap track-upper_buttons-icon add_to_play_list\" id=\"add_to_play_list\">\n                    <img src=\"/images/media_mute_btn.png\" alt=\"mute\" class=\"flex-item-row-wrap track-upper_buttons-icon mute\" id=\"mute\">\n                </div>\n                <div class=\"track-volume flex-container-row-no_wrap\">\n                    <span class=\"volume_start\" id=\"volume_start\"></span>\n                    <input class=\"track-volume-volume volume\"  type=\"range\" value=\"10\" name=\"volume\" id=\"volume\">\n                    <span class=\"volume_end\" id=\"volume_end\"></span>\n                </div>\n                <div class=\"track-down_buttons flex-container-row-no_wrap\">\n                    <img src=\"/images/media_last_btn.png\" alt=\"last track\" class=\"flex-item-row-wrap track-down_buttons-icon last_track\" id=\"last_track\">\n                    <img src=\"/images/media_backward_btn.png\" alt=\"back 5 sec\" class=\"flex-item-row-wrap track-down_buttons-icon back_5_sec\" id=\"back_5_sec\">\n                    <img src=\"/images/media_pause_btn.png\" alt=\"play\" data-src=\"/storage/uploads/tracks/").concat(data.track_temp_name, "\" data-track_id=\"").concat(data.track_id, "\" class=\"flex-item-row-wrap track-down_buttons-icon play\" id=\"play\">\n                    <img src=\"/images/media_forward_btn.png\" alt=\"next 5 sec\"  class=\"flex-item-row-wrap track-down_buttons-icon next_5_sec\" id=\"next_5_sec\">\n                    <img src=\"/images/media_next_btn.png\" alt=\"next track\" class=\"flex-item-row-wrap track-down_buttons-icon next_track\" id=\"next_track\">\n                </div>\n                <div class=\"track-duration flex-container-row-no_wrap\">\n                    <span class=\"duration_start\" id=\"duration_start\"></span>\n                    <input class=\"track-duration-duration duration\" value=\"0\" type=\"range\"  id=\"duration\">\n                    <span class=\"duration_end\" id=\"duration_end\"></span>\n                </div>\n            </div>\n\n            <p class=\"card-text text-white\">").concat(data.track_caption, "</p>\n        </div>\n        <div class=\"card-footer bg-transparent border-info d-flex justify-content-around align-items-center\">\n\n        </div>\n    </div>\n</div>\n        ")); //for repeat
+    success: function success(trackOptions) {
+      $('#track_options-body').append(trackOptions); //for repeat
 
       $('#repeat').on('click', repeatMethod); //for shuffle
 
@@ -11811,15 +11866,15 @@ function unLoveComment(event) {
 }
 
 function loadMoreIndexTracks() {
-  var last_id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var pageNumber = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
   $.ajax({
-    url: "/",
+    url: "/?page=" + pageNumber,
     method: 'GET',
     data: {
-      last_id: last_id
+      pageNumber: pageNumber
     },
     success: function success(tracks) {
-      $('#master_view-show_more').remove();
+      // $('#master_view-show_more').remove();
       $('#tracks_container').append(tracks);
       $('.delete-track-submit').on('click', delete_track_submit);
     }
@@ -11827,17 +11882,18 @@ function loadMoreIndexTracks() {
 }
 
 function loadMoreProfileTracks() {
-  var last_id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var pageNumber = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
   var user_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
   $.ajax({
-    url: "/tracks",
+    url: "/tracks?page=" + pageNumber,
     method: 'GET',
+    // dataType:'json',
     data: {
-      last_id: last_id,
+      pageNumber: pageNumber,
       user_id: user_id
     },
     success: function success(tracks) {
-      $('#master_view-show_more').remove();
+      // $('#master_view-show_more').remove();
       $('#tracks_container').append(tracks);
       $('.delete-track-submit').on('click', delete_track_submit);
     }
@@ -11845,83 +11901,91 @@ function loadMoreProfileTracks() {
 }
 
 function loadMoreComments() {
-  var last_id = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var pageNumber = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
   var track_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
   $.ajax({
-    url: "/comments",
+    url: "/comments?page=" + pageNumber,
     method: 'GET',
     data: {
-      last_id: last_id,
+      pageNumber: pageNumber,
       track_id: track_id
     },
     success: function success(comments) {
-      $('#master_view-show_more-button-comments').remove();
+      // $('#master_view-show_more-button-comments').remove();
       $('.track-comments-container').append(comments);
       $('.delete-track_comment-submit').on('click', delete_track_comment_submit);
     }
   });
 }
 
-function loadMoreFollowers(user_id) {
-  var last_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
-
-  if (last_id == 0) {
-    $.ajax({
-      url: "/friends/followers/" + user_id,
-      method: 'GET',
-      data: {
-        last_id: last_id
-      },
-      success: function success(followers) {
-        $('#follower-modal-body').remove();
-        $('#modal-body-div-follower').append("\n                    <tbody id=\"follower-modal-body\">\n                    </tbody>\n                ");
-        $('#follower-modal-body').append(followers);
-      }
-    });
-  } else {
-    $.ajax({
-      url: "/friends/followers/" + user_id,
-      method: 'GET',
-      data: {
-        last_id: last_id
-      },
-      success: function success(followers) {
-        $('#master_view-show_more-followers').remove();
-        $('#follower-modal-body').append(followers);
-      }
-    });
-  }
+function loadMoreTrackLoves() {
+  var pageNumber = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var track_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  $.ajax({
+    url: "/trackLoves?page=" + pageNumber,
+    method: 'GET',
+    data: {
+      pageNumber: pageNumber,
+      track_id: track_id
+    },
+    success: function success(loves) {
+      // $('#master_view-show_more-button-comments').remove();
+      $('.modal-body').append(loves);
+    }
+  });
 }
 
-function loadMoreFollowings(user_id) {
-  var last_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+function loadMoreTrackCommentLoves() {
+  var pageNumber = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var track_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  $.ajax({
+    url: "/commentLoves?page=" + pageNumber,
+    method: 'GET',
+    data: {
+      pageNumber: pageNumber,
+      comment_id: comment_id
+    },
+    success: function success(loves) {
+      // $('#master_view-show_more-button-comments').remove();
+      $('.modal-body').append(loves);
+    }
+  });
+}
 
-  if (last_id == 0) {
-    $.ajax({
-      url: "/friends/following/" + user_id,
-      method: 'GET',
-      data: {
-        last_id: last_id
-      },
-      success: function success(followings) {
-        $('#following-modal-body').remove();
-        $('#modal-body-div-following').append("\n                    <tbody id=\"following-modal-body\">\n\n                    </tbody>\n                ");
-        $('#following-modal-body').append(followings);
-      }
-    });
-  } else {
-    $.ajax({
-      url: "/friends/following/" + user_id,
-      method: 'GET',
-      data: {
-        last_id: last_id
-      },
-      success: function success(followings) {
-        $('#master_view-show_more-followings').remove();
-        $('#following-modal-body').append(followings);
-      }
-    });
-  }
+function loadMoreFollowers(pageNumber) {
+  var user_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  $.ajax({
+    url: "/friends/followers/" + user_id + "?page=" + pageNumber,
+    method: 'GET',
+    data: {
+      pageNumber: pageNumber
+    },
+    success: function success(followers) {
+      // $('#follower-modal-body').remove();
+      $('.modal-body-followers-table').append(followers);
+    },
+    error: function error() {
+      console.log("failed");
+    }
+  });
+}
+
+function loadMoreFollowings() {
+  var pageNumber = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
+  var user_id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
+  $.ajax({
+    url: "/friends/following/" + user_id + "?page=" + pageNumber,
+    method: 'GET',
+    data: {
+      pageNumber: pageNumber
+    },
+    success: function success(followings) {
+      $('.modal-body-following-table').append(followings);
+    },
+    error: function error() {
+      console.log("failed");
+    }
+  });
 }
 
 function addCommentFromSubmit(event) {
@@ -11992,7 +12056,6 @@ var songName;
 var audioPlayer = null;
 var audioPlayerId = null;
 var trackIsPlaying = 0;
-var songs = ["khaled", "mostafa", "ismaiel"];
 playMethod();
 var doRepeat = 1;
 
@@ -12062,65 +12125,62 @@ function back5SecMethod(event) {
 
 function playMethod() {
   var play = document.getElementsByClassName('play');
+  $(document).on('click', '.play', function (event) {
+    songName = event.target.getAttribute('data-src');
+    audioPlayer = document.querySelector('#player'); //there are audio or not
 
-  for (var i = 0; i < play.length; ++i) {
-    play[i].addEventListener('click', function (event) {
-      songName = event.target.getAttribute('data-src');
-      audioPlayer = document.querySelector('#player'); //there are audio or not
+    if (!audioPlayer) {
+      audioPlayer = document.createElement('audio');
+      audioPlayer.id = 'player';
+      audioPlayer.src = songName;
+      audioPlayerId = event.target.getAttribute('data-track_id');
+      document.body.appendChild(audioPlayer);
+      audioPlayer.play();
+      event.target.src = '/images/media_pause_btn.png';
+      trackIsPlaying = 1; //for end
 
-      if (!audioPlayer) {
-        audioPlayer = document.createElement('audio');
-        audioPlayer.id = 'player';
-        audioPlayer.src = songName;
-        audioPlayerId = event.target.getAttribute('data-track_id');
-        document.body.appendChild(audioPlayer);
-        audioPlayer.play();
-        event.target.src = '/images/media_pause_btn.png';
-        trackIsPlaying = 1; //for end
+      audioPlayer.addEventListener("ended", function () {
+        audioPlayer.parentNode.removeChild(audioPlayer); // event.target.id = '';
 
-        audioPlayer.addEventListener("ended", function () {
-          audioPlayer.parentNode.removeChild(audioPlayer); // event.target.id = '';
-
-          event.target.src = '/images/media_play_btn.png';
-          trackIsPlaying = 0;
-        });
-      } else {
-        //
-        if (songName === audioPlayer.getAttribute('src')) {
-          if (audioPlayer.paused) {
-            audioPlayer.play();
-            event.target.src = '/images/media_pause_btn.png';
-            trackIsPlaying = 1; //
-          } else {
-            audioPlayer.pause();
-            event.target.src = '/images/media_play_btn.png';
-            trackIsPlaying = 0; //
-          }
-        } else {
-          audioPlayer.src = songName;
-          audioPlayerId = event.target.getAttribute('data-track_id');
+        event.target.src = '/images/media_play_btn.png';
+        trackIsPlaying = 0;
+      });
+    } else {
+      //
+      if (songName === audioPlayer.getAttribute('src')) {
+        if (audioPlayer.paused) {
           audioPlayer.play();
-
-          for (var j = 0; j < play.length; ++j) {
-            play[j].setAttribute('src', '/images/media_play_btn.png');
-            trackIsPlaying = 0;
-          } // if(document.querySelector('#playing')){
-          //     document.querySelector('#playing').id = '' ;
-          // }else{
-          //     document.querySelector('#paused').id = '' ;
-          // }
-          // event.target.id='playing';
-          //
-
-
           event.target.src = '/images/media_pause_btn.png';
           trackIsPlaying = 1; //
-        } //
+        } else {
+          audioPlayer.pause();
+          event.target.src = '/images/media_play_btn.png';
+          trackIsPlaying = 0; //
+        }
+      } else {
+        audioPlayer.src = songName;
+        audioPlayerId = event.target.getAttribute('data-track_id');
+        audioPlayer.play();
 
+        for (var j = 0; j < play.length; ++j) {
+          play[j].setAttribute('src', '/images/media_play_btn.png');
+          trackIsPlaying = 0;
+        } // if(document.querySelector('#playing')){
+        //     document.querySelector('#playing').id = '' ;
+        // }else{
+        //     document.querySelector('#paused').id = '' ;
+        // }
+        // event.target.id='playing';
+        //
+
+
+        event.target.src = '/images/media_pause_btn.png';
+        trackIsPlaying = 1; //
       } //
 
-    });
-  }
+    } //
+
+  });
 }
 
 function next5SecMethod(event) {

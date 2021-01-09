@@ -108,15 +108,7 @@ class UsersController extends Controller
     {
         $user = User::findorfail($id) ;
 
-        $tracks = $user->tracks()->simplePaginate(4) ;
-
-        $lastId = null;
-        foreach ($tracks as $track){
-            $lastId = $track->id;
-        }
-
-        return view('profile' , compact('user','tracks','lastId'));
-
+        return view('profile' , compact('user'));
     }
 
     /**
@@ -127,7 +119,6 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $user = new User() ;
         $user = User::findorfail($id);
 
         $can_edit = \request('can_edit') ;

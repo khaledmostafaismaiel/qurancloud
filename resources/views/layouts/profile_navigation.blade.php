@@ -18,7 +18,7 @@
 
         <!-- Followers Modal -->
         <div class="modal fade" id="follower-modal" tabindex="-1" role="dialog" aria-labelledby="follower-modal-Title" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="follower-modal-Title">Followers</h5>
@@ -26,15 +26,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" id="modal-body-div-follower">
-                        <table>
-                            <thead>
-                            <tr>
-                            </tr>
-                            </thead>
-                            <tbody id="follower-modal-body">
+                    <div class="modal-body">
+                        <table class="modal-body-followers-table">
 
-                            </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">
@@ -57,7 +51,7 @@
 
         <!-- Followings Modal -->
         <div class="modal fade" id="following-modal" tabindex="-1" role="dialog" aria-labelledby="following-modal-Title" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="following-modal-Title">Followings</h5>
@@ -65,15 +59,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" id="modal-body-div-following">
-                        <table>
-                            <thead>
-                                <tr>
-                                </tr>
-                            </thead>
-                            <tbody id="following-modal-body">
+                    <div class="modal-body">
+                        <table class="modal-body-following-table">
 
-                            </tbody>
                         </table>
                     </div>
                     <div class="modal-footer">

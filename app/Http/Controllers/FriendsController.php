@@ -111,36 +111,21 @@ class FriendsController extends Controller
 
     public function followers($user_id)
     {
-        $lastId = "";
         if (\request()->ajax()){
 
-            if(\request()->last_id >= 0){
-
-                $followers = DB::table('friends')
-                    ->where('id','>',\request()->last_id)
-                    ->where('following_user_id','=',$user_id)
-                    ->limit(2)
-                    ->get();
+            if(\request()->pageNumber >= 1){
+                $followers = User::findOrfail($user_id)->followers()->paginate(10);
             }else{
 
-//                $followers = DB::table('friends')
-//                    ->where('follower_user_id','=',$user_id)
-//                    ->orderBy('id','DESC')
-//                    ->limit(1)
-//                    ->get();
             }
             $output='';
             if(! $followers->isEmpty()){
 
                 foreach ($followers as $follower) {
                     $output .= view('layouts.popup.followers',compact('follower'))->render() ;
-                    $lastId = $follower->id;
                 }
 
-                $output .= view('layouts.showmore-btns.show_more_followers',compact('lastId','user_id'))->render();
-
             }else{
-                $output .= view('layouts.showmore-btns.no_more_followers')->render();
 
             }
             echo $output;
@@ -152,43 +137,23 @@ class FriendsController extends Controller
 
     public function followings($user_id)
     {
-        $lastId = "";
         if (\request()->ajax()){
-
-            if(\request()->last_id >= 0){
-
-                $followings = DB::table('friends')
-                    ->where('id','>',\request()->last_id)
-                    ->where('follower_user_id','=',$user_id)
-                    ->limit(2)
-                    ->get();
-
+            if(\request()->pageNumber >= 1){
+                $followings = User::findOrfail($user_id)->followings()->paginate(10);
             }else{
 
-//                $followings = DB::table('friends')
-//                    ->where('following_user_id','=',$user_id)
-//                    ->orderBy('id','DESC')
-//                    ->limit(1)
-//                    ->get();
             }
 
             $output='';
             if(! $followings->isEmpty()){
                 foreach ($followings as $following) {
                     $output .= view('layouts.popup.followings',compact('following'))->render();
-
-                    $lastId = $following->id;
                 }
-
-                $output .= view('layouts.showmore-btns.show_more_followings',compact('lastId','user_id'))->render();
-
             }else{
-                $output .= view('layouts.showmore-btns.no_more_followings')->render();
 
             }
             echo $output;
         }else{
-
 
         }
     }

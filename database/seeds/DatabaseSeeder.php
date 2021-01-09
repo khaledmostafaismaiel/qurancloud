@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
 
         $this->call('users');
         $this->call('tracks');
+        $this->call('PlaylistSeeder');
+        $this->call('PlaylistTracksSeeder');
         $this->call('trackComments');
         $this->call('trackLoves');
         $this->call('commentLoves');

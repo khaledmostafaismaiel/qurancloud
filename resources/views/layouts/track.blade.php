@@ -153,7 +153,7 @@
 </div>
 
 <!-- Track Loves Modal -->
-<div class="modal fade  offset-xl-5 offset-lg-4 offset-md-4 offset-sm-3" id="track-loves-{{$track->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="track-loves-Label-{{$track->id}}" aria-hidden="true">
+<div class="modal fade {{--offset-xl-5 offset-lg-4 offset-md-4 offset-sm-3--}} track_loves_script" id="track-loves-{{$track->id}}" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="track-loves-Label-{{$track->id}}" aria-hidden="true" data-track_id="{{$track->id}}">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -163,26 +163,9 @@
                 </button>
             </div>
             <div class="modal-body text-center">
-                @foreach($track->trackLoves as $love)
-                    <div class="col mb-5">
-                        <div class="">
-                            <a href="/users/{{$love->user_id}}">
-                                <img src="/storage/uploads/profile_pictures/{{$profile_pic = App\User::findorfail($love->user_id)->profile_picture}}" alt="User photo" class="track-comment-photo">
-                            </a>
-                        </div>
-                        <div class="">
-                            <a href="/users/{{App\User::findorfail($love->user_id)->id}}" class="">
-                                {{App\User::findorfail($love->user_id)->full_name()}}
-                            </a>
-                        </div>
-                        <div class="">
-                            <span class="text-dark">{{date("Y-m-d h:i:sa",strtotime($love->created_at))}}</span>
-                        </div>
-                    </div>
-                @endforeach
+
             </div>
             <div class="modal-footer">
-                <button type="button" id="track-loves-popup" class="btn btn-success btn-block" data-last_id="" data-user_id="">Show More</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

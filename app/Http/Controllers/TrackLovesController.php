@@ -15,9 +15,27 @@ class TrackLovesController extends Controller
      */
     public function index()
     {
-        $id = \request('track_id');
-        $loves = Track::findorfail($id)->trackLoves ;
-        return view('loves' ,compact('loves'));
+        if (\request()->ajax()){
+            if (\request()->pageNumber >= 1){
+                $loves = Track::findorfail(\request('track_id'))->trackLoves()->simplepaginate(5) ;
+
+                $output='';
+                if (! $loves->isEmpty()){
+                    foreach ($loves as $love){
+                        $output .= view('layouts.popup.lover',compact('love'))->render();
+                    }
+                }else{
+
+                }
+                echo $output;
+
+            }else{
+
+            }
+        }else{
+
+        }
+
     }
 
     /**

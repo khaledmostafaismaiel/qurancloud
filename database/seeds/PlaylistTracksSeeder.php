@@ -3,7 +3,7 @@
 use Illuminate\Database\Seeder;
 use Faker\Factory as faker ;
 
-class trackLoves extends Seeder
+class PlaylistTracksSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,14 +13,13 @@ class trackLoves extends Seeder
     public function run()
     {
         $faker = Faker::create() ;
-        $users_ids = App\User::all()->pluck('id');
+        $playlist_ids = App\Playlist::all()->pluck('id');
         $tracks_ids = App\Track::all()->pluck('id');
-        foreach (range(1,500) as $index){
-            \Illuminate\Support\Facades\DB::table('track_loves')->insert([
+        foreach (range(1,1000) as $index){
+            \Illuminate\Support\Facades\DB::table('playlist_tracks')->insert([
+                'playlist_id'=>$faker->randomElement($playlist_ids)  ,
                 'track_id'=>$faker->randomElement($tracks_ids) ,
-                'user_id'=>$faker->randomElement($users_ids)  ,
-                'created_at'=>$faker->date(now()),
-
+                'created_at'=>$faker->date(now())
             ]);
         }
     }

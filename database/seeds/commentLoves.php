@@ -13,10 +13,12 @@ class commentLoves extends Seeder
     public function run()
     {
         $faker = Faker::create() ;
+        $users_ids = App\User::all()->pluck('id');
+        $Comments_ids = App\Comment::all()->pluck('id');
         foreach (range(1,500) as $index){
             \Illuminate\Support\Facades\DB::table('comment_loves')->insert([
-                'comment_id'=>$faker->numberBetween(1,500) ,
-                'user_id'=>$faker->numberBetween(1,50) ,
+                'comment_id'=>$faker->randomElement($Comments_ids) ,
+                'user_id'=>$faker->randomElement($users_ids) ,
                 'created_at'=>$faker->date(now()),
 
             ]);

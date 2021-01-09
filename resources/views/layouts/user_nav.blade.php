@@ -7,11 +7,15 @@
         @include('layouts.search_box')
         <ul class="navbar-nav ml-auto text-center">
             <li class="nav-item m-3 ">
-                @include('layouts.track_options')
+                @include('layouts.track_form_add_track')
             </li>
 
             <li class="nav-item m-3 ">
-                @include('layouts.track_form_add_track')
+                @include('layouts.track_options_btn')
+            </li>
+
+            <li class="nav-item m-3 ">
+                @include('layouts.playlistBtn')
             </li>
 
             <li class="nav-item mx-3 ">
@@ -20,7 +24,7 @@
                 </a>
             </li>
 
-            <li class="nav-item mx-3 " id="user-nav__friend_requests_box">
+            <li class="nav-item mx-3" id="user-nav__friend_requests_box">
                 <a href="/friends" class="nav-link">
                     <svg class="user-nav__icon">
                         <use xlink:href="/images/sprite.svg#icon-star"></use>
@@ -47,7 +51,7 @@
                     </a>
                 </div>
             </li>
-            <li class="nav-item mx-3" id="user-nav__messages_box">
+            <li class="nav-item mx-3 d-none" id="user-nav__messages_box">
                 <a href="/messages" class="nav-link">
                     <svg class="user-nav__icon">
                         <use xlink:href="/images/sprite.svg#icon-chat"></use>
@@ -176,6 +180,26 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" data-dismiss="modal" id="track_options-modal-ok">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- PLAYLIST Modal -->
+<div class="modal fade" id="playlist" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="playlist-Label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="playlist-Label">PLAYLIST</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="playlist-modal-close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body d-flex justify-content-center" id="playlist-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-dismiss="modal" id="playlist-modal-ok">OK</button>
             </div>
         </div>
     </div>

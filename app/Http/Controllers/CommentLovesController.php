@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\commentLoves;
+use App\Track;
 use Illuminate\Http\Request;
 
 class CommentLovesController extends Controller
@@ -15,9 +16,27 @@ class CommentLovesController extends Controller
      */
     public function index()
     {
-        $id = \request('comment_id');
-        $loves = Comment::findorfail($id)->commentLoves ;
-        return view('loves' ,compact('loves'));
+        dd("hi");
+        if (\request()->ajax()){
+            if (\request()->pageNumber >= 1){
+                $loves = Comment::findorfail(\request('comment_id'))->commentLoves()->simplepaginate(5) ;
+
+                $output='';
+                if (! $loves->isEmpty()){
+                    foreach ($loves as $love){
+                        $output .= view('layouts.popup.lover',compact('love'))->render();
+                    }
+                }else{
+
+                }
+                echo $output;
+
+            }else{
+
+            }
+        }else{
+
+        }
     }
 
     /**

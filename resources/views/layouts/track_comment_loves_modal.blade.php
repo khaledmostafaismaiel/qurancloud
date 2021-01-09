@@ -32,7 +32,6 @@
                 @endforeach
             </div>
             <div class="modal-footer">
-                <button type="button" id="comment-loves-popup" class="btn btn-success btn-block" data-last_id="" data-user_id="">Show More</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
             </div>
         </div>

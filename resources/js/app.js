@@ -211,50 +211,115 @@ $("document").ready(function () {
     $(document).on('blur', '#search', function(){
         $('#search-records').toggle();
     });
-    $(document).on('click','#master_view-show_more-button-tracks-index',function(){
-        var last_id = $(this).data('last_id');
-        $('#master_view-show_more-button-tracks-index').html('<b>Loadding...</b>');
-        loadMoreIndexTracks(last_id);
-    });
-    $(document).on('click','#master_view-show_more-button-tracks-profile',function(){
-        var last_id = $(this).data('last_id');
-        var user_id = $(this).data('user_id');
 
-        $('#master_view-show_more-button-tracks-profile').html('<b>Loadding...</b>');
-        loadMoreProfileTracks(last_id,user_id);
-    });
-    $(document).on('click','#master_view-show_more-button-comments',function(){
-        var last_id = $(this).data('last_id');
-        var track_id = $(this).data('track_id');
+    if ($('div.index_script').length){
+        var pageNumber = 1 ;
 
-        $('#master_view-show_more-button-comments').html('<b>Loadding...</b>');
-        loadMoreComments(last_id,track_id);
-    });
+        $(window).ready(function () {
+            loadMoreIndexTracks(pageNumber);
+        });
+        $(window).scroll(function(){
+           if($(window).scrollTop() + $(window).height()  >=  $(document).height()){
+               pageNumber++;
+               loadMoreIndexTracks(pageNumber);
+           }
+        });
+
+    }
+
+    if ($('div.profile_script').length){
+        var pageNumber = 1 ;
+        $(window).ready(function () {
+            var userId = $('.profile_script').data('user_id');
+            loadMoreProfileTracks(pageNumber,userId);
+        });
+        $(window).scroll(function(){
+            if($(window).scrollTop() + $(window).height()  >=  $(document).height()){
+                pageNumber++;
+                var userId = $('.profile_script').data('user_id');
+                loadMoreProfileTracks(pageNumber,userId);
+            }
+        });
+    }
+    if ($('div.profile_script').length){
+        $(document).on('click','#follower-modal-button',function () {
+            var user_id = $(this).data('user_id');
+            var pageNumber = 1 ;
+            $('.modal-body-followers-table').remove();
+            $('.modal-body').append(`
+                    <table class="modal-body-followers-table">
+
+                    </table>
+                `);
+            loadMoreFollowers(pageNumber,user_id);
+        });
+        $('.modal-body').scroll(function(){
+            if($('.modal-body').scrollTop() + $('.modal-body').height()  >=  $('.modal-body').height()){
+                pageNumber++;
+                var userId = $('#follower-modal-button').data('user_id');
+                loadMoreFollowers(pageNumber,userId);
+            }
+        });
+
+        $(document).on('click','#following-modal-button',function () {
+            var user_id = $(this).data('user_id');
+            var pageNumber = 1 ;
+            $('.modal-body-following-table').remove();
+            $('.modal-body').append(`
+                    <table class="modal-body-following-table">
+
+                    </table>
+                `);
+            loadMoreFollowings(pageNumber,user_id);
+        });
+        $('.modal-body').scroll(function(){
+            if($('.modal-body').scrollTop() + $('.modal-body').height()  >=  $('.modal-body').height()){
+                pageNumber++;
+                var userId = $('#following-modal-button').data('user_id');
+                loadMoreFollowings(pageNumber,userId);
+            }
+        });
+
+    }
+
+    if ($('div.show_track_script').length){
 
 
-    $(document).on('click','#follower-modal-button',function () {
-        var user_id = $(this).data('user_id');
-        var last_id = 0 ;
-        loadMoreFollowers(user_id,last_id);
-    });
-    $(document).on('click','#master_view-show_more-button-followers',function(){
-        var user_id = $(this).data('user_id');
-        $('#master_view-show_more-button-followers').html('<b>Loadding...</b>');
-        var last_id = $(this).data('last_id');
-        loadMoreFollowers(user_id,last_id);
-    });
+        var pageNumber = 1 ;
 
-    $(document).on('click','#following-modal-button',function () {
-        var user_id = $(this).data('user_id');
-        var last_id = 0 ;
-        loadMoreFollowings(user_id,last_id);
-    });
-    $(document).on('click','#master_view-show_more-button-followings',function(){
-        var user_id = $(this).data('user_id');
-        $('#master_view-show_more-button-followings').html('<b>Loadding...</b>');
-        var last_id = $(this).data('last_id');
-        loadMoreFollowings(user_id,last_id);
-    });
+        $(window).ready(function () {
+            var trackId = $('.show_track_script').data('track_id');
+            loadMoreComments(pageNumber,trackId);
+        });
+        $(window).scroll(function(){
+            if($(window).scrollTop() + $(window).height()  >=  $(document).height()){
+                pageNumber++;
+                var trackId = $('.show_track_script').data('track_id');
+                loadMoreComments(pageNumber,trackId);
+            }
+        });
+
+        if ($('div.track_loves_script').length){
+            var tackLovespageNumber = 1 ;
+
+            $(window).ready(function () {
+                var trackId = $('.track_loves_script').data('track_id');
+                loadMoreTrackLoves(tackLovespageNumber,trackId);
+            });
+            $('.modal-body').scroll(function(){
+                if($('.modal-body').scrollTop() + $('.modal-body').height()  >=  $('.modal-body').height()){
+                    tackLovespageNumber++;
+                    var trackId = $('.track_loves_script').data('track_id');
+                    loadMoreTrackLoves(tackLovespageNumber,trackId);
+                }
+            });
+
+        }
+    }
+
+
+
+
 
     $('.track-love_photo').click(loveTrack);
 
@@ -290,19 +355,23 @@ $("document").ready(function () {
             $('#track_options-body').append(`choose track to play from HOME and try this again.`);
         }
 
+    });
+    $('#playlist-user_nav-btn').on('click',function (event) {
+        $.ajax({
+            url:"/playlistTracks",
+            method:'GET',
+            success:function(playlist)
+            {
+                $('#playlist-body').empty();
+                $('#playlist-body').append(playlist);
 
-
-
-
-
+            },
+            error:function(playlist){
+                console.log(playlist);
+            },
+        });
 
     });
-
-    // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
-    //
-    // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
-    //
-    // $('.track-third_section-unlove_photo').on('click',unLoveTrack);
 
 });
 
@@ -310,79 +379,14 @@ $("document").ready(function () {
 
 function getTrackInfo(track_id="") {
     $.ajax({
-        url:"/tracks/get_track_info/"+ track_id,
+        url:"/tracks/"+ track_id,
         method:"GET",
         data:{
             track_id:track_id,
         },
-        dataType:'json',
 
-        success:function (data) {
-            if(! data.track_caption){
-                data.track_caption = "";
-            }
-            $('#track_options-body').append(`
-<div class="col mb-4">
-    <div class="card h-100 text-center border-info track">
-        <table class="mt-3">
-            <tr>
-                <td class="">
-                    <a href="/users/${data.user_id}">
-                        <img src="/storage/uploads/profile_pictures/${data.user_profile_picture}" class="card-img-top mb-1 track-track_owner-pic" alt="...">
-                    </a>
-                    <a class="track-track_owner-name" href="/users/${data.user_id}">
-                        ${data.user_full_name}
-                    </a>
-                </td>
-            </tr>
-            <tr class="">
-                <td class="track-created_at">
-                    ${data.track_created_at}
-                </td>
-            </tr>
-        </table>
-        <div class="card-body">
-            <a href="/tracks/${data.track_id}" class="track-track_name">
-                <h4 class="card-title text-white">${data.track_file_name}</h4>
-            </a>
-
-            <div class="">
-                <div class="track-upper_buttons flex-container-row-no_wrap">
-                    <img src="/images/media_repeat_btn.png" alt="repeat" class="flex-item-row-wrap track-upper_buttons-icon repeat" id="repeat">
-                    <img src="/images/media_shuffle_btn.png" alt="shuffle" class="flex-item-row-wrap track-upper_buttons-icon shuffle" id="shuffle">
-                    <img src="/images/media_addtoplaylist_btn.png" alt="addtoplaylist" class="flex-item-row-wrap track-upper_buttons-icon add_to_play_list" id="add_to_play_list">
-                    <img src="/images/media_mute_btn.png" alt="mute" class="flex-item-row-wrap track-upper_buttons-icon mute" id="mute">
-                </div>
-                <div class="track-volume flex-container-row-no_wrap">
-                    <span class="volume_start" id="volume_start"></span>
-                    <input class="track-volume-volume volume"  type="range" value="10" name="volume" id="volume">
-                    <span class="volume_end" id="volume_end"></span>
-                </div>
-                <div class="track-down_buttons flex-container-row-no_wrap">
-                    <img src="/images/media_last_btn.png" alt="last track" class="flex-item-row-wrap track-down_buttons-icon last_track" id="last_track">
-                    <img src="/images/media_backward_btn.png" alt="back 5 sec" class="flex-item-row-wrap track-down_buttons-icon back_5_sec" id="back_5_sec">
-                    <img src="/images/media_pause_btn.png" alt="play" data-src="/storage/uploads/tracks/${data.track_temp_name}" data-track_id="${data.track_id}" class="flex-item-row-wrap track-down_buttons-icon play" id="play">
-                    <img src="/images/media_forward_btn.png" alt="next 5 sec"  class="flex-item-row-wrap track-down_buttons-icon next_5_sec" id="next_5_sec">
-                    <img src="/images/media_next_btn.png" alt="next track" class="flex-item-row-wrap track-down_buttons-icon next_track" id="next_track">
-                </div>
-                <div class="track-duration flex-container-row-no_wrap">
-                    <span class="duration_start" id="duration_start"></span>
-                    <input class="track-duration-duration duration" value="0" type="range"  id="duration">
-                    <span class="duration_end" id="duration_end"></span>
-                </div>
-            </div>
-
-            <p class="card-text text-white">${data.track_caption}</p>
-        </div>
-        <div class="card-footer bg-transparent border-info d-flex justify-content-around align-items-center">
-
-        </div>
-    </div>
-</div>
-        `);
-
-
-
+        success:function (trackOptions) {
+            $('#track_options-body').append(trackOptions);
 
             //for repeat
             $('#repeat').on('click',repeatMethod);
@@ -582,115 +586,121 @@ function unLoveComment(event){
 
 }
 
-function loadMoreIndexTracks(last_id=""){
+function loadMoreIndexTracks(pageNumber=""){
     $.ajax({
-        url:"/",
+        url:"/?page=" + pageNumber,
         method:'GET',
         data:{
-            last_id:last_id
+            pageNumber:pageNumber
         },
         success:function (tracks) {
-            $('#master_view-show_more').remove();
+            // $('#master_view-show_more').remove();
             $('#tracks_container').append(tracks);
             $('.delete-track-submit').on('click',delete_track_submit);
 
         }
     });
 }
-function loadMoreProfileTracks(last_id="",user_id=""){
+function loadMoreProfileTracks(pageNumber="",user_id=""){
     $.ajax({
-        url:"/tracks",
+        url:"/tracks?page=" + pageNumber,
         method:'GET',
+        // dataType:'json',
         data:{
-            last_id:last_id,
+            pageNumber:pageNumber,
             user_id:user_id
         },
         success:function (tracks) {
-            $('#master_view-show_more').remove();
+            // $('#master_view-show_more').remove();
             $('#tracks_container').append(tracks);
             $('.delete-track-submit').on('click',delete_track_submit);
 
         }
     });
 }
-function loadMoreComments(last_id="",track_id=""){
+function loadMoreComments(pageNumber="",track_id=""){
     $.ajax({
-        url:"/comments",
+        url:"/comments?page=" + pageNumber,
         method:'GET',
         data:{
-            last_id:last_id,
+            pageNumber:pageNumber,
             track_id:track_id,
         },
         success:function (comments) {
-            $('#master_view-show_more-button-comments').remove();
+            // $('#master_view-show_more-button-comments').remove();
             $('.track-comments-container').append(comments);
             $('.delete-track_comment-submit').on('click',delete_track_comment_submit);
+
         }
     });
 }
-function loadMoreFollowers(user_id,last_id="") {
-    if (last_id == 0){
-        $.ajax({
-            url:"/friends/followers/"+ user_id,
-            method:'GET',
-            data:{
-                last_id:last_id
-            },
-            success:function (followers) {
-                $('#follower-modal-body').remove();
-                $('#modal-body-div-follower').append(`
-                    <tbody id="follower-modal-body">
-                    </tbody>
-                `);
-                $('#follower-modal-body').append(followers);
-            }
-        });
-    }else{
-        $.ajax({
-            url:"/friends/followers/"+ user_id,
-            method:'GET',
-            data:{
-                last_id:last_id
-            },
-            success:function (followers) {
-                $('#master_view-show_more-followers').remove();
-                $('#follower-modal-body').append(followers);
-            }
-        });
-    }
+
+function loadMoreTrackLoves(pageNumber="",track_id=""){
+    $.ajax({
+        url:"/trackLoves?page=" + pageNumber,
+        method:'GET',
+        data:{
+            pageNumber:pageNumber,
+            track_id:track_id,
+        },
+        success:function (loves) {
+            // $('#master_view-show_more-button-comments').remove();
+            $('.modal-body').append(loves);
+        }
+    });
+}
+function loadMoreTrackCommentLoves(pageNumber="",track_id=""){
+
+    $.ajax({
+        url:"/commentLoves?page=" + pageNumber,
+        method:'GET',
+        data:{
+            pageNumber:pageNumber,
+            comment_id:comment_id,
+        },
+        success:function (loves) {
+            // $('#master_view-show_more-button-comments').remove();
+            $('.modal-body').append(loves);
+        }
+    });
 }
 
-function loadMoreFollowings(user_id,last_id="") {
-    if (last_id == 0){
-        $.ajax({
-            url:"/friends/following/"+ user_id,
-            method:'GET',
-            data:{
-                last_id:last_id
-            },
-            success:function (followings) {
-                $('#following-modal-body').remove();
-                $('#modal-body-div-following').append(`
-                    <tbody id="following-modal-body">
+function loadMoreFollowers(pageNumber,user_id="") {
+    $.ajax({
+        url:"/friends/followers/"+ user_id + "?page=" + pageNumber,
+        method:'GET',
+        data:{
+            pageNumber:pageNumber
+        },
+        success:function (followers) {
+            // $('#follower-modal-body').remove();
+            $('.modal-body-followers-table').append(followers);
+        },
+        error:function () {
+            console.log("failed");
 
-                    </tbody>
-                `);
-                $('#following-modal-body').append(followings);
-            }
-        });
-    }else{
-        $.ajax({
-            url:"/friends/following/"+ user_id,
-            method:'GET',
-            data:{
-                last_id:last_id
-            },
-            success:function (followings) {
-                $('#master_view-show_more-followings').remove();
-                $('#following-modal-body').append(followings);
-            }
-        });
-    }
+        }
+    });
+}
+
+function loadMoreFollowings(pageNumber="",user_id="") {
+
+    $.ajax({
+        url:"/friends/following/"+ user_id + "?page=" + pageNumber,
+        method:'GET',
+        data:{
+            pageNumber:pageNumber
+        },
+        success:function (followings) {
+
+            $('.modal-body-following-table').append(followings);
+        },
+        error:function () {
+            console.log("failed");
+
+        }
+
+    });
 }
 
 function addCommentFromSubmit(event){
@@ -776,9 +786,7 @@ var songName ;
 var audioPlayer = null;
 var audioPlayerId =null ;
 var trackIsPlaying = 0 ;
-var songs = ["khaled","mostafa","ismaiel"];
 playMethod();
-
 var doRepeat = 1 ;
 function repeatMethod(event){
     if (doRepeat){
@@ -837,8 +845,7 @@ function back5SecMethod(event){
 }
 function playMethod() {
     var play = document.getElementsByClassName('play');
-    for(var i=0 ; i < play.length ; ++i){
-        play[i].addEventListener('click',function (event){
+    $(document).on('click','.play',function (event) {
             songName = event.target.getAttribute('data-src');
             audioPlayer = document.querySelector('#player'); //there are audio or not
 
@@ -860,7 +867,6 @@ function playMethod() {
                     trackIsPlaying = 0;
                 });
 
-
             }else{
 //
                 if(songName === audioPlayer.getAttribute('src')){
@@ -880,6 +886,7 @@ function playMethod() {
                     audioPlayerId = event.target.getAttribute('data-track_id');
 
                     audioPlayer.play();
+
                     for(var j=0 ; j < play.length ; ++j) {
                         play[j].setAttribute('src','/images/media_play_btn.png');
                         trackIsPlaying = 0 ;
@@ -898,8 +905,8 @@ function playMethod() {
 //
             }
 //
-        });
-    }
+    });
+
 }
 function next5SecMethod(event){
     var position = parseInt(audioPlayer.currentTime)  + parseInt(5) ;

@@ -44,10 +44,8 @@ Route::get('/test', function () {
     Route::patch('/projects/{project_id}', 'UsersController@update');//PATCH/edit_expense form
     Route::delete('/projects/{project_id}', 'UsersController@destroy');//DELETE/specific expense form
                     ==
-    Route::resource('projects','UsersController')
+    Route::resource('projects','ProjectsController')
 */
-
-Route::resource('users', 'UsersController')/*->middleware('auth')->except('create','store')*/;
 Route::post('/users/process_sign_in', 'UsersController@process_sign_in');
 Route::post('/users/process_sign_out', 'UsersController@process_sign_out')->middleware('auth');
 Route::get('/users/{user_id}/about', 'UsersController@about')->middleware('auth');
@@ -56,12 +54,11 @@ Route::get('/users/{user_id}/about_to_edit', 'UsersController@about_to_edit')->n
 Route::get('/users/terms_of_conditions', 'UsersController@termsOfConditions');
 Route::get('sign_in/{service}', 'UsersController@redirectToProvider');
 Route::get('sign_in/{service}/callback', 'UsersController@providerCallback');
+Route::resource('users', 'UsersController')/*->middleware('auth')->except('create','store')*/;
 
 
-
-Route::resource('tracks', 'TracksController')->middleware('auth');
 Route::post('/tracks/report/{user_id}', 'TracksController@reportTrack' )->middleware('auth') ;
-Route::get('/tracks/get_track_info/{track_id}', 'TracksController@getTrackInfo' )->middleware('auth') ;
+Route::resource('tracks', 'TracksController')->middleware('auth');
 
 
 Route::resource('comments', 'CommentsController')->middleware('auth');
@@ -72,60 +69,44 @@ Route::resource('notifications', 'NotificationsController')->middleware('auth');
 Route::resource('commentLoves', 'CommentLovesController')->middleware('auth');
 Route::resource('trackLoves', 'TrackLovesController')->middleware('auth');
 
-Route::resource('chats', 'ChatsController')->middleware('auth');
 Route::get('/chats/get_chat_by_user/{user_id}', 'ChatsController@getChatByUser')->middleware('auth');
 Route::get('/chats/prepare_and_create/{user_id}', 'ChatsController@prepareAndCreate')->middleware('auth');
 Route::get('/chats/create/for_first_time/{user_id}', 'ChatsController@createForFirstTime')->middleware('auth');
 Route::post('/chats/store/for_first_time', 'ChatsController@storeForFirstTime')->middleware('auth');
+Route::resource('chats', 'ChatsController')->middleware('auth');
 
-
-Route::resource('friends', 'FriendsController')->middleware('auth');
 Route::get('/friends/followers/{user_id}', 'FriendsController@followers')->middleware('auth');
 Route::get('/friends/following/{user_id}', 'FriendsController@followings')->middleware('auth');
+Route::resource('friends', 'FriendsController')->middleware('auth');
 
-Route::resource('live_search', 'LiveSearchController')->middleware('auth');
 Route::get('/live_search/search/tracksAndUsers', 'LiveSearchController@search')->middleware('auth');
+Route::resource('live_search', 'LiveSearchController')->middleware('auth');
+
+Route::resource('playlist', 'PlaylistController')->middleware('auth');
+
+Route::resource('playlistTracks', 'PlaylistTracksController')->middleware('auth');
 
 
 Route::get('/', function () {
-    $lastId='';
 
     if(request()->ajax()){
-        if(request()->last_id > 0){
-
-            $tracks = Track::
-                where('id','<',request()->last_id)
-                ->orderByDesc('id')
-                ->limit(4)
-                ->get();
+        if(request()->pageNumber >= 1){
+            $tracks = Track::latest()->simplePaginate(12)/*->sortByDesc('created_at')*/;
         }else{
 
-//            $tracks = Track::
-//                where('id','>',request()->last_id)
-//                ->limit(4)
-//                ->get();
         }
-
         $output='';
         if(! $tracks->isEmpty()){
 
             foreach ($tracks as $track) {
                 $output .= view('layouts.track',compact('track'))->render();
-                $lastId = $track->id;
             }
-            $output .= view('layouts.showmore-btns.show_more_index_tracks',compact('lastId'))->render();
-
         }else{
-            $output .= view('layouts.showmore-btns.no_more_tracks')->render();
 
         }
         echo $output;
     }else{
-        $tracks = Track::latest()->simplePaginate(4)/*->sortByDesc('created_at')*/;
-        foreach ($tracks as $track){
-            $lastId = $track->id ;
-        }
-        return view('index',compact('tracks' ,'lastId'));
+        return view('index');
     }
 })->middleware('auth');
 

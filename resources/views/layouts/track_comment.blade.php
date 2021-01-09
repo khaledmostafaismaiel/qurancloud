@@ -4,9 +4,7 @@
             <tr>
                 <td><a href="/users/{{App\User::findorfail($comment->user_id)->id}}"><img src="/storage/uploads/profile_pictures/{{App\User::findorfail($comment->user_id)->profile_picture}}" alt="User photo" class="track-comment-photo"></a></td>
                 <td><a  href="/users/{{$comment->user_id}}" class="track-track_owner-name">{{App\User::findorfail($comment->user_id)->full_name()}}</a></td>
-                <td>
-                    @include('layouts.track_comment-dropdown_menu')
-                </td>
+
 
                 <td><input hidden type="text" name="user_id" value="{{$comment->user_id}}" required></td>
             </tr>
@@ -38,10 +36,10 @@
                         </form>
                     </td>
                 @else
-                    <td><textarea name="comment"  cols="500" rows="1" readonly class="w-100 h-auto p-2">{{$comment->comment}}</textarea></td>
+                    <td><p name="comment"   class="w-100 h-auto p-2 text-white">{{$comment->comment}}</p></td>
                 @endif
                 <td>
-
+                    @include('layouts.track_comment-dropdown_menu')
                 </td>
             </tr>
             <tr>

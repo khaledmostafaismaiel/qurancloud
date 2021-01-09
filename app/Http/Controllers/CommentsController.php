@@ -18,31 +18,22 @@ class CommentsController extends Controller
      */
     public function index()
     {
-        $lastId = null;
         if (\Request()->ajax()){
-            $comments = Comment::
-                orderByDesc('created_at')
-                ->where('track_id','=',\request('track_id'))
-                ->where('id','<',\request('last_id'))
-                ->limit(2)
-                ->get();
+            if(\Request()->pageNumber >= 1){
+                $comments = Track::findOrfail(request('track_id'))->Comments()->simplePaginate(2);
+            }else{
+
+            }
             $output='';
             if(! $comments->isEmpty()){
                 foreach ($comments as $comment) {
                     $output .= view('layouts.track_comment',compact('comment'))->render();
-
-                    $lastId = $comment->id;
                 }
-                $track_id = \request('track_id');
-                $output .= view('layouts.showmore-btns.show_more_track_comments',compact('lastId','track_id'))->render();
-
             }else{
-                $output .= view('layouts.showmore-btns.no_more_track_comments')->render();
 
             }
             echo $output;
-//            return response()->json(['html'=>$output]);
-
+//          return response()->json(['html'=>$output]);
 
         }else{
 

@@ -73,7 +73,10 @@ class User extends Authenticatable
         return $this->hashed_password;
     }
     public function chats(){
-        $this->hasMany(Chat::class);
+        return $this->hasMany(Chat::class);
     }
 
+    public function playlist(){
+        return $this->hasOne(Playlist::class,'user_id','id');
+    }
 }

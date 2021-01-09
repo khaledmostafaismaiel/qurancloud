@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Track;
 use App\Comment ;
+use App\User;
 use http\QueryString;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -18,31 +19,24 @@ class TracksController extends Controller
      */
     public function index()
     {
-        $lastId = null;
         if (\Request()->ajax()){
-            $tracks = Track::
-                where('user_id','=',\request('user_id'))
-                ->where('id','<',\request('last_id'))
-                ->orderByDesc('id')
-                ->limit(4)
-                ->get();
+            if(request()->pageNumber >= 1){
+                $tracks = User::findOrfail(\request('user_id'))->Tracks()->simplePaginate(12);
+            }else{
+
+            }
             $output='';
             if(! $tracks->isEmpty()){
+
                 foreach ($tracks as $track) {
                     $output .= view('layouts.track',compact('track'))->render();
-                    $lastId = $track->id;
                 }
-                $user_id = \request('user_id');
-                $output .= view('layouts.showmore-btns.show_more_profile_tracks',compact('lastId','user_id'))->render();
 
             }else{
-                $output .= view('layouts.showmore-btns.no_more_tracks')->render();
 
             }
             echo $output;
-
-
-
+//            return response()->json(['html'=>$output]);
         }else{
 
         }
@@ -108,13 +102,12 @@ class TracksController extends Controller
      */
     public function show(Track $track)
     {
-        $comments = $track->Comments()->simplePaginate(1);
-        $comment_to_edit = null ;
-        $lastId = null;
-        foreach ($comments as $comment){
-            $lastId = $comment->id ;
+        if (\request()->ajax()){
+            echo view('layouts.track_options',compact('track'))->render();
+        }else{
+            return view('show_track',compact('track'));
+
         }
-        return view('show_track',compact('track','comments' ,'comment_to_edit','lastId'));
     }
 
     /**
@@ -209,28 +202,4 @@ class TracksController extends Controller
         return back();
     }
 
-    public function getTrackInfo(){
-        if (\request()->ajax()){
-            $track = \App\Track::findorfail(\request('track_id'));
-
-            $user = \App\User::findorfail($track->user_id);
-
-            $data = array(
-                'track_id'  => $track->id,
-                'track_user_id'  => $track->user_id,
-                'track_caption'  => $track->caption,
-                'track_file_name'  => $track->file_name,
-                'track_temp_name'  => $track->temp_name,
-                'track_created_at'  => $track->created_at,
-                'user_id'  => $user->id,
-                'user_full_name'  => $user->full_name(),
-                'user_profile_picture'  => $user->profile_picture,
-            );
-
-            echo json_encode($data);
-        }else{
-
-        }
-
-    }
 }
