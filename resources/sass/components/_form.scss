@@ -19,12 +19,16 @@
             text-align: center;
 
             &-gmail{
-                height: 4rem;
-                width: 4rem;
+                &-logo{
+                    height: 4rem;
+                    width: 4rem;
+                }
             }
             &-facebook{
-                height: 4rem;
-                width: 4rem;
+                &-logo{
+                    height: 4rem;
+                    width: 4rem;
+                }
             }
         }
 
@@ -51,12 +55,17 @@
             text-align: center;
 
             &-gmail{
-                height: 4rem;
-                width: 4rem;
+
+                &-logo{
+                    height: 4rem;
+                    width: 4rem;
+                }
             }
             &-facebook{
-                height: 4rem;
-                width: 4rem;
+                &-logo{
+                    height: 4rem;
+                    width: 4rem;
+                }
             }
         }
     }

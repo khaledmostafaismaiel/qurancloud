@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Expense;
-use App\Mail\UserSignedup;
-use App\Track;
+use App\country;
+use App\Gender;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\User ;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
-
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\View\View;
+use App\Http\Requests\StoreUserRequest;
+use App\Jobs\SendUserSignedupEmailJob;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class UsersController extends Controller
 {
@@ -23,7 +22,7 @@ class UsersController extends Controller
      */
     public function index()
     {
-        dd("index");
+
     }
 
     /**
@@ -33,9 +32,7 @@ class UsersController extends Controller
      */
     public function create()
     {
-        $tracks_or_track_or_not = 'not';
-
-        return view('/auth/login',compact('tracks_or_track_or_not'));
+        return view('/auth/login');
     }
 
     /**
@@ -44,57 +41,31 @@ class UsersController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreUserRequest $request)
     {
-        $valid = request()->validate(
-            [
-                'first_name'=> ['required' , 'min:2'] ,
-                'second_name'=> ['required' , 'min:2' ] ,
-                'user_name'=> ['required' , 'min:3' ] ,
-                'password'=> ['required' , 'confirmed' , 'min:8'] ,
-//                'gender'=> ['required'] ,
-                'not_robot'=> ['required' ] ,
-                'terms_of_conditions'=> ['required' ] ,
-
-            ]
-        );
-
-//        if($request->gender == 'male'){
-//            $default_profile_pic = "default_man_profile_picture.png" ;
-//        }elseif ($request->gender == 'female'){
-//            $default_profile_pic = "default_woman_profile_picture.png" ;
-//        }else{
-//            return back() ;
-//        }
+        if($request->gender == USER_GENDER_MALE){
+            $default_profile_pic = "default_male_profile_picture.png" ;
+        }else{
+            $default_profile_pic = "default_female_profile_picture.png" ;
+        }
 
         $user = new User() ;
         if($user->create([
-            'first_name'=>  trim(request('first_name')) ,
-            'second_name'=>  trim(request('second_name')),
-            'user_name'=>  strtolower(trim(request('user_name'))),
-            'hashed_password'=>  bcrypt(request('password')),
-//            'gender'=>  strtolower(trim(request('gender'))),
-//            'profile_picture'=>  $default_profile_pic,
+            'first_name'=>  $request->first_name ,
+            'second_name'=>  $request->second_name,
+            'user_name'=> $request->user_name,
+            'hashed_password'=>  bcrypt($request->password),
+            'gender'=> $request->gender,
+            'profile_picture'=>  $default_profile_pic,
 
         ])){
-
-            session()->flash('message','Welcome');
-
-            if(\Auth::attempt(['user_name' => request('user_name'), 'password' => request('password')])){
-                session()->flash('message','Welcome');
-//                session(['authUser'=>\auth()->user()]);
-                Mail::to(env('OWNER_EMAIL'))->queue(
-                    new UserSignedup(\auth()->user())
-                );
+            if(\Auth::attempt(['user_name' => request('user_name'), 'password' => request('password')])) {
+                dispatch((new SendUserSignedupEmailJob(auth()->user()))->delay(Carbon::now()->addSeconds(10)));
                 return redirect('/');
-            }else{
-                session()->flash('message','Sorry Try Again');
-                return redirect('/users/create');
             }
-        }else{
-            session()->flash('message','Sorry Try Again');
-            return redirect('/users/create');
+
         }
+        return redirect('/users/create');
 
     }
 
@@ -107,8 +78,13 @@ class UsersController extends Controller
     public function show($id)
     {
         $user = User::findorfail($id) ;
+        $tracks = $user->tracks;
 
-        return view('profile' , compact('user'));
+        if (\request()->ajax()){
+            echo view('AjaxRequests.profile' , compact('user','tracks'))->render();
+        }else{
+            return view('GetRequests.profile' , compact('user','tracks'));
+        }
     }
 
     /**
@@ -119,11 +95,7 @@ class UsersController extends Controller
      */
     public function edit($id)
     {
-        $user = User::findorfail($id);
 
-        $can_edit = \request('can_edit') ;
-        $tracks_or_track_or_not = 'not';
-        return view("about_to_edit" , compact('user' ,'can_edit','tracks_or_track_or_not'));
 
     }
 
@@ -136,108 +108,74 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $user = User::findorfail($id);
-
-        if($request->first_name){
-            $user->first_name = strtolower($request->first_name) ;
-            if($user->update()){
-                session()->flash('message','Welcome');
+        if($request->ajax()){
+            if($request->can_edit == "first_name" ){
+                auth()->user()->first_name = $request->newEdit ;
             }
-
-        }
-        elseif ($request->second_name){
-            $user->second_name = strtolower($request->second_name) ;
-            if($user->update()){
-                session()->flash('message','Welcome');
+            elseif ($request->can_edit == "second_name"){
+                auth()->user()->second_name = $request->newEdit ;
             }
-        }
-        elseif ($request->from) {
-            $user->from = strtolower($request->from);
-            if ($user->update()) {
-                session()->flash('message', 'Welcome');
+            elseif ($request->can_edit == "from") {
+                auth()->user()->from = $request->newEdit;
             }
-        }
-        elseif ($request->lives) {
-            $user->lives = strtolower($request->lives) ;
-            if($user->update()){
-                session()->flash('message','Welcome');
+            elseif ($request->can_edit == "lives") {
+                auth()->user()->lives = $request->newEdit ;
             }
-        }
-        elseif ($request->study) {
-            $user->study = strtolower($request->study) ;
-            if($user->update()){
-                session()->flash('message','Welcome');
+            elseif ($request->can_edit == "study") {
+                auth()->user()->study = $request->newEdit ;
             }
-        }
-        elseif ($request->work) {
-            $user->work = strtolower($request->work) ;
-            if($user->update()){
-                session()->flash('message','Welcome');
+            elseif ($request->can_edit == "work") {
+                auth()->user()->work = $request->newEdit ;
             }
-        }
-        elseif ($request->gender) {
-            $user->gender = strtolower($request->gender) ;
-            if($user->update()){
-                session()->flash('message','Welcome');
+            elseif ($request->can_edit == "gender") {
+                auth()->user()->gender = $request->newEdit ;
             }
-
-        }
-        elseif ($request->cover_picture) {
-            \request()->validate([
-                    'cover_picture' => 'required',
-                ]
-            );
-            if ($request->hasFile('cover_picture')) {
-
-                $file_name_with_extention = $request->file('cover_picture')->getClientOriginalName();
-                $file_name = pathinfo($file_name_with_extention, PATHINFO_FILENAME);
-                $extention = $request->file('cover_picture')->getClientOriginalExtension();
-//                if ($extention != "jpg") {
-//                    session()->flash('message','Sorry Try another extention');
-//                    return back() ;
-//                }
-                $temp_name = generateRandomString().".".$extention;
-                $path = $request->file('cover_picture')->storeAs('public/uploads/cover_pictures', $temp_name);
-
-                $user->cover_picture = $temp_name ;
-                if($user->update()){
-                    session()->flash('message','Done');
-                }
-            }
-        }
-        elseif ($request->profile_picture) {
-            \request()->validate([
-                    'profile_picture' => 'required',
-                ]
-            );
-            if ($request->hasFile('profile_picture')) {
-                if(\auth()->user()->profile_picture != "default_profile_picture.png"){
-//                    unlink(storage_path('uploads/profile_pictures/'.\auth()->user()->profile_picture));
-                }
-
-                $file_name_with_extention = $request->file('profile_picture')->getClientOriginalName();
-                $file_name = pathinfo($file_name_with_extention, PATHINFO_FILENAME);
-                $extention = $request->file('profile_picture')->getClientOriginalExtension();
-//                if ($extention != "jpg") {
-//                    session()->flash('message','Sorry Try another extention');
-//                    return back() ;
-//                }
-                $temp_name = generateRandomString().".".$extention;
-                $path = $request->file('profile_picture')->storeAs('public/uploads/profile_pictures', $temp_name);
-
-                $user->profile_picture = $temp_name ;
-                if($user->update()){
-                    session()->flash('message','Welcome');
-                }
-            }
-
+            auth()->user()->update();
         }else{
-            session()->flash('message','Sorry Try Again');
+            if ($request->cover_picture) {
+                \request()->validate([
+                        'cover_picture' =>  'required|image|mimes:jpeg,png,jpg,|max:20048',
+                    ]
+                );
+                if ($request->hasFile('cover_picture')) {
+                    if(\auth()->user()->cover_picture != "default_cover_picture.jpg"){
+                        unlink(storage_path('app/public/uploads/cover_pictures/'.\auth()->user()->cover_picture));
+                    }
+                    $file_name_with_extention = $request->file('cover_picture')->getClientOriginalName();
+                    $file_name = pathinfo($file_name_with_extention, PATHINFO_FILENAME);
+                    $extention = $request->file('cover_picture')->getClientOriginalExtension();
 
+                    $temp_name = generateRandomString().".".$extention;
+                    $path = $request->file('cover_picture')->storeAs('public/uploads/cover_pictures', $temp_name);
+
+                    auth()->user()->cover_picture = $temp_name ;
+                    auth()->user()->update();
+                }
+                return redirect('/');
+            }
+            elseif ($request->profile_picture) {
+                \request()->validate([
+                        'profile_picture' => 'required|image|mimes:jpeg,png,jpg,|max:20048',
+                    ]
+                );
+                if ($request->hasFile('profile_picture')) {
+                    if(\auth()->user()->profile_picture != "default_profile_picture.png"){
+                        unlink(storage_path('app/public/uploads/profile_pictures/'.\auth()->user()->profile_picture));
+                    }
+
+                    $file_name_with_extention = $request->file('profile_picture')->getClientOriginalName();
+                    $file_name = pathinfo($file_name_with_extention, PATHINFO_FILENAME);
+                    $extention = $request->file('profile_picture')->getClientOriginalExtension();
+
+                    $temp_name = generateRandomString().".".$extention;
+                    $path = $request->file('profile_picture')->storeAs('public/uploads/profile_pictures', $temp_name);
+
+                    auth()->user()->profile_picture = $temp_name ;
+                    auth()->user()->update();
+                }
+                return redirect('/');
+            }
         }
-
-        $can_edit = null ;
-        return redirect('/users/'.$id.'/about_to_edit');
 
     }
 
@@ -249,7 +187,6 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        dd("destroy");
 
     }
 
@@ -261,10 +198,8 @@ class UsersController extends Controller
         // \Auth::setUser($user)
         // \Auth::logout()
         if(\Auth::attempt(['user_name' => \request('user_name'), 'password' => \request('password')])){
-            session()->flash('message','Welcome');
             return redirect('/');
         }else{
-            session()->flash('message','Sorry Try Again');
             return redirect('/users/create');
         }
     }
@@ -272,39 +207,59 @@ class UsersController extends Controller
     public function process_sign_out()
     {
         auth()->logout();
-
         return redirect('/users/create');
     }
 
     public function about($user_id)
     {
-        $user = new User() ;
         $user = User::findorfail($user_id);
-        $tracks_or_track_or_not = 'not';
-        return view("about" , compact('user' , 'tracks_or_track_or_not'));
-    }
-
-    public function about_to_edit($user_id)
-    {
-        if(auth()->id() == $user_id){
-            $user = new User() ;
-            $user = User::findorfail($user_id);
-            $can_edit = null ;
-            $tracks_or_track_or_not = 'not' ;
-            return view("about_to_edit" , compact('user' ,'can_edit','tracks_or_track_or_not'));
+        $countries = country::all();
+        $genders = gender::all();
+        if(\request()->ajax()){
+            echo view("AjaxRequests.about" , compact('user','countries','genders'));
         }else{
-            return back() ;
+            return view("GetRequests.about" , compact('user','countries','genders'));
         }
     }
 
-    public function settings($user_id)
+    public function about_to_edit()
     {
-        $user = new User() ;
-        $user = User::findorfail($user_id);
-        $tracks_or_track_or_not = 'not';
-        return view("settings",compact('user','tracks_or_track_or_not'));
+        $user = \auth()->user();
+        $countries = country::all();
+        $genders = gender::all();
+        $about_to_edit = 1;
+        if(\request()->ajax()){
+            echo view("AjaxRequests.about" , compact('user','countries','genders','about_to_edit' ));
+        }else{
+            return view("GetRequests.about" , compact('user','countries','genders' ,'about_to_edit'));
+        }
     }
 
+    public function settings()
+    {
+        if(\request()->ajax()){
+            echo view("AjaxRequests.settings");
+        }else{
+            return view("GetRequests.settings");
+        }
+    }
+
+    public function privacy()
+    {
+        if(\request()->ajax()){
+            echo view("AjaxRequests.privacy");
+        }else{
+            return view("GetRequests.privacy");
+        }
+    }
+    public function security()
+    {
+        if(\request()->ajax()){
+            echo view("AjaxRequests.security");
+        }else{
+            return view("GetRequests.security");
+        }
+    }
     public function termsOfConditions()
     {
         dd("termsOfConditions");
@@ -337,25 +292,30 @@ class UsersController extends Controller
         $findUser = \Auth::attempt(['user_name' => $socialUser->email , 'password' => "12345678"]) ;
         if($findUser){
             return redirect('/');
-
         }else{
             $newUser = new User() ;
 
             $fullName = explode(" ",$socialUser->name);
 
-            $newUser->first_name = $fullName[0] ;
-            $newUser->second_name = $fullName[1] ;
-            $newUser->user_name = $socialUser->email ;
-            $newUser->hashed_password = bcrypt("12345678");
-            $newUser->save();
-            Auth::login($newUser);
-//            session(['authUser'=>\auth()->user()]);
-            Mail::to(env('OWNER_EMAIL'))->queue(
-                new UserSignedup(\auth()->user())
-            );
-            return redirect('/');
+            $first_name = $newUser->first_name = $fullName[0] ;
+            $second_name = $newUser->second_name = $fullName[1] ;
+            $user_name = $newUser->user_name = $socialUser->email ;
+
+            $complete_sign_up = true;
+
+//            $url = $socialUser->avatar;
+//            $cover = file_get_contents($url);
+//            $filename = generateRandomString();
+//            Image::make($cover)->save(public_path('/upload/profile_pictures/' . $filename . '.jpg'));
+            return view('auth.login',compact('first_name','second_name','user_name','complete_sign_up'));
+//            $newUser->hashed_password = bcrypt("12345678");
+//            $newUser->save();
+//            Auth::login($newUser);
+//            dispatch((new SendUserSignedupEmailJob(auth()->user()))->delay(Carbon::now()->addSeconds(10)));
+//            return redirect('/');
         }
     }
+
 
 }
 

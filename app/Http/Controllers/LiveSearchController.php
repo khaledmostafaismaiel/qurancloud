@@ -3,15 +3,10 @@
 namespace App\Http\Controllers;
 use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 class LiveSearchController extends Controller
 {
-
-
-    public function index(){
-        dd("hi index");
-    }
-
 
     public function search(Request $request)
     {
@@ -24,8 +19,7 @@ class LiveSearchController extends Controller
 
             if($searchFor != '')
             {
-
-                $users = DB::table('users')
+                $users = User::select('*')
                     ->where('first_name', 'like', '%'.$searchFor.'%')
                     ->orWhere('second_name', 'like', '%'.$searchFor.'%')
                     ->orderBy('id', 'desc')

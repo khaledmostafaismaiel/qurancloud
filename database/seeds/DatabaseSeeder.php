@@ -13,17 +13,17 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UserSeeder::class);
-
-        $this->call('users');
-        $this->call('tracks');
-        $this->call('PlaylistSeeder');
-        $this->call('PlaylistTracksSeeder');
-        $this->call('trackComments');
-        $this->call('trackLoves');
-        $this->call('commentLoves');
-        $this->call('friends');
-        $this->call('chats');
-        $this->call('messages');
+//        $this->call('CountrySeeder');
+        $this->call('GenderSeeder');
+//        $this->call('users');
+//        $this->call('tracks');
+//        $this->call('PlaylistSeeder');
+//        $this->call('PlaylistTracksSeeder');
+//        $this->call('trackComments');
+//        $this->call('trackLoves');
+//        $this->call('commentLoves');
+//        $this->call('Friends');
+//        $this->call('Chats');
+//        $this->call('messages');
     }
 }

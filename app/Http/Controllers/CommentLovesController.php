@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Comment;
 use App\commentLoves;
-use App\Track;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTrackCommentLoveRequest;
 
 class CommentLovesController extends Controller
 {
@@ -16,26 +16,18 @@ class CommentLovesController extends Controller
      */
     public function index()
     {
-        dd("hi");
         if (\request()->ajax()){
-            if (\request()->pageNumber >= 1){
-                $loves = Comment::findorfail(\request('comment_id'))->commentLoves()->simplepaginate(5) ;
+            if (\request()->pageNumber >= 1) {
+                $loves = Comment::findorfail(\request('comment_id'))->commentLoves()->simplepaginate(40);
 
-                $output='';
-                if (! $loves->isEmpty()){
-                    foreach ($loves as $love){
-                        $output .= view('layouts.popup.lover',compact('love'))->render();
+                $output = '';
+                if (!$loves->isEmpty()) {
+                    foreach ($loves as $love) {
+                        $output .= view('layouts.popup.lover', compact('love'))->render();
                     }
-                }else{
-
                 }
                 echo $output;
-
-            }else{
-
             }
-        }else{
-
         }
     }
 
@@ -55,24 +47,28 @@ class CommentLovesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTrackCommentLoveRequest $request)
     {
-        $valid = request()->validate(
-            [
-                'comment_id'=> ['required'] ,
+        if($request->ajax()){
+            $id = commentLoves::insertGetId([
+                'user_id'=> auth()->id(),
+                'comment_id'=> $request->track_comment_id ,
+            ]);
 
-            ]
-        );
-
-        if(commentLoves::create([
-            'user_id'=> auth()->id(),
-            'comment_id'=> strtolower(trim(request('comment_id'))) ,
-        ])){
-            session()->flash('message','Done');
-            return back();
-        }else{
-            session()->flash('message','Sorry');
-            return back();
+            if ($id) {
+                return response()->json([
+                    'track_comment_love_id'=>$id,
+                    'priorty' => "success",
+                    'title' => 'Success',
+                    'message'=>"Love successfully added"
+                ]);
+            } else {
+                return response()->json([
+                    'priorty' => "danger",
+                    'title' => 'Error',
+                    'message' => "Sorry,Try again"
+                ]);
+            }
         }
     }
 
@@ -118,14 +114,20 @@ class CommentLovesController extends Controller
      */
     public function destroy(commentLoves $commentLove)
     {
-        if($commentLove->delete()){
-            session()->flash('message','Done');
-            return back();
-
-        }else{
-            session()->flash('message','Sorry');
-            return back();
-
+        if (\request()->ajax()) {
+            if ($commentLove->delete()) {
+                return response()->json([
+                    'priorty' => "success",
+                    'title' => 'Success',
+                    'message' => "Deleted successfully"
+                ]);
+            } else {
+                return response()->json([
+                    'priorty' => "danger",
+                    'title' => 'Error',
+                    'message' => "Sorry,Try again"
+                ]);
+            }
         }
     }
 }

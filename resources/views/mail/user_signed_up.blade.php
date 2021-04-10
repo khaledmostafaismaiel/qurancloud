@@ -1,13 +1,13 @@
 @component('mail::message')
     # New user had signed up now!
-    * first name: {{ $user->first_name }}
-    * second name: {{ $user->second_name }}
-    * user name: {{ $user->user_name }}
+    * User ID: {{ $user->id }}
+    * First Name: {{ $user->first_name }}
+    * Second Name: {{ $user->second_name }}
+    * User Name: {{ $user->user_name }}
 
     @component('mail::button', ['url' => env('WEBSITE_DOMAIN').'/users/'.$user->id])
         User Profile
     @endcomponent
 
-    Thanks,<br>
-    {{ config('app.name') }}
+    Thanks,{{ config('app.name') }}
 @endcomponent

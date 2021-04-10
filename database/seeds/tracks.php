@@ -14,11 +14,11 @@ class tracks extends Seeder
     {
         $faker = Faker::create() ;
         $users_ids = App\User::all()->pluck('id');
-        foreach (range(1,100) as $index){
+        foreach (range(1,114) as $index){
             \Illuminate\Support\Facades\DB::table('tracks')->insert([
                 'user_id'=>$faker->randomElement($users_ids)  ,
-                'file_name'=>$faker->sentence(5,true) ,
-                'temp_name'=>$faker->text ,
+                'file_name'=>str_pad($index, 3, '0', STR_PAD_LEFT)."_2.mp3",
+                'temp_name'=>str_pad($index, 3, '0', STR_PAD_LEFT)."_2.mp3" ,
                 'caption'=>$faker->sentence(10,true) ,
                 'created_at'=>$faker->date(now()),
 

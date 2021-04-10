@@ -6,6 +6,7 @@ use App\Chat;
 use App\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\StoreChatRequest;
 
 class ChatsController extends Controller
 {
@@ -16,25 +17,12 @@ class ChatsController extends Controller
      */
     public function index()
     {
-
-        $messages = DB::table('messages')
-            ->where('from_user_id','=',auth()->id())
-            ->orWhere('to_user_id','=',auth()->id())
-            ->get();
-        $chats_id = array() ;
-        foreach ($messages as $message){
-            if (! in_array($message->chat_id,$chats_id)){
-                $chats_id[] = $message->chat_id;
-            }
+        $chats = auth()->user()->chats();
+        if(\request()->ajax()){
+            echo view('AjaxRequests.chats',compact('chats'));
+        }else{
+            return view('GetRequests.chats',compact('chats'));
         }
-
-        $chats = array();
-        foreach ($chats_id as $id){
-            $chats[] = Chat::findorfail($id);
-        }
-        $tracks_or_track_or_not = "not";
-
-        return view('chats',compact('chats','tracks_or_track_or_not'));
     }
 
     /**
@@ -53,15 +41,15 @@ class ChatsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreChatRequest $request)
     {
         $chat = new Chat();
         $id = $chat->insertGetId([]);
         if ($id){
-            session()->flash('message','Done');
+            $chat->from_user_id = auth()->id;
+            $chat->to_user_id = $request->to_user_id;
             return $id;
         }else{
-            session()->flash('message','Sorry Try Again');
             return redirect('/users/create');
         }
     }
@@ -74,40 +62,29 @@ class ChatsController extends Controller
      */
     public function show(Chat $chat)
     {
-
-        $tracks_or_track_or_not = "not";
         $messages = $chat->messages;
-        $to_user_id = null ;
-        if ($chat->lastMessage()->to_user_id != auth()->id()){
-            $to_user_id = $chat->lastMessage()->to_user_id ;
-        }else{
-            $to_user_id = $chat->lastMessage()->from_user_id ;
-        }
+
         $chat_id = $chat->id;
+        $to_user_id = $chat->from_user_id == auth()->id() ? $chat->to_user_id : $chat->from_user_id  ;
+        Message::where('chat_id',$chat_id)->where('to_user_id',auth()->id())->where('is_read',0)->update(['is_read'=>1]);
 
-
-        $messages__ = DB::table('messages')
-            ->where('from_user_id','=',auth()->id())
-            ->orWhere('to_user_id','=',auth()->id())
-            ->get();
-        $chats_id = array() ;
-        foreach ($messages__ as $message){
-            if (! in_array($message->chat_id,$chats_id)){
-                $chats_id[] = $message->chat_id;
+        if(\request()->ajax()){
+            $with_side_nav = \request('with_side_nav');
+            if($with_side_nav){
+                $chats = auth()->user()->chats();
+                echo view('AjaxRequests.chat',compact('messages','chats','with_side_nav','chat_id','to_user_id'))->render();
+                return;
             }
-        }
-
-        $chats = array();
-        foreach ($chats_id as $id){
-            $chats[] = Chat::findorfail($id);
-        }
-        if (! empty($chats)){
-            return view('chat',compact('messages','tracks_or_track_or_not','to_user_id','chat_id','chats'));
+            echo view('layouts.Chat.message_section',compact('messages','chats','with_side_nav','chat_id','to_user_id'))->render();
 
         }else{
-
-
+            $with_side_nav = 1;
+            if($with_side_nav){
+                $chats = auth()->user()->chats();
+            }
+            return view('GetRequests.chat',compact('messages','chats','with_side_nav','chat_id','to_user_id'));
         }
+
     }
 
     /**
@@ -215,7 +192,6 @@ class ChatsController extends Controller
 
     }
     function storeForFirstTime(){
-        dd("hi");
         if (request()->ajax()){
 
             $chat_id = $this->store(new Request());

@@ -16,7 +16,9 @@ class PlaylistTracksController extends Controller
     {
         if(\request()->ajax()) {
             $playlistTracks = auth()->user()->playlist->playlistTracks;
-            echo view('layouts.playlistTable', compact('playlistTracks'))->render();
+            echo view('layouts.User-Navigation.playlistTable', compact('playlistTracks'))->render();
+        }else{
+
         }
     }
 
@@ -44,10 +46,10 @@ class PlaylistTracksController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\PlaylistTracks  $playlistTracks
+     * @param  \App\PlaylistTracks  $playlistTrack
      * @return \Illuminate\Http\Response
      */
-    public function show(PlaylistTracks $playlistTracks)
+    public function show(PlaylistTracks $playlistTrack)
     {
         //
     }
@@ -55,10 +57,10 @@ class PlaylistTracksController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\PlaylistTracks  $playlistTracks
+     * @param  \App\PlaylistTracks  $playlistTrack
      * @return \Illuminate\Http\Response
      */
-    public function edit(PlaylistTracks $playlistTracks)
+    public function edit(PlaylistTracks $playlistTrack)
     {
         //
     }
@@ -67,10 +69,10 @@ class PlaylistTracksController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\PlaylistTracks  $playlistTracks
+     * @param  \App\PlaylistTracks  $playlistTrack
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, PlaylistTracks $playlistTracks)
+    public function update(Request $request, PlaylistTracks $playlistTrack)
     {
         //
     }
@@ -78,11 +80,13 @@ class PlaylistTracksController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\PlaylistTracks  $playlistTracks
+     * @param  \App\PlaylistTracks  $playlistTrack
      * @return \Illuminate\Http\Response
      */
-    public function destroy(PlaylistTracks $playlistTracks)
+    public function destroy(PlaylistTracks $playlistTrack)
     {
-        //
+        if(\request()->ajax()){
+            $playlistTrack->delete();
+        }
     }
 }

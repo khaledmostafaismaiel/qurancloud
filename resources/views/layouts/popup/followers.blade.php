@@ -1,7 +1,11 @@
-<tr class="col">
-    <td class="col-auto">
-        <img src="/storage/uploads/profile_pictures/{{\App\User::findorfail($follower->follower_user_id)->profile_picture}}" alt="User photo" class="user-nav__user-photo mb-4">
-        {{\App\User::findorfail($follower->follower_user_id)->full_name()}}
+<tr class="row mt-2 ml-2">
+    <td class="col-10 row">
+        <img src="/storage/uploads/profile_pictures/{{$follower->profile_picture}}" alt="User photo" class="track-comment-photo"  data-user-id="{{$follower->id}}">
+        <span class="mt-4">
+            {{$follower->full_name()}}
+        </span>
     </td>
-    <td class="col-auto"><a class="btn btn-success" href="/users/{{$follower->follower_user_id}}">View</a></td>
+    <td class="col-2 mt-4">
+        @include('layouts.Profile_Navigation.followUnfollowAction',['user'=>$follower])
+    </td>
 </tr>

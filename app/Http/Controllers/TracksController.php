@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\StoreTrackJob;
 use App\Track;
-use App\Comment ;
 use App\User;
 use http\QueryString;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\StoreTrackRequest;
+use App\Http\Requests\UpdateTrackRequest;
 
 class TracksController extends Controller
 {
@@ -29,7 +29,7 @@ class TracksController extends Controller
             if(! $tracks->isEmpty()){
 
                 foreach ($tracks as $track) {
-                    $output .= view('layouts.track',compact('track'))->render();
+                    $output .= view('layouts.track.track',compact('track'))->render();
                 }
 
             }else{
@@ -59,23 +59,15 @@ class TracksController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTrackRequest $request)
     {
-        \request()->validate([
-                'file_upload' => 'required',
-            ]
-        );
 
         if ($request->hasFile('file_upload')) {
-
             $file_name_with_extention = $request->file('file_upload')->getClientOriginalName();
-            $file_name = pathinfo($file_name_with_extention, PATHINFO_FILENAME);
             $extention = $request->file('file_upload')->getClientOriginalExtension();
-            if ($extention != "mp3") {
-                return back() ;
-            }
             $temp_name = generateRandomString().".".$extention;
-            $path = $request->file('file_upload')->storeAs('public/uploads/tracks', $temp_name);
+//            dispatch(new StoreTrackJob($request->file('file_upload'),$temp_name));
+            $request->file('file_upload')->storeAs('public/uploads/tracks', $temp_name);
             $size = $request->file('file_upload')->getSize();
 
             if (Track::create([
@@ -86,11 +78,20 @@ class TracksController extends Controller
                 'caption' => $request->caption,
                 'temp_name' => $temp_name,
             ])) {
-                session()->flash('message', 'Done');
+
                 return back();
+                return response()->json([
+                    'priorty'=>"success",
+                    'title'=>'Success',
+                    'message'=>"Track successfully uploaded"
+                ]);
             } else {
-                session()->flash('message', 'Sorry');
                 return back();
+                return response()->json([
+                    'priorty'=>"danger",
+                    'title'=>'Error',
+                    'message'=>"Sorry,Try again"
+                ]);
             }
         }
     }
@@ -103,10 +104,9 @@ class TracksController extends Controller
     public function show(Track $track)
     {
         if (\request()->ajax()){
-            echo view('layouts.track_options',compact('track'))->render();
+            echo view('AjaxRequests.show_track',compact('track'))->render();
         }else{
-            return view('show_track',compact('track'));
-
+            return view('GetRequests.show_track',compact('track'));
         }
     }
 
@@ -119,10 +119,6 @@ class TracksController extends Controller
     public function edit(Track $track)
     {
 
-        $track_to_edit = $track ;
-        $lastId = \request()->lastId;
-        $comments = $track->Comments;
-        return view('show_track',compact('track','track_to_edit','lastId','comments'));
     }
 
     /**
@@ -132,18 +128,23 @@ class TracksController extends Controller
      * @param  \App\Track  $track
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Track $track)
+    public function update(UpdateTrackRequest $request, Track $track)
     {
-        $validate = $request->validate([
-           'caption'=>'required'
-        ]);
-
-        $track->caption = $request->caption;
-        if ($track->save()){
-
-            return redirect('/tracks/'. $track->id);
-        }else{
-
+        if($request->ajax()){
+            $track->caption = $request->caption;
+            if ($track->update()) {
+                return response()->json([
+                    'priorty' => "success",
+                    'title' => 'Success',
+                    'message' => "Track edited successfully"
+                ]);
+            } else {
+                return response()->json([
+                    'priorty' => "danger",
+                    'title' => 'Error',
+                    'message' => "Sorry,Try again"
+                ]);
+            }
         }
     }
 
@@ -156,30 +157,23 @@ class TracksController extends Controller
     public function destroy(Track $track)
     {
         if(\request()->ajax()){
-            // First remove the database entry
-            if($track->delete()) {
-                // then remove the file
-                // Note that even though the database entry is gone, this object
-                // is still around (which lets us use $this->image_path()).
-//            if(unlink(storage_path('app/uploads/tracks/').$track->temp_name)){
-//                session()->flash('message','Done');
-//            }else{
-//                session()->flash('message',"Sorry");
-//            }
-            } else {
-                // database delete failed
-                session()->flash('message',"Sorry");
 
-            }
-
-
-            if (back()->getTargetUrl() == "http://localhost:8000/tracks/".$track->id ){
-
-                return redirect('/');
-
+            if($track->delete()){
+                unlink(storage_path('app/public/uploads/tracks/'.$track->temp_name));
+                return response()->json([
+                    'priorty'=>"success",
+                    'title'=>'Success',
+                    'message'=>"Deleted successfully"
+                ]);
             }else{
-                return back();
+                return response()->json([
+                    'priorty'=>"danger",
+                    'title'=>'Error',
+                    'message'=>"Sorry,Try again"
+                ]);
             }
+
+
         }else{
 
         }
@@ -200,6 +194,15 @@ class TracksController extends Controller
             'reason'=>'required',
         ]);
         return back();
+    }
+
+    public function getTrackInfo($track_id){
+        if (\request()->ajax()){
+            $track = Track::findOrFail($track_id);
+            echo view('layouts.track_options',compact('track'))->render();
+        }else{
+            return back();
+        }
     }
 
 }

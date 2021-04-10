@@ -18,6 +18,7 @@ class CreateMessagesTable extends Migration
             $table->integer('chat_id')->unsigned();
             $table->unsignedBigInteger('from_user_id');
             $table->unsignedBigInteger('to_user_id');
+            $table->boolean('is_read')->default(0);
             $table->text('body');
             $table->timestamps();
 

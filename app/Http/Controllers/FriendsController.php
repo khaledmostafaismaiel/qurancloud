@@ -5,9 +5,8 @@ namespace App\Http\Controllers;
 use App\Friends;
 use App\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
-
+use App\Http\Requests\StoreFriendRequest;
+use Pusher\Pusher;
 
 class FriendsController extends Controller
 {
@@ -38,23 +37,47 @@ class FriendsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreFriendRequest $request)
     {
-        $valid = request()->validate(
-            [
-                'following_user_id'=> ['required'] ,
-            ]
-        );
+        if($request->ajax()){
 
-        if(Friends::create([
-            'follower_user_id'=> auth()->id() ,
-            'following_user_id'=> strtolower(trim(request('following_user_id'))),
-        ])){
-            session()->flash('message','Done');
-            return back();
-        }else{
-            session()->flash('message');
-            return back();
+            $id = Friends::insertGetId([
+                'follower_user_id'=> auth()->id() ,
+                'following_user_id'=> $request->following_user_id]);
+            if($id){
+                $options = array(
+                    'cluster'=>env('PUSHER_APP_CLUSTER'),
+                    'useTLS'=>true
+                );
+                $pusher = new Pusher(
+                    env('PUSHER_APP_KEY'),
+                    env('PUSHER_APP_SECRET'),
+                    env('PUSHER_APP_ID'),
+                    $options
+                );
+                $data = [
+                    'following_user_id'=> $request->following_user_id,
+                    'friend_request_notification'=>""
+                ];
+
+                $pusher->trigger('friend-request', 'new-friend-request', $data);
+
+                return response()->json([
+                    'friends_id'=>$id,
+                    'priorty' => "success",
+                    'title' => 'Success',
+                    'message' => "Follow successfully"
+                ]);
+            }else{
+                return response()->json([
+                    'priorty'=>"danger",
+                    'title'=>'Error',
+                    'message'=>"Sorry,Try again"
+                ]);
+            }
+
+
+
         }
     }
 
@@ -100,12 +123,20 @@ class FriendsController extends Controller
      */
     public function destroy(Friends $friend)
     {
-        if ($friend->delete()){
-            session()->flash('message','Done');
-            return back();
-        }else{
-            session()->flash('message','Sorry');
-            return back();
+        if(\request()->ajax()){
+            if($friend->delete()){
+                return response()->json([
+                    'priorty'=>"success",
+                    'title'=>'Success',
+                    'message'=>"Unfollow successfully"
+                ]);
+            }else{
+                return response()->json([
+                    'priorty'=>"danger",
+                    'title'=>'Error',
+                    'message'=>"Sorry,Try again"
+                ]);
+            }
         }
     }
 
@@ -114,24 +145,17 @@ class FriendsController extends Controller
         if (\request()->ajax()){
 
             if(\request()->pageNumber >= 1){
-                $followers = User::findOrfail($user_id)->followers()->paginate(10);
-            }else{
-
+                $followers = User::findOrfail($user_id)->followers()->simplepaginate(10);
             }
+
             $output='';
             if(! $followers->isEmpty()){
 
                 foreach ($followers as $follower) {
                     $output .= view('layouts.popup.followers',compact('follower'))->render() ;
                 }
-
-            }else{
-
             }
             echo $output;
-
-        }else{
-
         }
     }
 
@@ -139,9 +163,7 @@ class FriendsController extends Controller
     {
         if (\request()->ajax()){
             if(\request()->pageNumber >= 1){
-                $followings = User::findOrfail($user_id)->followings()->paginate(10);
-            }else{
-
+                $followings = User::findOrfail($user_id)->followings()->simplepaginate(10);
             }
 
             $output='';
@@ -149,12 +171,8 @@ class FriendsController extends Controller
                 foreach ($followings as $following) {
                     $output .= view('layouts.popup.followings',compact('following'))->render();
                 }
-            }else{
-
             }
             echo $output;
-        }else{
-
         }
     }
 }

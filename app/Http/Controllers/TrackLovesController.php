@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Track;
 use App\trackLoves;
 use Illuminate\Http\Request;
+use App\Http\Requests\StoreTrackLoveRequest;
 
 class TrackLovesController extends Controller
 {
@@ -17,7 +18,7 @@ class TrackLovesController extends Controller
     {
         if (\request()->ajax()){
             if (\request()->pageNumber >= 1){
-                $loves = Track::findorfail(\request('track_id'))->trackLoves()->simplepaginate(5) ;
+                $loves = Track::findorfail(\request('track_id'))->trackLoves()->simplepaginate(10) ;
 
                 $output='';
                 if (! $loves->isEmpty()){
@@ -54,23 +55,27 @@ class TrackLovesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreTrackLoveRequest $request)
     {
-        $valid = request()->validate(
-            [
-                'track_id'=> ['required'] ,
-            ]
-        );
-
-        if(trackLoves::create([
-            'user_id'=> auth()->id(),
-            'track_id'=> strtolower(trim(request('track_id'))) ,
-        ])){
-            session()->flash('message','Done');
-            return back();
-        }else{
-            session()->flash('message','Sorry');
-            return back();
+        if($request->ajax()){
+            $id = trackLoves::insertGetId([
+                'user_id'=> auth()->id(),
+                'track_id'=> strtolower(trim(request('track_id'))) ,
+            ]);
+            if($id){
+                return response()->json([
+                    'track_love_id'=>$id,
+                    'priorty'=>"success",
+                    'title'=>'Success',
+                    'message'=>"Love successfully added"
+                ]);
+            }else{
+                return response()->json([
+                    'priorty'=>"danger",
+                    'title'=>'Error',
+                    'message'=>"Sorry,Try again"
+                ]);
+            }
         }
     }
 
@@ -116,14 +121,20 @@ class TrackLovesController extends Controller
      */
     public function destroy(trackLoves $trackLove)
     {
-        if($trackLove->delete()){
-            session()->flash('message','Done');
-            return back();
-
-        }else{
-            session()->flash('message','Sorry');
-            return back();
-
+        if(\request()->ajax()){
+            if($trackLove->delete()){
+                return response()->json([
+                    'priorty'=>"success",
+                    'title'=>'Success',
+                    'message'=>"Deleted successfully"
+                ]);
+            }else{
+                return response()->json([
+                    'priorty'=>"danger",
+                    'title'=>'Error',
+                    'message'=>"Sorry,Try again"
+                ]);
+            }
         }
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\MessageSent;
+use App\Chat;
 use App\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-
+use App\Http\Requests\StoreMessageRequest;
+use Pusher\Pusher;
 class MessagesController extends Controller
 {
     /**
@@ -37,37 +36,45 @@ class MessagesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreMessageRequest $request)
     {
+        if($request->ajax()){
+            $message = new Message();
+            $message->chat_id = $request->chat_id;
+            $message->from_user_id = auth()->id() ;
+            $message->to_user_id = $request->to_user_id;
+            $message->body = $request->body;
+            $message->is_read = 0;
+            $message->created_at = now();
+            $message->save();
+            $chat = Chat::findOrfail($request->chat_id);
+            $chat->updated_at = now();
+            $chat->save();
 
-        $validate  = $request->validate([
-            'chat_id'=> ['required'] ,
-            'to_user_id'=> ['required'] ,
-            'body'=> ['required'] ,
-        ]);
+            $options = array(
+               'cluster'=>env('PUSHER_APP_CLUSTER'),
+                'useTLS'=>true
+            );
+            $pusher = new Pusher(
+                env('PUSHER_APP_KEY'),
+                env('PUSHER_APP_SECRET'),
+                env('PUSHER_APP_ID'),
+                $options
+            );
+            $data = [
+                'chat_id' => $request->chat_id,
+                'from_user_id'=>auth()->id(),
+                'to_user_id'=>$request->to_user_id,
+                'message_from_me'=> view('layouts.Chat.message_from_me',compact('message'))->render(),
+                'message_to_me'=>view('layouts.Chat.message_to_me',compact('message'))->render()
+            ];
 
+            $pusher->trigger('chat', 'new-message', $data);
 
-//        if (! $request->chat_id){
-//            $chat = new \App\Http\Controllers\ChatsController();
-//            $chat_id = $chat->store(new Request());
-//
-//        }else{
-//            $chat_id = $request->chat_id ;
-//        }
-        $message = new Message();
-        if($message->create([
-            'chat_id'=>$request->chat_id,
-            'from_user_id'=>\auth()->id(),
-            'to_user_id'=>$request->to_user_id,
-            'body'=>$request->body,
-        ])) {
+            return response()->json([
+                'status'=>"success"
+            ]);
 
-            session()->flash('message', 'Done');
-//            broadcast(new MessageSent($message->load('user')))->toOthers();
-            return back();
-        }else{
-            session()->flash('message','Sorry');
-            return back();
         }
     }
 

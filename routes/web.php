@@ -14,18 +14,6 @@ use App\User;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-
-
-Route::get('/test', function () {
-    $comment_to_edit = null ;
-    return view('test');
-//    return action([UsersController::class,'index']);
-
-});
-
-
-
 /*
     GET /projects (index)
     GET /projects/create (create)
@@ -49,14 +37,17 @@ Route::get('/test', function () {
 Route::post('/users/process_sign_in', 'UsersController@process_sign_in');
 Route::post('/users/process_sign_out', 'UsersController@process_sign_out')->middleware('auth');
 Route::get('/users/{user_id}/about', 'UsersController@about')->middleware('auth');
-Route::get('/users/{user_id}/settings', 'UsersController@settings')->middleware('auth');
-Route::get('/users/{user_id}/about_to_edit', 'UsersController@about_to_edit')->name('khaled')->middleware('auth');
+Route::get('/users/privacy', 'UsersController@privacy')->middleware('auth');
+Route::get('/users/security', 'UsersController@security')->middleware('auth');
+
+Route::get('/users/settings', 'UsersController@settings')->middleware('auth');
+Route::get('/users/about_to_edit', 'UsersController@about_to_edit')->middleware('auth');
 Route::get('/users/terms_of_conditions', 'UsersController@termsOfConditions');
 Route::get('sign_in/{service}', 'UsersController@redirectToProvider');
 Route::get('sign_in/{service}/callback', 'UsersController@providerCallback');
 Route::resource('users', 'UsersController')/*->middleware('auth')->except('create','store')*/;
 
-
+Route::get('/tracks/getTrackInfo/{track_id}', 'TracksController@getTrackInfo' )->middleware('auth') ;
 Route::post('/tracks/report/{user_id}', 'TracksController@reportTrack' )->middleware('auth') ;
 Route::resource('tracks', 'TracksController')->middleware('auth');
 
@@ -88,25 +79,21 @@ Route::resource('playlistTracks', 'PlaylistTracksController')->middleware('auth'
 
 
 Route::get('/', function () {
-
     if(request()->ajax()){
         if(request()->pageNumber >= 1){
             $tracks = Track::latest()->simplePaginate(12)/*->sortByDesc('created_at')*/;
-        }else{
-
-        }
-        $output='';
-        if(! $tracks->isEmpty()){
-
-            foreach ($tracks as $track) {
-                $output .= view('layouts.track',compact('track'))->render();
+            $output='';
+            if(! $tracks->isEmpty()){
+                foreach ($tracks as $track) {
+                    $output .= view('layouts.track.track',compact('track'))->render();
+                }
             }
+            echo $output;
         }else{
-
+            echo view('AjaxRequests.index')->render();
         }
-        echo $output;
     }else{
-        return view('index');
+        return view('GetRequests.index');
     }
 })->middleware('auth');
 

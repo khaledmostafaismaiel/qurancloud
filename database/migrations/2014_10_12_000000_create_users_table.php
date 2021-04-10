@@ -20,12 +20,12 @@ class CreateUsersTable extends Migration
             $table->string('user_name')->unique();
             $table->string('hashed_password');
             $table->string('profile_picture')->default('default_profile_picture.png');
-            $table->string('cover_picture')->nullable()->default('default_cover_picture.jpg');
-            $table->string('from')->nullable();
-            $table->string('lives')->nullable();
+            $table->string('cover_picture')->default('default_cover_picture.jpg');
+            $table->integer('from')->nullable();
+            $table->integer('lives')->nullable();
             $table->string('study')->nullable();
             $table->string('work')->nullable();
-            $table->string('gender')->nullable();
+            $table->integer('gender');
             $table->timestamps();
         });
     }

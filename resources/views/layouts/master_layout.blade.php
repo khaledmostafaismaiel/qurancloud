@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html>
 @include('layouts/head')
-@yield('content')
 @include('layouts/error_messages')
+<div id="master_view" class="master_view">
+@yield('content')
+</div>
 @include('layouts/footer')
 </html>
